@@ -1,7 +1,6 @@
 library playx_theme;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'builder.dart';
+export 'config.dart';
+export 'facade.dart';
+export 'x_theme.dart';

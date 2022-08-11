@@ -1,24 +1,28 @@
-name: playx_theme
-description: A new Flutter package project.
-version: 0.0.1
-homepage: https://sourcya.com/
+name: example
+description: A new Flutter project.
+
 publish_to: "none"
+
+version: 1.0.0+1
 
 environment:
   sdk: ">=2.17.3 <3.0.0"
-  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  playx_theme:
+    path: ../
   playx_core:
     git:
       url: https://github.com/playx-flutter/core.git
-      ref: 270c72716ee8ade63602df2031fa8023145be476
-  shared_preferences: ^2.0.15
+      ref: 90cf30a0d77558ba1caa0cfdeec106fd4cd6e4ab
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 
 flutter:
+  uses-material-design: true

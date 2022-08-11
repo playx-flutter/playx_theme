@@ -24,7 +24,7 @@ jobs:
         run: flutter analyze lib test example
 
       - name: Test
-      - run: flutter test --coverage
+        run: flutter test --coverage
 
       - name: Check Test Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.2.0

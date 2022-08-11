@@ -187,11 +187,9 @@ packages:
   playx_core:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "90cf30a0d77558ba1caa0cfdeec106fd4cd6e4ab"
-      resolved-ref: "90cf30a0d77558ba1caa0cfdeec106fd4cd6e4ab"
-      url: "https://github.com/playx-flutter/core.git"
-    source: git
+      name: playx_core
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   playx_theme:
     dependency: "direct main"

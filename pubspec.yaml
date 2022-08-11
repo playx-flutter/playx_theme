@@ -11,11 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  playx_core:
-    git:
-      url: https://github.com/playx-flutter/core.git
-      ref: 270c72716ee8ade63602df2031fa8023145be476
-  shared_preferences: ^2.0.15
+  playx_core: ^0.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -16,7 +16,7 @@ void main() {
   );
   tearDown(
     () async {
-      await PlayXCore.disbose();
+      await PlayXCore.dispose();
     },
   );
 }

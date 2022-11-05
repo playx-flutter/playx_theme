@@ -6,8 +6,8 @@ abstract class XThemeConfig {
   List<XTheme> get themes;
 }
 
-class XDefualtThemeConfig extends XThemeConfig {
-  const XDefualtThemeConfig() : super();
+class XDefaultThemeConfig extends XThemeConfig {
+  const XDefaultThemeConfig() : super();
 
   @override
   List<XTheme> get themes => [

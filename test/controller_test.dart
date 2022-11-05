@@ -14,7 +14,7 @@ void main() {
     await AppTheme.boot();
   });
   tearDown(() async {
-    await PlayXCore.disbose();
+    await PlayXCore.dispose();
   });
 
   test(

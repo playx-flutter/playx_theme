@@ -8,7 +8,7 @@ abstract class AppTheme {
   static XThemeController get _controller => Get.find<XThemeController>();
 
   static Future<void> boot({
-    XThemeConfig config = const XDefualtThemeConfig(),
+    XThemeConfig config = const XDefaultThemeConfig(),
   }) async {
     Get
       ..put<XThemeConfig>(config)
@@ -19,7 +19,7 @@ abstract class AppTheme {
   /// return current theme index
   static int get index => _controller.currentIndex;
 
-  /// return current `Xtheme`
+  /// return current `XTheme`
   static XTheme get xTheme => _controller.currentXTheme;
 
   static String get name => _controller.currentXTheme.nameBuilder();

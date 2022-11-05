@@ -13,7 +13,7 @@ void main() {
     await AppTheme.boot(config: TestConfig());
   });
   tearDown(() async {
-    await PlayXCore.disbose();
+    await PlayXCore.dispose();
   });
   test('it updates theme', () async {
     expect(AppTheme.xTheme == themeOutOFTheList, isFalse);

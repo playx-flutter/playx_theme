@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:playx_core/playx_core.dart';
 
-/// wrapper arround flutter `ThemeData`
+/// wrapper around flutter `ThemeData`
 class XTheme extends Equatable {
-  // acctual theme
+  // actual theme
   final ThemeData theme;
   // theme id
   final String id;

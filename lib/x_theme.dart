@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:playx_core/playx_core.dart';
 
-/// wrapper around flutter `ThemeData`
+/// wrapper around flutter `ThemeData`.
+/// used to define current app theme.
 class XTheme extends Equatable {
   // actual theme
   final ThemeData theme;

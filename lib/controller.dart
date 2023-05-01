@@ -2,6 +2,7 @@ import 'package:playx_core/playx_core.dart';
 import 'package:playx_theme/config.dart';
 import 'package:playx_theme/x_theme.dart';
 
+///XThemeController used to handle all operations on themes like how to change theme, etc.
 class XThemeController extends GetxController {
   static const lastKnownIndexKey = 'playx.theme.last_known_index';
 
@@ -25,9 +26,7 @@ class XThemeController extends GetxController {
         config.themes.first;
   }
 
-  /// update the theme to one of the theme list by index
-
-  /// update the theme to one of the theme list by index
+  /// update the theme to one of the theme list.
   Future<void> updateTo(XTheme theme) async {
     _current = theme;
     await Prefs.setInt(lastKnownIndexKey, currentIndex);
@@ -44,6 +43,7 @@ class XThemeController extends GetxController {
     );
   }
 
+  /// update the theme to by index
   Future<void> updateByIndex(int index) async {
     try {
       _current = config.themes[index];

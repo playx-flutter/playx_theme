@@ -1,12 +1,10 @@
 # Playx Theme
 
-# Get Started
-
 # Features 🔥
 
 - no need for `BuildContext` (you still can access the theme from the context if you need 😉)
 - works out of the box
-  - no need to store or load the last used theme by your self
+- no need to store or load the last used theme by your self
 
 ### boot the core
 

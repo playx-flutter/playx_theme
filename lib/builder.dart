@@ -3,6 +3,9 @@ import 'package:playx_core/exports.dart';
 import 'package:playx_theme/controller.dart';
 import 'package:playx_theme/x_theme.dart';
 
+///PlayXThemeBuilder:
+///It allows us to create a widget with current theme.
+///It should rebuild the widget automatically after changing the theme.
 class PlayXThemeBuilder extends StatelessWidget {
   final Widget Function(XTheme xTheme) builder;
 

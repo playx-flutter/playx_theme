@@ -3,10 +3,14 @@ import 'package:playx_theme/config.dart';
 import 'package:playx_theme/controller.dart';
 import 'package:playx_theme/x_theme.dart';
 
+/// AppTheme :
+/// It controls current app theme and how to change current theme.
 abstract class AppTheme {
   /// shortcut for the rest of the functions
   static XThemeController get _controller => Get.find<XThemeController>();
 
+  ///Used to setup AppTheme.
+  ///Must be called to initialize dependencies.
   static Future<void> boot({
     XThemeConfig config = const XDefaultThemeConfig(),
   }) async {
@@ -16,13 +20,16 @@ abstract class AppTheme {
     return _controller.boot();
   }
 
-  /// return current theme index
+  /// Get current theme index
   static int get index => _controller.currentIndex;
 
-  /// return current `XTheme`
+  /// Get current `XTheme`
   static XTheme get xTheme => _controller.currentXTheme;
 
+  ///Get current theme name
   static String get name => _controller.currentXTheme.nameBuilder();
+
+  ///Get current theme id
   static String get id => _controller.currentXTheme.id;
 
   /// return list of supported XThemes

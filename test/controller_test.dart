@@ -10,6 +10,7 @@ void main() {
   );
 
   setUp(() async {
+    Prefs.setMockInitialValues({});
     await PlayXCore.bootCore();
     await AppTheme.boot();
   });

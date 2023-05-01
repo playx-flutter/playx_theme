@@ -50,6 +50,7 @@ class XThemeController extends GetxController {
       await Prefs.setInt(lastKnownIndexKey, index);
       refresh();
     } catch (err) {
+      err.printError(info: 'Playx Theme :');
       if (err is! RangeError) rethrow;
     }
   }

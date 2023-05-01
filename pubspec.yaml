@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  playx_core: ^0.0.3
+  playx_core: ^0.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

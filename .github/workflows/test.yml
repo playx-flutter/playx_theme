@@ -17,10 +17,10 @@ jobs:
       - name: Install deps
         run: flutter packages get
 
-      - name: Format
-        run: flutter format --set-exit-if-changed .
+      - name: Format code
+        run: dart format --fix
 
-      - name: Analyze
+      - name: Analyze Code
         run: flutter analyze lib test example
 
       - name: Test

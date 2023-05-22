@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
   }  
 }  
 ```  
-### Update App Theme
+### -Update App Theme
 
 #### Use `AppTheme` facade to switch between themes
 With `AppTheme` you will have access to current app theme, it's index, name and id.
@@ -84,7 +84,8 @@ Here is a ``AppTheme `` methods :
 | colorScheme      | Get current `XTheme` color scheme.                         |
 
 
-### Customize Your Themes
+
+## Customize Your Themes
 Create a class that extends ``XThemeConfig`` then overrides it's themes method and provides it with all themes that your app needs.
 
 For example:
@@ -142,9 +143,25 @@ abstract class BaseColorScheme extends XColorScheme {
 ```
 
 Then, We can make each theme color scheme class to extend  `BaseColorScheme`.  
+For example:
+```dart 
+class LightColorScheme extends BaseColorScheme {
+  @override
+  Color get containerBackgroundColor => XColorScheme.white;
+
+  @override
+  Color get background => XColorScheme.white;
+
+  @override
+  Color get error => XColorScheme.red;
+
+  @override
+  Color get onBackground => XColorScheme.black;
+}
+```
 Now we can have access to colors that defined in both  `XColorScheme`  and  `BaseColorScheme` in each theme color scheme.
 
-Then, We can access each theme color scheme like this:
+Then, We can access to each theme color scheme like this:
  ```dart  
   final colorScheme = AppTheme.colorScheme as BaseColorScheme;  
   final primary = colorScheme.primary;  

@@ -1,16 +1,16 @@
 name: example
-description: A new Flutter project.
+description: An example for showcasing playx theme widget.
 version: 0.0.2
+publish_to: none
 
 environment:
-  sdk: ">=2.17.3 <3.0.0"
+  sdk: ">=2.19.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
-  playx_theme: ^0.0.2
-  playx_core: ^0.0.3
+  playx_theme:
+    path: ../
 
 dev_dependencies:
   flutter_test:

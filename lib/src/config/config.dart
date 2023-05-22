@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:playx_theme/x_theme.dart';
+import 'package:playx_theme/src/model/colors/dark_color_scheme.dart';
+import 'package:playx_theme/src/model/colors/light_color_scheme.dart';
+import 'package:playx_theme/src/model/x_theme.dart';
 
 /// Theme config :
 /// used to configure out app theme by providing the app with the needed themes.
@@ -7,6 +9,7 @@ import 'package:playx_theme/x_theme.dart';
 /// defaults to [XDefaultThemeConfig].
 abstract class XThemeConfig {
   const XThemeConfig();
+
   List<XTheme> get themes;
 }
 
@@ -17,14 +20,14 @@ class XDefaultThemeConfig extends XThemeConfig {
   @override
   List<XTheme> get themes => [
         XTheme(
-          id: 'dark',
-          nameBuilder: () => 'Dark',
-          theme: ThemeData.dark(),
-        ),
+            id: 'light',
+            nameBuilder: () => 'Light',
+            theme: ThemeData.light(),
+            colorScheme: LightColorScheme()),
         XTheme(
-          id: 'light',
-          nameBuilder: () => 'Light',
-          theme: ThemeData.light(),
-        ),
+            id: 'dark',
+            nameBuilder: () => 'Dark',
+            theme: ThemeData.dark(),
+            colorScheme: DarkColorScheme()),
       ];
 }

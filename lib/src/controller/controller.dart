@@ -1,6 +1,5 @@
 import 'package:playx_core/playx_core.dart';
-import 'package:playx_theme/config.dart';
-import 'package:playx_theme/x_theme.dart';
+import 'package:playx_theme/playx_theme.dart';
 
 ///XThemeController used to handle all operations on themes like how to change theme, etc.
 class XThemeController extends GetxController {

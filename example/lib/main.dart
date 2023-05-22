@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
-import 'package:playx_core/playx_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  /// boot the core
-  await PlayXCore.bootCore();
 
   /// boot the AppTheme
   await AppTheme.boot();
@@ -25,7 +21,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Flutter Demo',
           theme: xTheme.theme,
-          home: const MyHomePage(),
+          home: MyHomePage(),
         );
       },
     );
@@ -33,9 +29,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    Key? key,
-  }) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -48,11 +42,16 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('PlayX Themes Demo Home Page'),
       ),
-      floatingActionButton: const FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: AppTheme.next,
         tooltip: 'Next Theme',
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: colorScheme.onBackground,
+        ),
       ),
     );
   }
 }
+
+XColorScheme get colorScheme => AppTheme.colorScheme;

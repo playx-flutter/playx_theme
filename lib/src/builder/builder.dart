@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:playx_core/exports.dart';
-import 'package:playx_theme/controller.dart';
-import 'package:playx_theme/x_theme.dart';
+import 'package:playx_core/playx_core.dart';
+import 'package:playx_theme/src/controller/controller.dart';
+import 'package:playx_theme/src/model/x_theme.dart';
 
 ///PlayXThemeBuilder:
 ///It allows us to create a widget with current theme.
@@ -17,8 +17,9 @@ class PlayXThemeBuilder extends StatelessWidget {
   @override
   Widget build(
     BuildContext context,
-  ) =>
-      GetBuilder<XThemeController>(
-        builder: (c) => builder(c.currentXTheme),
-      );
+  ) {
+    return GetBuilder<XThemeController>(
+      builder: (c) => builder(c.currentXTheme),
+    );
+  }
 }

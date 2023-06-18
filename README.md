@@ -142,6 +142,23 @@ abstract class BaseColorScheme extends XColorScheme {
 ```
 
 Then, We can make each theme color scheme class to extend  `BaseColorScheme`.  
+For example:
+```dart 
+class LightColorScheme extends BaseColorScheme {
+  @override
+  Color get containerBackgroundColor => XColorScheme.white;
+
+  @override
+  Color get background => XColorScheme.white;
+
+  @override
+  Color get error => XColorScheme.red;
+
+  @override
+  Color get onBackground => XColorScheme.black;
+}
+```
+
 Now we can have access to colors that defined in both  `XColorScheme`  and  `BaseColorScheme` in each theme color scheme.
 
 Then, We can access each theme color scheme like this:

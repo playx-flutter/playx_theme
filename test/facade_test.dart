@@ -23,12 +23,12 @@ void main() {
 
   test('it updates theme by index', () async {
     expect(
-      AppTheme.xTheme.nameBuilder() == 'Red',
+      AppTheme.xTheme.name == 'Red',
       isFalse,
     );
     await AppTheme.updateByIndex(3);
     expect(
-      AppTheme.xTheme.nameBuilder(),
+      AppTheme.xTheme.name,
       'Red',
     );
   });

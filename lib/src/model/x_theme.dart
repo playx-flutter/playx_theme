@@ -13,21 +13,22 @@ class XTheme extends Equatable {
   final String id;
 
   /// build theme name.
-  final String Function() nameBuilder;
+  final String name;
 
+  /// color scheme for the theme.
   final XColorScheme colorScheme;
 
   const XTheme({
     required this.theme,
     required this.id,
-    required this.nameBuilder,
+    required this.name,
     required this.colorScheme,
   });
 
   @override
   List<Object> get props => [
         id,
+        name,
         theme,
-        nameBuilder(),
       ];
 }

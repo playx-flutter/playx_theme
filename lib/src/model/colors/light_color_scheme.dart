@@ -5,6 +5,9 @@ import 'package:playx_theme/src/model/x_color_scheme.dart';
 
 class LightColorScheme extends BaseColorScheme {
   @override
+  Color get containerBackgroundColor => XColorScheme.white;
+
+  @override
   Color get background => XColorScheme.white;
 
   @override
@@ -34,6 +37,4 @@ class LightColorScheme extends BaseColorScheme {
   @override
   Color get surface => XColorScheme.white;
 
-  @override
-  Color get containerBackgroundColor => XColorScheme.white;
 }

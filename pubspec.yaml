@@ -1,6 +1,6 @@
 name: playx_theme
 description: Multi theme features for flutter apps from playx eco system.
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/playx-flutter/playx_theme
 repository: https://github.com/playx-flutter/playx_theme
 
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  playx_core: ^0.0.5
+  playx_core: ^0.0.6
 
 dev_dependencies:
   flutter_test:

@@ -5,7 +5,7 @@ import 'package:playx_theme/src/model/colors/light_color_scheme.dart';
 
 final themeOutOFTheList = XTheme(
   id: '_id',
-  nameBuilder: () => '_name',
+  name: '_name',
   theme: ThemeData.dark(),
   colorScheme: LightColorScheme(),
 );
@@ -15,7 +15,7 @@ class TestConfig extends XThemeConfig {
   List<XTheme> get themes => [
         XTheme(
           theme: ThemeData.dark(),
-          nameBuilder: () => 'Dark',
+          name: 'Dark',
           id: 'Dark',
           colorScheme: DarkColorScheme(),
         ),
@@ -23,13 +23,13 @@ class TestConfig extends XThemeConfig {
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.yellow,
           ),
-          nameBuilder: () => 'Yellow',
+          name: 'Yellow',
           id: 'Yellow',
           colorScheme: DarkColorScheme(),
         ),
         XTheme(
           theme: ThemeData.light(),
-          nameBuilder: () => 'Light',
+          name: 'Light',
           id: 'Light',
           colorScheme: LightColorScheme(),
         ),
@@ -37,7 +37,7 @@ class TestConfig extends XThemeConfig {
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.red,
           ),
-          nameBuilder: () => 'Red',
+          name: 'Red',
           id: 'Red',
           colorScheme: DarkColorScheme(),
         ),
@@ -45,7 +45,7 @@ class TestConfig extends XThemeConfig {
           theme: ThemeData(
             scaffoldBackgroundColor: Colors.cyan,
           ),
-          nameBuilder: () => 'cyan',
+          name: 'cyan',
           id: 'cyan',
           colorScheme: LightColorScheme(),
         ),

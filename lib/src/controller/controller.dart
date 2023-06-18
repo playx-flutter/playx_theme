@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:playx_core/playx_core.dart';
 import 'package:playx_theme/playx_theme.dart';
 
@@ -26,28 +27,55 @@ class XThemeController extends GetxController {
   }
 
   /// update the theme to one of the theme list.
-  Future<void> updateTo(XTheme theme) async {
+  Future<void> updateTo(XTheme theme, {bool forceUpdateTheme = true}) async {
     _current = theme;
     await Prefs.setInt(lastKnownIndexKey, currentIndex);
     refresh();
+
+    if (forceUpdateTheme) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.forceAppUpdate();
+      });
+    }
   }
 
   /// switch the theme to the next in the list
   /// if there is no next theme, it will switch to the first one
-  Future<void> nextTheme() async {
+  Future<void> nextTheme({bool forceUpdateTheme = true}) async {
     final isLastTheme = currentIndex == config.themes.length - 1;
 
-    await updateByIndex(
-      isLastTheme ? 0 : currentIndex + 1,
-    );
+    await updateByIndex(isLastTheme ? 0 : currentIndex + 1,
+        forceUpdateTheme: forceUpdateTheme);
   }
 
   /// update the theme to by index
-  Future<void> updateByIndex(int index) async {
+  Future<void> updateByIndex(int index, {bool forceUpdateTheme = true}) async {
     try {
       _current = config.themes[index];
       await Prefs.setInt(lastKnownIndexKey, index);
       refresh();
+      if (forceUpdateTheme) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Get.forceAppUpdate();
+        });
+      }
+    } catch (err) {
+      err.printError(info: 'Playx Theme :');
+      if (err is! RangeError) rethrow;
+    }
+  }
+
+  /// update the theme to by index
+  Future<void> updateById(String id, {bool forceUpdateTheme = true}) async {
+    try {
+      _current = config.themes.firstWhere((element) => element.id == id);
+      await Prefs.setInt(lastKnownIndexKey, currentIndex);
+      refresh();
+      if (forceUpdateTheme) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Get.forceAppUpdate();
+        });
+      }
     } catch (err) {
       err.printError(info: 'Playx Theme :');
       if (err is! RangeError) rethrow;

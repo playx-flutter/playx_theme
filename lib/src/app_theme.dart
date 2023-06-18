@@ -37,7 +37,7 @@ abstract class AppTheme {
   static XColorScheme get colorScheme => xTheme.colorScheme;
 
   ///Get current theme name
-  static String get name => _controller.currentXTheme.nameBuilder();
+  static String get name => _controller.currentXTheme.name;
 
   ///Get current theme id
   static String get id => _controller.currentXTheme.id;
@@ -46,18 +46,20 @@ abstract class AppTheme {
   static List<XTheme> get supportedThemes => _controller.config.themes;
 
   /// update theme to use the given one
-  static Future<void> updateTo(
-    XTheme theme,
-  ) =>
-      _controller.updateTo(theme);
+  static Future<void> updateTo(XTheme theme, {bool forceUpdateTheme = true}) =>
+      _controller.updateTo(theme, forceUpdateTheme: forceUpdateTheme);
 
   /// updates the app theme by the index
   /// if index is out of range , it will do nothing
-  static Future<void> updateByIndex(
-    int index,
-  ) =>
-      _controller.updateByIndex(index);
+  static Future<void> updateByIndex(int index,
+          {bool forceUpdateTheme = true}) =>
+      _controller.updateByIndex(index, forceUpdateTheme: forceUpdateTheme);
+
+  /// updates the app theme by the index
+  static Future<void> updateById(String id, {bool forceUpdateTheme = true}) =>
+      _controller.updateById(id, forceUpdateTheme: forceUpdateTheme);
 
   /// updates the app theme to the next theme
-  static Future<void> next() => _controller.nextTheme();
+  static Future<void> next({bool forceUpdateTheme = true}) =>
+      _controller.nextTheme(forceUpdateTheme: forceUpdateTheme);
 }

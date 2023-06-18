@@ -17,7 +17,7 @@ Which comes prepackaged with Playx Theme with more features and is easy to use.
 in `pubspec.yaml` add these lines to `dependencies`
 
 ```yaml
- playx_theme: ^0.0.4  
+ playx_theme: ^0.0.5  
 ```   
 
 ## Usage
@@ -71,18 +71,18 @@ With `AppTheme` you will have access to current app theme, it's index, name and 
       ),  
 ```  
 Here is a ``AppTheme `` methods :
+
 | Method           | Description                                                |
 | -----------      | :--------------------------------------------------------  |
 | next             | updates the app theme to the next theme.                   |
 | updateByIndex    | updates the app theme by the index.                        |
 | updateTo         | updates the app theme to a specific `XTheme`.              |
 | index            | Get current `XTheme` index.                                |
-| xTheme           | Get current `XTheme`.                                      |
+| xTheme           | Get current `XTheme`.                                      | 
 | name             | Get current theme name.                                    |
 | id               | Get current theme id.                                      |
 | supportedThemes  | Get current supported themes configured in `XThemeConfig`. |
 | colorScheme      | Get current `XTheme` color scheme.                         |
-
 
 ### Customize Your Themes
 Create a class that extends ``XThemeConfig`` then overrides it's themes method and provides it with all themes that your app needs.

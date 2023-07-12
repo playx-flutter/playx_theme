@@ -14,11 +14,13 @@ abstract class AppTheme {
 
   ///Used to setup AppTheme.
   ///Must be called to initialize dependencies.
+  ///securePrefsSettings is not necessary for only using PlayxTheme package.
   static Future<void> boot({
     XThemeConfig config = const XDefaultThemeConfig(),
+    SecurePrefsSettings? securePrefsSettings
   }) async {
     /// * boot the core
-    await PlayXCore.bootCore();
+    await PlayXCore.bootCore(securePrefsSettings: securePrefsSettings);
     log('[playx] core booted ✔');
 
     Get
@@ -26,6 +28,8 @@ abstract class AppTheme {
       ..put<XThemeController>(XThemeController());
     return _controller.boot();
   }
+
+
 
   /// Get current theme index
   static int get index => _controller.currentIndex;
@@ -62,4 +66,12 @@ abstract class AppTheme {
   /// updates the app theme to the next theme
   static Future<void> next({bool forceUpdateTheme = true}) =>
       _controller.nextTheme(forceUpdateTheme: forceUpdateTheme);
+
+
+
+  static Future<void> dispose(){
+    return PlayXCore.dispose();
+  }
+
+
 }

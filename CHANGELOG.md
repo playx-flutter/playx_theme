@@ -1,3 +1,8 @@
+## 0.0.6
+- update packages
+- Add `dispose` function to `AppTheme` to clear unused resources.
+
+
 ## 0.0.5
 - [Breaking change] : Refactor `XThemeConfig` [nameBuilder] function to String [name]
 - Added [updateById]: Updates theme using it's id.

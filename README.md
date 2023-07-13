@@ -1,4 +1,6 @@
 # Playx Theme
+[![pub package](https://img.shields.io/pub/v/playx_theme.svg?color=1284C5)](https://pub.dev/packages/playx_theme)
+
 Multi theme features for flutter apps from playx eco system.
 
 # Features 🔥
@@ -17,7 +19,7 @@ Which comes prepackaged with Playx Theme with more features and is easy to use.
 in `pubspec.yaml` add these lines to `dependencies`
 
 ```yaml
- playx_theme: ^0.0.6  
+ playx_theme: ^0.0.7
 ```   
 
 ## Usage

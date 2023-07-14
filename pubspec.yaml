@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  playx_core: ^0.0.9
+  playx_core: ^0.1.0
 
 dev_dependencies:
   flutter_test:

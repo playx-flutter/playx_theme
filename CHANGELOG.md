@@ -1,3 +1,6 @@
+## 0.0.8
+- update packages
+
 ## 0.0.6 -0.0.7
 - update packages
 - Add `dispose` function to `AppTheme` to clear unused resources.

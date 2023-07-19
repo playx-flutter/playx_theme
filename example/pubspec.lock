@@ -252,17 +252,17 @@ packages:
     dependency: transitive
     description:
       name: playx_core
-      sha256: "69752839a6f37c23ac1e2df292225b6301c3b3e69b47d9d0c9721eb3025bfdb1"
+      sha256: "876863066779da8e89040469745cd13b97bcc97900b6fc818e148fda5194c3f9"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0"
+    version: "0.1.1"
   playx_theme:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.0.7"
+    version: "0.0.9"
   plugin_platform_interface:
     dependency: transitive
     description:

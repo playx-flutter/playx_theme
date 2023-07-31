@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:playx_core/playx_core.dart';
 import 'package:playx_theme/src/config/config.dart';
@@ -6,9 +5,9 @@ import 'package:playx_theme/src/controller/controller.dart';
 import 'package:playx_theme/src/model/x_color_scheme.dart';
 import 'package:playx_theme/src/model/x_theme.dart';
 
-/// AppTheme :
+/// PlayxTheme :
 /// It controls current app theme and how to change current theme.
-abstract class AppTheme {
+abstract class PlayxTheme {
   /// shortcut for the rest of the functions
   static XThemeController get _controller => Get.find<XThemeController>();
 
@@ -19,9 +18,6 @@ abstract class AppTheme {
     XThemeConfig config = const XDefaultThemeConfig(),
     SecurePrefsSettings securePrefsSettings = const SecurePrefsSettings(),
   }) async {
-    /// * boot the core
-    await PlayXCore.bootCore(securePrefsSettings: securePrefsSettings);
-    log('[playx] core booted ✔');
 
     Get
       ..put<XThemeConfig>(config)

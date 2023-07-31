@@ -4,8 +4,11 @@ import 'package:playx_theme/playx_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// * boot the core
+  await PlayXCore.bootCore();
+
   /// boot the AppTheme
-  await AppTheme.boot();
+  await PlayxTheme.boot();
 
   /// run the real app
   runApp(const MyApp());
@@ -43,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('PlayX Themes Demo Home Page'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: AppTheme.next,
+        onPressed: PlayxTheme.next,
         tooltip: 'Next Theme',
         child: Icon(
           Icons.add,
@@ -54,4 +57,4 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-XColorScheme get colorScheme => AppTheme.colorScheme;
+XColorScheme get colorScheme => PlayxTheme.colorScheme;

@@ -1,6 +1,6 @@
 library playx_theme;
 
-export 'src/app_theme.dart';
+export 'src/playx_theme.dart';
 
 ///Library exports
 export 'src/builder/builder.dart';

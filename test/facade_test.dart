@@ -9,25 +9,25 @@ void main() {
   setUp(() async {
     await PlayXCore.bootCore();
     await Prefs.clear();
-    await AppTheme.boot(config: TestConfig());
+    await PlayxTheme.boot(config: TestConfig());
   });
   tearDown(() async {
     await PlayXCore.dispose();
   });
   test('it updates theme', () async {
-    expect(AppTheme.xTheme == themeOutOFTheList, isFalse);
-    AppTheme.updateTo(themeOutOFTheList);
-    expect(AppTheme.xTheme == themeOutOFTheList, isTrue);
+    expect(PlayxTheme.xTheme == themeOutOFTheList, isFalse);
+    PlayxTheme.updateTo(themeOutOFTheList);
+    expect(PlayxTheme.xTheme == themeOutOFTheList, isTrue);
   });
 
   test('it updates theme by index', () async {
     expect(
-      AppTheme.xTheme.name == 'Red',
+      PlayxTheme.xTheme.name == 'Red',
       isFalse,
     );
-    await AppTheme.updateByIndex(3);
+    await PlayxTheme.updateByIndex(3);
     expect(
-      AppTheme.xTheme.name,
+      PlayxTheme.xTheme.name,
       'Red',
     );
   });

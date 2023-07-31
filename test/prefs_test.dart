@@ -14,7 +14,7 @@ void main() {
   setUp(() async {
     await PlayXCore.bootCore();
     Prefs.setMockInitialValues({XThemeController.lastKnownIndexKey: 2});
-    await AppTheme.boot(config: TestConfig());
+    await PlayxTheme.boot(config: TestConfig());
   });
 
   tearDown(
@@ -25,8 +25,8 @@ void main() {
   test(
     'it saves the theme to shared preferences',
     () async {
-      await AppTheme.next();
-      expect(Prefs.getInt(XThemeController.lastKnownIndexKey), AppTheme.index);
+      await PlayxTheme.next();
+      expect(Prefs.getInt(XThemeController.lastKnownIndexKey), PlayxTheme.index);
     },
   );
   testWidgets(
@@ -35,7 +35,7 @@ void main() {
       /// * pump the app
       await tester.pumpWidget(const TestApp());
 
-      final counterZero = find.text(AppTheme.index.toString());
+      final counterZero = find.text(PlayxTheme.index.toString());
       expect(counterZero, findsOneWidget);
     },
   );

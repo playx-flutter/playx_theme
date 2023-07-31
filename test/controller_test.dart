@@ -11,7 +11,7 @@ void main() {
   setUp(() async {
     Prefs.setMockInitialValues({});
     await PlayXCore.bootCore();
-    await AppTheme.boot();
+    await PlayxTheme.boot();
   });
   tearDown(() async {
     await PlayXCore.dispose();
@@ -20,7 +20,7 @@ void main() {
   test(
     'updateByIndex does not throws if index is out of range',
     () async {
-      await AppTheme.updateByIndex(333);
+      await PlayxTheme.updateByIndex(333);
       expect(true, isTrue);
     },
   );

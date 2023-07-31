@@ -63,7 +63,7 @@ class TestApp extends StatelessWidget {
         theme: xTheme.theme,
         home: Scaffold(
           body: Center(
-            child: Text(AppTheme.index.toString()),
+            child: Text(PlayxTheme.index.toString()),
           ),
         ),
       ),

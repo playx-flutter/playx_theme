@@ -1,3 +1,8 @@
+## 0.1.0
+- [Breaking change] : Refactor `AppTheme` to be `PlayxTheme`.
+- Move `PlayxCore.boot()` to be called individually.
+
+
 ## 0.0.8 -0.0.9
 - update packages
 

@@ -6,7 +6,7 @@ Multi theme features for flutter apps from playx eco system.
 # Features 🔥
 - Create and mange app theme with the ability to easily change app theme.
 - No need for `BuildContext` (you still can access the theme from the context if you need 😉)
-- Create custom colors for each theme and easily access it like `AppTheme.colorScheme.primary`
+- Create custom colors for each theme and easily access it like `PlayxTheme.colorScheme.primary`
 - Works out of the box.
 - No need to store or load the last used theme by your self
 
@@ -19,7 +19,7 @@ Which comes prepackaged with Playx Theme with more features and is easy to use.
 in `pubspec.yaml` add these lines to `dependencies`
 
 ```yaml
- playx_theme: ^0.0.9
+ playx_theme: ^0.1.0
 ```   
 
 ## Usage
@@ -27,13 +27,15 @@ in `pubspec.yaml` add these lines to `dependencies`
 
 ```dart  
  void main ()async{  
- WidgetsFlutterBinding.ensureInitialized();  
-   
-  /// boot the theme  
-  /// you can provide `XThemeConfig` to add your custom themes  
-  await AppTheme.boot();  
+  WidgetsFlutterBinding.ensureInitialized();
+
+  /// * boot the core
+  await PlayXCore.bootCore();
+
+  /// boot the AppTheme
+  await PlayxTheme.boot();
   
-  /// run the real app  
+  /// run the app  
   runApp(const MyApp());  
 }  
 ```  
@@ -60,19 +62,19 @@ class MyApp extends StatelessWidget {
 ```  
 ### Update App Theme
 
-#### Use `AppTheme` facade to switch between themes
-With `AppTheme` you will have access to current app theme, it's index, name and id.
+#### Use `PlayxTheme` facade to switch between themes
+With `PlayxTheme` you will have access to current app theme, it's index, name and id.
 
 ```dart   
     FloatingActionButton(  
         //Change App theme to the next theme in Theme Config.  
-        onPressed: AppTheme.next,  //changes theme to next theme
+        onPressed: PlayxTheme.next,  //changes theme to next theme
         child: Icon(Icons.next,  
-        color: AppTheme.colorScheme.onBackground //color updates by theme.  
+        color: PlayxTheme.colorScheme.onBackground //color updates by theme.  
         ),  
       ),  
 ```  
-Here is a ``AppTheme `` methods :
+Here is a ``PlayxTheme `` methods :
 
 | Method           | Description                                                |
 | -----------      | :--------------------------------------------------------  |
@@ -165,7 +167,7 @@ Now we can have access to colors that defined in both  `XColorScheme`  and  `Bas
 
 Then, We can access each theme color scheme like this:
  ```dart  
-  final colorScheme = AppTheme.colorScheme as BaseColorScheme;  
+  final colorScheme = PlayxTheme.colorScheme as BaseColorScheme;  
   final primary = colorScheme.primary;  
   ```
 

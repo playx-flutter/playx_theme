@@ -7,7 +7,7 @@ import 'package:playx_theme/src/model/x_color_scheme.dart';
 class XTheme extends Equatable {
   /// Defines the configuration of the overall visual [Theme] for a [MaterialApp]
   /// or a widget subtree within the app.
-  final ThemeData theme;
+  final ThemeData Function( Locale locale) theme;
 
   /// id for the theme.
   final String id;
@@ -29,6 +29,5 @@ class XTheme extends Equatable {
   List<Object> get props => [
         id,
         name,
-        theme,
       ];
 }

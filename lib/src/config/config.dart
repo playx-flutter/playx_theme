@@ -22,12 +22,15 @@ class XDefaultThemeConfig extends XThemeConfig {
         XTheme(
             id: 'light',
             name: 'Light',
-            theme: ThemeData.light(),
+            theme: (locale) => ThemeData.light().copyWith(
+                textTheme: const TextTheme().apply(
+                    fontFamily:
+                        locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),
             colorScheme: LightColorScheme()),
         XTheme(
             id: 'dark',
             name: 'Dark',
-            theme: ThemeData.dark(),
+            theme: (locale) => ThemeData.dark(),
             colorScheme: DarkColorScheme()),
       ];
 }

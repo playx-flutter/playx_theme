@@ -6,7 +6,7 @@ import 'package:playx_theme/src/model/colors/light_color_scheme.dart';
 final themeOutOFTheList = XTheme(
   id: '_id',
   name: '_name',
-  theme: ThemeData.dark(),
+  theme: (locale) => ThemeData.dark(),
   colorScheme: LightColorScheme(),
 );
 
@@ -14,13 +14,13 @@ class TestConfig extends XThemeConfig {
   @override
   List<XTheme> get themes => [
         XTheme(
-          theme: ThemeData.dark(),
+          theme:(locale)=> ThemeData.dark(),
           name: 'Dark',
           id: 'Dark',
           colorScheme: DarkColorScheme(),
         ),
         XTheme(
-          theme: ThemeData(
+          theme:(locale)=>ThemeData(
             scaffoldBackgroundColor: Colors.yellow,
           ),
           name: 'Yellow',
@@ -28,13 +28,13 @@ class TestConfig extends XThemeConfig {
           colorScheme: DarkColorScheme(),
         ),
         XTheme(
-          theme: ThemeData.light(),
+          theme: (locale)=>ThemeData.light(),
           name: 'Light',
           id: 'Light',
           colorScheme: LightColorScheme(),
         ),
         XTheme(
-          theme: ThemeData(
+          theme:(locale)=> ThemeData(
             scaffoldBackgroundColor: Colors.red,
           ),
           name: 'Red',
@@ -42,7 +42,7 @@ class TestConfig extends XThemeConfig {
           colorScheme: DarkColorScheme(),
         ),
         XTheme(
-          theme: ThemeData(
+          theme:(locale)=> ThemeData(
             scaffoldBackgroundColor: Colors.cyan,
           ),
           name: 'cyan',
@@ -58,9 +58,11 @@ class TestApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+
     return PlayXThemeBuilder(
       builder: (xTheme) => MaterialApp(
-        theme: xTheme.theme,
+        theme: xTheme.theme(locale),
         home: Scaffold(
           body: Center(
             child: Text(PlayxTheme.index.toString()),

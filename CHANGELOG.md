@@ -1,5 +1,6 @@
-## 0.1.0
+## 0.1.0 -0.1.1
 - [Breaking change] : Refactor `AppTheme` to be `PlayxTheme`.
+- [Breaking change] : Refactor `XTheme` theme property from `ThemeData` to `ThemeData Function( Locale locale)`
 - Move `PlayxCore.boot()` to be called individually.
 
 

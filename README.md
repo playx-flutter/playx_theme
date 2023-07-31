@@ -48,11 +48,12 @@ class MyApp extends StatelessWidget {
   
   @override  
   Widget build(BuildContext context) {  
+    final locale = Localizations.localeOf(context);
     return PlayXThemeBuilder(  
       builder: (xTheme) {  
         return MaterialApp(  
           title: 'Flutter Demo',  
-          theme: xTheme.theme,  
+          theme: (locale)=> xTheme.theme(locale),  
           home: const MyHomePage(),  
         );  
       },  
@@ -99,12 +100,18 @@ For example:
         XTheme(
             id: 'light',
             nameBuilder: () => 'Light',
-            theme: ThemeData.light(),
+            theme: (locale) => ThemeData.light().copyWith(
+                textTheme: const TextTheme().apply(
+                    fontFamily:
+                    locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),
             colorScheme: LightColorScheme()),
         XTheme(
             id: 'dark',
             nameBuilder: () => 'Dark',
-            theme: ThemeData.dark(),
+            theme: (locale) => ThemeData.dark().copyWith(
+                textTheme: const TextTheme().apply(
+                    fontFamily:
+                    locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),
             colorScheme: DarkColorScheme()),
       ];
 }

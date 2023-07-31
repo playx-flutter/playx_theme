@@ -16,9 +16,7 @@ abstract class PlayxTheme {
   ///securePrefsSettings is not necessary for only using PlayxTheme package.
   static Future<void> boot({
     XThemeConfig config = const XDefaultThemeConfig(),
-    SecurePrefsSettings securePrefsSettings = const SecurePrefsSettings(),
   }) async {
-
     Get
       ..put<XThemeConfig>(config)
       ..put<XThemeController>(XThemeController());
@@ -61,7 +59,8 @@ abstract class PlayxTheme {
   static Future<void> next({bool forceUpdateTheme = true}) =>
       _controller.nextTheme(forceUpdateTheme: forceUpdateTheme);
 
-  static Future<void> dispose() {
-    return PlayXCore.dispose();
+  static Future<bool> dispose() async {
+   await Get.delete<XThemeConfig>();
+   return Get.delete<XThemeController>();
   }
 }

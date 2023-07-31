@@ -11,7 +11,7 @@ void main() async {
   await PlayxTheme.boot();
 
   /// run the real app
-  runApp(const MyApp());
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,11 +19,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
     return PlayXThemeBuilder(
       builder: (xTheme) {
         return MaterialApp(
           title: 'Flutter Demo',
-          theme: xTheme.theme,
+          theme: xTheme.theme(locale),
           home: const MyHomePage(),
         );
       },

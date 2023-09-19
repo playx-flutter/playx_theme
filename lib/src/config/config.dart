@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:playx_theme/src/model/colors/dark_color_scheme.dart';
-import 'package:playx_theme/src/model/colors/light_color_scheme.dart';
-import 'package:playx_theme/src/model/x_theme.dart';
+import 'package:playx_theme/playx_theme.dart';
+import 'package:playx_theme/src/model/colors/dark_colors.dart';
+import 'package:playx_theme/src/model/colors/light_colors.dart';
 
 /// Theme config :
 /// used to configure out app theme by providing the app with the needed themes.
@@ -9,6 +9,8 @@ import 'package:playx_theme/src/model/x_theme.dart';
 /// defaults to [XDefaultThemeConfig].
 abstract class XThemeConfig {
   const XThemeConfig();
+
+  int get defaultThemeIndex => 0;
 
   List<XTheme> get themes;
 }
@@ -22,15 +24,18 @@ class XDefaultThemeConfig extends XThemeConfig {
         XTheme(
             id: 'light',
             name: 'Light',
-            theme: (locale) => ThemeData.light().copyWith(
-                textTheme: const TextTheme().apply(
-                    fontFamily:
-                        locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),
-            colorScheme: LightColorScheme()),
+            theme: (locale) => ThemeData(
+              brightness: Brightness.light,
+            ),
+            colors: LightColorScheme()),
         XTheme(
             id: 'dark',
             name: 'Dark',
             theme: (locale) => ThemeData.dark(),
-            colorScheme: DarkColorScheme()),
+            colors: DarkColorScheme()),
       ];
+
+  ///set default theme to light or dark based on device dark mode.
+  @override
+  int get defaultThemeIndex => PlayxTheme.isDeviceInDarkMode() ? 1 :0;
 }

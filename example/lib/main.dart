@@ -40,6 +40,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,11 +52,11 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Next Theme',
         child: Icon(
           Icons.add,
-          color: colorScheme.onBackground,
+          color: context.colorScheme.onPrimary,
         ),
       ),
     );
   }
 }
 
-XColorScheme get colorScheme => PlayxTheme.colorScheme;
+XColors get colorScheme => PlayxTheme.colors;

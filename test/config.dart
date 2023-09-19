@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
-import 'package:playx_theme/src/model/colors/dark_color_scheme.dart';
-import 'package:playx_theme/src/model/colors/light_color_scheme.dart';
+import 'package:playx_theme/src/model/colors/dark_colors.dart';
+import 'package:playx_theme/src/model/colors/light_colors.dart';
 
 final themeOutOFTheList = XTheme(
   id: '_id',
   name: '_name',
   theme: (locale) => ThemeData.dark(),
-  colorScheme: LightColorScheme(),
+  colors: LightColorScheme(),
 );
 
 class TestConfig extends XThemeConfig {
@@ -17,7 +17,7 @@ class TestConfig extends XThemeConfig {
           theme:(locale)=> ThemeData.dark(),
           name: 'Dark',
           id: 'Dark',
-          colorScheme: DarkColorScheme(),
+          colors: DarkColorScheme(),
         ),
         XTheme(
           theme:(locale)=>ThemeData(
@@ -25,13 +25,13 @@ class TestConfig extends XThemeConfig {
           ),
           name: 'Yellow',
           id: 'Yellow',
-          colorScheme: DarkColorScheme(),
+          colors: DarkColorScheme(),
         ),
         XTheme(
           theme: (locale)=>ThemeData.light(),
           name: 'Light',
           id: 'Light',
-          colorScheme: LightColorScheme(),
+          colors: LightColorScheme(),
         ),
         XTheme(
           theme:(locale)=> ThemeData(
@@ -39,7 +39,7 @@ class TestConfig extends XThemeConfig {
           ),
           name: 'Red',
           id: 'Red',
-          colorScheme: DarkColorScheme(),
+          colors: DarkColorScheme(),
         ),
         XTheme(
           theme:(locale)=> ThemeData(
@@ -47,7 +47,7 @@ class TestConfig extends XThemeConfig {
           ),
           name: 'cyan',
           id: 'cyan',
-          colorScheme: LightColorScheme(),
+          colors: LightColorScheme(),
         ),
         themeOutOFTheList,
       ];

@@ -29,8 +29,8 @@ abstract class PlayxTheme {
   /// Get current `XTheme`
   static XTheme get xTheme => _controller.currentXTheme;
 
-  /// Get current `XTheme` color scheme.
-  static XColorScheme get colorScheme => xTheme.colorScheme;
+  /// Get current `XTheme` colors.
+  static XColors get colors => xTheme.colors;
 
   ///Get current theme name
   static String get name => _controller.currentXTheme.name;
@@ -59,8 +59,15 @@ abstract class PlayxTheme {
   static Future<void> next({bool forceUpdateTheme = true}) =>
       _controller.nextTheme(forceUpdateTheme: forceUpdateTheme);
 
-  static Future<bool> dispose() async {
-   await Get.delete<XThemeConfig>();
-   return Get.delete<XThemeController>();
+  /// Determines whether the device is in dark or light mode.
+  static bool isDeviceInDarkMode(){
+    return _controller.isDeviceInDarkMode();
   }
+
+  /// dispose playx theme
+  static Future<bool> dispose() async {
+    await Get.delete<XThemeConfig>();
+    return Get.delete<XThemeController>();
+  }
+
 }

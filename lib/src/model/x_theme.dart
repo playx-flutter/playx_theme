@@ -15,14 +15,14 @@ class XTheme extends Equatable {
   /// build theme name.
   final String name;
 
-  /// color scheme for the theme.
-  final XColorScheme colorScheme;
+  /// color scheme for the theme which provides custom colors for each theme.
+  final XColors colors;
 
   const XTheme({
     required this.theme,
     required this.id,
     required this.name,
-    required this.colorScheme,
+     this.colors =const DefaultColors(),
   });
 
   @override

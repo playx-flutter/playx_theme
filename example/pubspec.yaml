@@ -12,6 +12,7 @@ dependencies:
   playx_theme:
     path: ../
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

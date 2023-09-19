@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:playx_theme/playx_theme.dart';
 
@@ -14,13 +17,18 @@ class XThemeController extends GetxController {
   /// current theme index
   int get currentIndex => config.themes.indexOf(currentXTheme);
 
+  int get defaultIndex  {
+    final index = config.defaultThemeIndex;
+    if(index < 0 || index >= config.themes.length) return 0;
+    return  index;
+  }
+
   /// set up the base controller
   Future<void> boot() async {
     final lastKnownIndex = Prefs.getInt(lastKnownIndexKey);
 
-    /// *
     _current = config.themes.atOrNull(
-          lastKnownIndex ?? 0,
+          lastKnownIndex ?? defaultIndex,
         ) ??
         config.themes.first;
   }
@@ -80,4 +88,17 @@ class XThemeController extends GetxController {
       if (err is! RangeError) rethrow;
     }
   }
+
+  ///Whether the device is currently in dark mode
+  /// Can be used to show theme based on user mode.
+  bool isDeviceInDarkMode(){
+    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+    return brightness == Brightness.dark;
+  }
+
+
+
+
+
+
 }

@@ -2,29 +2,18 @@ import 'dart:ui';
 
 import '/src/config/config.dart';
 
-/// This is base class for creating a color scheme for each theme.
-/// Each theme should have its own color scheme that is configured in [XThemeConfig].
-/// Each theme color scheme extends this class to provide a color scheme for each theme.
-/// If you want to extend the colors that are defined in [XColorScheme]
-/// You can define another base class that extends [XColorScheme] and adds more colors to it.
+/// This is base class for creating a custom colors for each theme.
+/// Each theme can have its own colors that is configured in [XThemeConfig].
+/// Each xTheme can have a class that extends this class to provide custom colors for each theme.
+/// If you want to extend the colors that are defined in [XColors]
+/// You can define another base class that extends [XColors] and adds more colors to it.
 /// And Make Each Theme Color Scheme to extend the new Class.
 /// You can access each theme color scheme like this:
 /// ```dart
-///  final colorScheme = AppTheme.colorScheme;
+///  final colorScheme = PlayxTheme.colorScheme;
 ///  final primary = colorScheme.primary;
 ///  ```
-abstract class XColorScheme {
-  Color get primary;
-  Color get secondary;
-  Color get background;
-  Color get surface;
-  Color get error;
-
-  Color get onPrimary;
-  Color get onSecondary;
-  Color get onBackground;
-  Color get onSurface;
-  Color get onError;
+abstract class XColors {
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
@@ -67,4 +56,12 @@ abstract class XColorScheme {
   static const Color blackTransparent = Color(0x80054477);
 
   static const Color blueTransparent = Color(0x80032C4C);
+
+  const XColors();
+}
+
+
+class DefaultColors extends XColors {
+
+ const DefaultColors();
 }

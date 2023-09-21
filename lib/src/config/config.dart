@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
 import 'package:playx_theme/src/model/colors/dark_colors.dart';
@@ -27,11 +28,17 @@ class XDefaultThemeConfig extends XThemeConfig {
             theme: (locale) => ThemeData(
               brightness: Brightness.light,
             ),
+            cupertinoTheme:(locale) => const CupertinoThemeData(
+              brightness: Brightness.light,
+            ),
             colors: LightColorScheme()),
         XTheme(
             id: 'dark',
             name: 'Dark',
             theme: (locale) => ThemeData.dark(),
+            cupertinoTheme:(locale) => const CupertinoThemeData(
+              brightness: Brightness.dark,
+            ),
             colors: DarkColorScheme()),
       ];
 

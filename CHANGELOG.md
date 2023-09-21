@@ -1,3 +1,6 @@
+## 0.2.1
+- Added an optional `cupertinoTheme` to `XTheme` to help with configuring cupertino app theme.
+
 ## 0.2.0
 > Note: This release has breaking changes.
 ### New features

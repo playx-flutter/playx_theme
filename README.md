@@ -17,7 +17,7 @@ Easily change and manage  current app theme with a lot of features like having c
 in `pubspec.yaml` add these lines to `dependencies`
 
 ```yaml  
- playx_theme: ^0.2.0  
+ playx_theme: ^0.2.1  
 ```   
 ## Usage
 ### - Boot the core
@@ -100,7 +100,10 @@ For example:
             theme: (locale) => ThemeData.light().copyWith(  
                 textTheme: const TextTheme().apply(  
                     fontFamily:  
-                    locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),  
+                    locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),
+            cupertinoTheme:(locale) => const CupertinoThemeData(
+              brightness: Brightness.light,
+            ),
             colorScheme: LightColorScheme()),  
         XTheme(  
             id: 'dark',  
@@ -108,7 +111,10 @@ For example:
             theme: (locale) => ThemeData.dark().copyWith(  
                 textTheme: const TextTheme().apply(  
                     fontFamily:  
-                    locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),  
+                    locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),
+            cupertinoTheme:(locale) => const CupertinoThemeData(
+              brightness: Brightness.dark,
+            ),
             colorScheme: DarkColorScheme()),  
       ];  
 }  

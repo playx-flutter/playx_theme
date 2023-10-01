@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:playx_theme/src/model/x_color_scheme.dart';
+import 'package:playx_theme/playx_theme.dart';
 
 /// This is base class for creating custom colors for each theme.
 /// You can create this class of you want to add more colors that will be implemented in each theme colors
@@ -15,17 +15,9 @@ abstract class BaseColors extends XColors {
   ///Colors that needs to implemented for each theme.
   Color get containerBackgroundColor;
 
-  Color get primary;
-  Color get secondary;
-  Color get background;
-  Color get surface;
-  Color get error;
+  final ColorScheme colorScheme;
 
-  Color get onPrimary;
-  Color get onSecondary;
-  Color get onBackground;
-  Color get onSurface;
-  Color get onError;
+  BaseColors({required this.colorScheme}) : super.fromColorScheme(scheme: colorScheme);
 
 
   ///Colors that needs to is used for each theme.

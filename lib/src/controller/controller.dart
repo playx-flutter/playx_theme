@@ -1,7 +1,6 @@
-import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 import 'package:playx_theme/playx_theme.dart';
 
 ///XThemeController used to handle all operations on themes like how to change theme, etc.

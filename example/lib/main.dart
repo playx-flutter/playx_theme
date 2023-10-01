@@ -1,3 +1,4 @@
+import 'package:example/config/config.dart';
 import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
 
@@ -8,7 +9,7 @@ void main() async {
   await PlayXCore.bootCore();
 
   /// boot the AppTheme
-  await PlayxTheme.boot();
+  await PlayxTheme.boot(config: const ThemeConfig());
 
   /// run the real app
   runApp(const MaterialApp(home: MyApp()));
@@ -47,6 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('PlayX Themes Demo Home Page'),
       ),
+
+      body: Center(
+        child: Text('Playx Theme', style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 20),),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: PlayxTheme.next,
         tooltip: 'Next Theme',
@@ -55,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
           color: context.colorScheme.onPrimary,
         ),
       ),
+
     );
   }
 }

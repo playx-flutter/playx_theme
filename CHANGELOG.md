@@ -1,3 +1,9 @@
+## 0.2.2
+- Added material 3 colors to `XColors` which can be configured through the app.
+- Added an optional `fromColorScheme` to `XColors` to help with configuring material 3 style colors that can be used on the app.
+- XDefaultThemeConfig now uses the default `XColors` instead of custom colors.
+
+
 ## 0.2.1
 - Added an optional `cupertinoTheme` to `XTheme` to help with configuring cupertino app theme.
 

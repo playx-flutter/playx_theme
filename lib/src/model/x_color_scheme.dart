@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 import '/src/config/config.dart';
 
@@ -13,7 +13,37 @@ import '/src/config/config.dart';
 ///  final colorScheme = PlayxTheme.colorScheme;
 ///  final primary = colorScheme.primary;
 ///  ```
-abstract class XColors {
+class XColors {
+  final Color primary;
+  final Color onPrimary;
+  final Color primaryContainer;
+  final Color onPrimaryContainer;
+  final Color secondary;
+  final Color onSecondary;
+  final Color secondaryContainer;
+  final Color onSecondaryContainer;
+  final Color tertiary;
+  final Color onTertiary;
+  final Color tertiaryContainer;
+  final Color onTertiaryContainer;
+  final Color error;
+  final Color onError;
+  final Color errorContainer;
+  final Color onErrorContainer;
+  final Color outline;
+  final Color outlineVariant;
+  final Color background;
+  final Color onBackground;
+  final Color surface;
+  final Color onSurface;
+  final Color surfaceVariant;
+  final Color onSurfaceVariant;
+  final Color inverseSurface;
+  final Color onInverseSurface;
+  final Color inversePrimary;
+  final Color shadow;
+  final Color scrim;
+  final Color surfaceTint;
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
@@ -57,11 +87,104 @@ abstract class XColors {
 
   static const Color blueTransparent = Color(0x80032C4C);
 
-  const XColors();
+  XColors.fromColorScheme({
+    required ColorScheme scheme,
+    Color? primary,
+    Color? onPrimary,
+    Color? primaryContainer,
+    Color? onPrimaryContainer,
+    Color? secondary,
+    Color? onSecondary,
+    Color? secondaryContainer,
+    Color? onSecondaryContainer,
+    Color? tertiary,
+    Color? onTertiary,
+    Color? tertiaryContainer,
+    Color? onTertiaryContainer,
+    Color? error,
+    Color? onError,
+    Color? errorContainer,
+    Color? onErrorContainer,
+    Color? outline,
+    Color? outlineVariant,
+    Color? background,
+    Color? onBackground,
+    Color? surface,
+    Color? onSurface,
+    Color? surfaceVariant,
+    Color? onSurfaceVariant,
+    Color? inverseSurface,
+    Color? onInverseSurface,
+    Color? inversePrimary,
+    Color? shadow,
+    Color? scrim,
+    Color? surfaceTint,
+  })  : primary = primary ?? scheme.primary,
+        onPrimary = onPrimary ?? scheme.onPrimary,
+        primaryContainer = primaryContainer ?? scheme.primaryContainer,
+        onPrimaryContainer = onPrimaryContainer ?? scheme.onPrimaryContainer,
+        secondary = secondary ?? scheme.secondary,
+        onSecondary = onSecondary ?? scheme.onSecondary,
+        secondaryContainer = secondaryContainer ?? scheme.secondaryContainer,
+        onSecondaryContainer =
+            onSecondaryContainer ?? scheme.onSecondaryContainer,
+        tertiary = tertiary ?? scheme.tertiary,
+        onTertiary = onTertiary ?? scheme.onTertiary,
+        tertiaryContainer = tertiaryContainer ?? scheme.tertiaryContainer,
+        onTertiaryContainer = onTertiaryContainer ?? scheme.onTertiaryContainer,
+        error = error ?? scheme.error,
+        onError = onError ?? scheme.onError,
+        errorContainer = errorContainer ?? scheme.errorContainer,
+        onErrorContainer = onErrorContainer ?? scheme.onErrorContainer,
+        outline = outline ?? scheme.outline,
+        outlineVariant = outlineVariant ?? scheme.outlineVariant,
+        background = background ?? scheme.background,
+        onBackground = onBackground ?? scheme.onBackground,
+        surface = surface ?? scheme.surface,
+        onSurface = onSurface ?? scheme.onSurface,
+        surfaceVariant = surfaceVariant ?? scheme.surfaceVariant,
+        onSurfaceVariant = onSurfaceVariant ?? scheme.onSurfaceVariant,
+        inverseSurface = inverseSurface ?? scheme.inverseSurface,
+        onInverseSurface = onInverseSurface ?? scheme.onInverseSurface,
+        inversePrimary = inversePrimary ?? scheme.inversePrimary,
+        shadow = shadow ?? scheme.shadow,
+        scrim = scrim ?? scheme.scrim,
+        surfaceTint = surfaceTint ?? scheme.primary;
+
+  const XColors({
+    this.primary = blueMain,
+    this.onPrimary = white,
+    this.primaryContainer = white,
+    this.onPrimaryContainer = black,
+    this.secondary = Colors.teal,
+    this.onSecondary = white,
+    this.secondaryContainer = white,
+    this.onSecondaryContainer = black,
+    this.tertiary = purpleMain,
+    this.onTertiary = white,
+    this.tertiaryContainer = white,
+    this.onTertiaryContainer = black,
+    this.error = red,
+    this.onError = white,
+    this.errorContainer = redLight,
+    this.onErrorContainer = white,
+    this.outline = black,
+    this.outlineVariant = Colors.black12,
+    this.background = white,
+    this.onBackground = black,
+    this.surface = white,
+    this.onSurface = black,
+    this.surfaceVariant = Colors.white12,
+    this.onSurfaceVariant = Colors.black12,
+    this.inverseSurface = black,
+    this.onInverseSurface = white,
+    this.inversePrimary = white,
+    this.shadow = black,
+    this.scrim = white,
+    this.surfaceTint = white,
+  });
 }
 
-
 class DefaultColors extends XColors {
-
- const DefaultColors();
+  const DefaultColors();
 }

@@ -8,7 +8,7 @@ void main() {
 
   setUp(() async {
     await PlayXCore.bootCore();
-    await Prefs.clear();
+    await PlayxPrefs.clear();
     await PlayxTheme.boot(config: TestConfig());
   });
   tearDown(() async {

@@ -11,7 +11,7 @@ void main() {
   setUp(
     () async {
       await PlayXCore.bootCore();
-      await Prefs.clear();
+      await PlayxPrefs.clear();
     },
   );
   tearDown(

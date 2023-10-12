@@ -1,6 +1,6 @@
 name: playx_theme
 description: Easily change and configure current app theme with a lot of features like having custom colors for each theme and more.
-version: 0.2.2
+version: 0.2.3
 homepage: https://github.com/playx-flutter/playx_theme
 repository: https://github.com/playx-flutter/playx_theme
 issue_tracker: https://github.com/playx-flutter/playx_theme/issues
@@ -17,7 +17,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  playx_core: ^0.1.2
+  playx_core: ^0.2.0
   flex_seed_scheme: ^1.4.0
 
 

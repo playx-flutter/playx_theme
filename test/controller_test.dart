@@ -9,7 +9,7 @@ void main() {
   );
 
   setUp(() async {
-    Prefs.setMockInitialValues({});
+    PlayxPrefs.setMockInitialValues({});
     await PlayXCore.bootCore();
     await PlayxTheme.boot();
   });

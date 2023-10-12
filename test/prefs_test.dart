@@ -13,7 +13,7 @@ void main() {
 
   setUp(() async {
     await PlayXCore.bootCore();
-    Prefs.setMockInitialValues({XThemeController.lastKnownIndexKey: 2});
+    PlayxPrefs.setMockInitialValues({XThemeController.lastKnownIndexKey: 2});
     await PlayxTheme.boot(config: TestConfig());
   });
 
@@ -26,7 +26,7 @@ void main() {
     'it saves the theme to shared preferences',
     () async {
       await PlayxTheme.next();
-      expect(Prefs.getInt(XThemeController.lastKnownIndexKey), PlayxTheme.index);
+      expect(PlayxPrefs.getInt(XThemeController.lastKnownIndexKey, fallback: 0), PlayxTheme.index);
     },
   );
   testWidgets(

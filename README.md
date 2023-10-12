@@ -17,7 +17,7 @@ Easily change and manage  current app theme with a lot of features like having c
 in `pubspec.yaml` add these lines to `dependencies`
 
 ```yaml  
- playx_theme: ^0.2.1  
+ playx_theme: ^0.2.3 
 ```   
 ## Usage
 ### - Boot the core

@@ -24,10 +24,10 @@ class XThemeController extends GetxController {
 
   /// set up the base controller
   Future<void> boot() async {
-    final lastKnownIndex = Prefs.getInt(lastKnownIndexKey);
+    final lastKnownIndex = PlayxPrefs.getInt(lastKnownIndexKey,fallback: defaultIndex );
 
     _current = config.themes.atOrNull(
-          lastKnownIndex ?? defaultIndex,
+          lastKnownIndex,
         ) ??
         config.themes.first;
   }
@@ -35,7 +35,7 @@ class XThemeController extends GetxController {
   /// update the theme to one of the theme list.
   Future<void> updateTo(XTheme theme, {bool forceUpdateTheme = true}) async {
     _current = theme;
-    await Prefs.setInt(lastKnownIndexKey, currentIndex);
+    await PlayxPrefs.setInt(lastKnownIndexKey, currentIndex);
     refresh();
 
     if (forceUpdateTheme) {
@@ -58,7 +58,7 @@ class XThemeController extends GetxController {
   Future<void> updateByIndex(int index, {bool forceUpdateTheme = true}) async {
     try {
       _current = config.themes[index];
-      await Prefs.setInt(lastKnownIndexKey, index);
+      await PlayxPrefs.setInt(lastKnownIndexKey, index);
       refresh();
       if (forceUpdateTheme) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,7 +75,7 @@ class XThemeController extends GetxController {
   Future<void> updateById(String id, {bool forceUpdateTheme = true}) async {
     try {
       _current = config.themes.firstWhere((element) => element.id == id);
-      await Prefs.setInt(lastKnownIndexKey, currentIndex);
+      await PlayxPrefs.setInt(lastKnownIndexKey, currentIndex);
       refresh();
       if (forceUpdateTheme) {
         WidgetsBinding.instance.addPostFrameCallback((_) {

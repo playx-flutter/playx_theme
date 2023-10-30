@@ -1,7 +1,7 @@
 library playx_theme;
 
 export 'src/playx_theme.dart';
-export 'src/builder/builder.dart';
+export 'src/widgets/theme_builder.dart';
 export 'src/config/config.dart';
 export 'src/model/x_color_scheme.dart';
 export 'src/model/x_theme.dart';

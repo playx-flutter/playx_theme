@@ -49,6 +49,7 @@ class TestConfig extends XThemeConfig {
         ),
         themeOutOFTheList,
       ];
+
 }
 
 class TestApp extends StatelessWidget {

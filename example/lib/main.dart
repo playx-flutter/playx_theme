@@ -53,7 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Text('Playx Theme', style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 20),),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: PlayxTheme.next,
+        onPressed: (){
+          PlayxTheme.updateByThemeMode(mode: ThemeMode.system);
+        },
         tooltip: 'Next Theme',
         child: Icon(
           Icons.add,

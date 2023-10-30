@@ -1,3 +1,16 @@
+## 0.3.0
+> Note: This release has breaking changes.
+- update packages
+- Rename `XThemeConfig` property `defaultThemeIndex` to `initialThemeIndex`.
+- Add `saveTheme` to `XThemeConfig` to determine whether it should save the current theme index to shared preferences or not.
+- Add `isDark` property to `Xtheme` to determine whether the theme is dark or not.
+- Add `updateToLightMode` method to `PlayxTheme` which updates the theme to the first light theme in supported themes.
+- Add `updateToDarkMode` method to `PlayxTheme` which updates the theme to the first dark theme in supported themes.
+- Add `updateToDeviceMode` method to `PlayxTheme` which updates the theme to the first theme that matches the device mode.
+- Add `updateByThemeMode` method to `PlayxTheme` which updates the theme to the first theme that matches the given mode.
+- Add `initialTheme` property to `PlayxTheme` which is the initial theme that will be used when the app starts.
+
+
 ## 0.2.3
 - update packages
 

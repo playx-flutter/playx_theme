@@ -1,4 +1,4 @@
-
+import 'package:flutter/material.dart';
 import 'package:playx_core/playx_core.dart';
 import 'package:playx_theme/src/config/config.dart';
 import 'package:playx_theme/src/controller/controller.dart';
@@ -38,6 +38,9 @@ abstract class PlayxTheme {
   ///Get current theme id
   static String get id => _controller.currentXTheme.id;
 
+  ///Get Start theme if provided.
+  static XTheme? get initialTheme => supportedThemes[_controller.config.initialThemeIndex];
+
   /// return list of supported XThemes
   static List<XTheme> get supportedThemes => _controller.config.themes;
 
@@ -60,14 +63,35 @@ abstract class PlayxTheme {
       _controller.nextTheme(forceUpdateTheme: forceUpdateTheme);
 
   /// Determines whether the device is in dark or light mode.
-  static bool isDeviceInDarkMode(){
+  static bool isDeviceInDarkMode() {
     return _controller.isDeviceInDarkMode();
   }
 
-  /// dispose playx theme
+  /// update the theme to the first light theme in supported themes.
+  static Future<void> updateToLightMode({bool forceUpdateTheme = true}) {
+    return _controller.updateToLightMode(forceUpdateTheme: forceUpdateTheme);
+  }
+
+  ///Update the theme to the first dark theme in supported themes.
+  static Future<void> updateToDarkMode({bool forceUpdateTheme = true}) {
+    return _controller.updateToDarkMode(forceUpdateTheme: forceUpdateTheme);
+  }
+
+  /// Update the theme to the first theme that matches the device mode.
+  static Future<void> updateToDeviceMode({bool forceUpdateTheme = true}) {
+    return _controller.updateToDeviceMode(forceUpdateTheme: forceUpdateTheme);
+  }
+
+  /// Update the theme to the first theme that matches the given mode.
+  static Future<void> updateByThemeMode(
+      {required ThemeMode mode, bool forceUpdateTheme = true}) {
+    return _controller.updateByThemeMode(
+        mode: mode, forceUpdateTheme: forceUpdateTheme);
+  }
+
+  /// dispose playx theme dependencies.
   static Future<bool> dispose() async {
     await Get.delete<XThemeConfig>();
     return Get.delete<XThemeController>();
   }
-
 }

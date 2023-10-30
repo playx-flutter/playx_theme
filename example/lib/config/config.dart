@@ -36,10 +36,14 @@ class ThemeConfig extends XThemeConfig {
             cupertinoTheme: (locale) => const CupertinoThemeData(
                   brightness: Brightness.dark,
                 ),
+            isDark: true,
             colors: darkColors),
       ];
 
   ///set default theme to light or dark based on device dark mode.
   @override
-  int get defaultThemeIndex => PlayxTheme.isDeviceInDarkMode() ? 1 : 0;
+  int get initialThemeIndex => PlayxTheme.isDeviceInDarkMode() ? 1 :0;
+
+  @override
+  bool get saveTheme => true;
 }

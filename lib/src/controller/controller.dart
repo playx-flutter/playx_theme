@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:playx_theme/playx_theme.dart';
@@ -11,20 +10,25 @@ class XThemeController extends GetxController {
 
   late XTheme? _current;
 
-  XTheme get currentXTheme => _current ?? config.themes.first;
+  /// Current theme used by the app.
+  XTheme get currentXTheme =>
+      _current ?? config.themes[config.initialThemeIndex];
 
   /// current theme index
   int get currentIndex => config.themes.indexOf(currentXTheme);
 
-  int get defaultIndex  {
-    final index = config.defaultThemeIndex;
-    if(index < 0 || index >= config.themes.length) return 0;
-    return  index;
+  ///Default theme index.
+  int get _defaultIndex {
+    final index = config.initialThemeIndex;
+    if (index < 0 || index >= config.themes.length) return 0;
+    return index;
   }
 
   /// set up the base controller
   Future<void> boot() async {
-    final lastKnownIndex = PlayxPrefs.getInt(lastKnownIndexKey,fallback: defaultIndex );
+    final lastKnownIndex = config.saveTheme
+        ? PlayxPrefs.getInt(lastKnownIndexKey, fallback: _defaultIndex)
+        : _defaultIndex;
 
     _current = config.themes.atOrNull(
           lastKnownIndex,
@@ -35,7 +39,9 @@ class XThemeController extends GetxController {
   /// update the theme to one of the theme list.
   Future<void> updateTo(XTheme theme, {bool forceUpdateTheme = true}) async {
     _current = theme;
-    await PlayxPrefs.setInt(lastKnownIndexKey, currentIndex);
+    if(config.saveTheme) {
+      await PlayxPrefs.setInt(lastKnownIndexKey, currentIndex);
+    }
     refresh();
 
     if (forceUpdateTheme) {
@@ -58,7 +64,10 @@ class XThemeController extends GetxController {
   Future<void> updateByIndex(int index, {bool forceUpdateTheme = true}) async {
     try {
       _current = config.themes[index];
-      await PlayxPrefs.setInt(lastKnownIndexKey, index);
+
+      if(config.saveTheme) {
+        await PlayxPrefs.setInt(lastKnownIndexKey, index);
+      }
       refresh();
       if (forceUpdateTheme) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,7 +84,9 @@ class XThemeController extends GetxController {
   Future<void> updateById(String id, {bool forceUpdateTheme = true}) async {
     try {
       _current = config.themes.firstWhere((element) => element.id == id);
-      await PlayxPrefs.setInt(lastKnownIndexKey, currentIndex);
+      if(config.saveTheme) {
+        await PlayxPrefs.setInt(lastKnownIndexKey, currentIndex);
+      }
       refresh();
       if (forceUpdateTheme) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -90,14 +101,44 @@ class XThemeController extends GetxController {
 
   ///Whether the device is currently in dark mode
   /// Can be used to show theme based on user mode.
-  bool isDeviceInDarkMode(){
-    var brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+  bool isDeviceInDarkMode() {
+    var brightness =
+        SchedulerBinding.instance.platformDispatcher.platformBrightness;
     return brightness == Brightness.dark;
   }
 
+  /// update the theme to the first light theme in supported themes.
+  Future<void> updateToLightMode({bool forceUpdateTheme = true}) {
+    final theme = config.themes.firstWhereOrNull((element) => !element.isDark);
+    if (theme == null) throw Exception('No light theme found');
+    return updateTo(theme, forceUpdateTheme: forceUpdateTheme);
+  }
 
+  ///Update the theme to the first dark theme in supported themes.
+  Future<void> updateToDarkMode({bool forceUpdateTheme = true}) {
+    final theme = config.themes.firstWhereOrNull((element) => element.isDark);
+    if (theme == null) throw Exception('No Dark theme found');
+    return updateTo(theme, forceUpdateTheme: forceUpdateTheme);
+  }
 
+  /// Update the theme to the first theme that matches the device mode.
+  Future<void> updateToDeviceMode({bool forceUpdateTheme = true}) {
+    final theme = config.themes
+        .firstWhereOrNull((element) => element.isDark == isDeviceInDarkMode());
+    if (theme == null) throw Exception('No theme found for device mode');
+    return updateTo(theme, forceUpdateTheme: forceUpdateTheme);
+  }
 
-
-
+  /// Update the theme to the first theme that matches the given mode.
+  Future<void> updateByThemeMode(
+      {required ThemeMode mode, bool forceUpdateTheme = true}) {
+    switch (mode) {
+      case ThemeMode.system:
+        return updateToDeviceMode(forceUpdateTheme: forceUpdateTheme);
+      case ThemeMode.light:
+        return updateToLightMode(forceUpdateTheme: forceUpdateTheme);
+      case ThemeMode.dark:
+        return updateToDarkMode(forceUpdateTheme: forceUpdateTheme);
+    }
+  }
 }

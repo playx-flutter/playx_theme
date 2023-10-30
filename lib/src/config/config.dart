@@ -9,8 +9,13 @@ import 'package:playx_theme/playx_theme.dart';
 abstract class XThemeConfig {
   const XThemeConfig();
 
-  int get defaultThemeIndex => 0;
+  /// Index of the initial theme to start the app with.
+  int get initialThemeIndex => 0;
 
+  /// Whether to save the theme index to the device storage or not.
+  bool get saveTheme => true;
+
+  /// List of themes to use in the app.
   List<XTheme> get themes;
 }
 
@@ -31,6 +36,7 @@ class XDefaultThemeConfig extends XThemeConfig {
             cupertinoTheme: (locale) => const CupertinoThemeData(
                   brightness: Brightness.light,
                 ),
+            isDark: false,
             colors: const XColors()),
         XTheme(
             id: 'dark',
@@ -43,10 +49,11 @@ class XDefaultThemeConfig extends XThemeConfig {
             cupertinoTheme: (locale) => const CupertinoThemeData(
                   brightness: Brightness.dark,
                 ),
+            isDark: true,
             colors: const XColors()),
       ];
 
   ///set default theme to light or dark based on device dark mode.
   @override
-  int get defaultThemeIndex => PlayxTheme.isDeviceInDarkMode() ? 1 : 0;
+  int get initialThemeIndex => PlayxTheme.isDeviceInDarkMode() ? 1 : 0;
 }

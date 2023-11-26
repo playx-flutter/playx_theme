@@ -10,11 +10,11 @@ void main() {
 
   setUp(() async {
     PlayxPrefs.setMockInitialValues({});
-    await PlayXCore.bootCore();
+    await PlayxCore.bootCore();
     await PlayxTheme.boot();
   });
   tearDown(() async {
-    await PlayXCore.dispose();
+    await PlayxCore.dispose();
   });
 
   test(

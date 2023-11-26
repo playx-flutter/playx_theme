@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:example/colors/base_colors.dart';
 import 'package:flutter/material.dart';

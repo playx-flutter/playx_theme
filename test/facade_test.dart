@@ -7,12 +7,12 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() async {
-    await PlayXCore.bootCore();
+    await PlayxCore.bootCore();
     await PlayxPrefs.clear();
     await PlayxTheme.boot(config: TestConfig());
   });
   tearDown(() async {
-    await PlayXCore.dispose();
+    await PlayxCore.dispose();
   });
   test('it updates theme', () async {
     expect(PlayxTheme.xTheme == themeOutOFTheList, isFalse);

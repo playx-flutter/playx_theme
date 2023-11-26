@@ -10,13 +10,13 @@ void main() {
 
   setUp(
     () async {
-      await PlayXCore.bootCore();
+      await PlayxCore.bootCore();
       await PlayxPrefs.clear();
     },
   );
   tearDown(
     () async {
-      await PlayXCore.dispose();
+      await PlayxCore.dispose();
     },
   );
 }

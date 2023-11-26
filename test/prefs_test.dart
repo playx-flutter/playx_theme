@@ -12,14 +12,14 @@ void main() {
   );
 
   setUp(() async {
-    await PlayXCore.bootCore();
+    await PlayxCore.bootCore();
     PlayxPrefs.setMockInitialValues({XThemeController.lastKnownIndexKey: 2});
     await PlayxTheme.boot(config: TestConfig());
   });
 
   tearDown(
     () async {
-      await PlayXCore.dispose();
+      await PlayxCore.dispose();
     },
   );
   test(

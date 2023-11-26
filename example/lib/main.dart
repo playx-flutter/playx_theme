@@ -6,7 +6,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   /// * boot the core
-  await PlayXCore.bootCore();
+  await PlayxCore.bootCore();
 
   /// boot the AppTheme
   await PlayxTheme.boot(config: const ThemeConfig());
@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          PlayxTheme.updateByThemeMode(mode: ThemeMode.system);
+          PlayxTheme.next();
         },
         tooltip: 'Next Theme',
         child: Icon(

@@ -27,7 +27,7 @@ in `pubspec.yaml` add these lines to `dependencies`
   WidgetsFlutterBinding.ensureInitialized();  
   
   /// * boot the core  
-  await PlayXCore.bootCore();  
+  await PlayxCore.bootCore();  
   
   /// boot the AppTheme  
   await PlayxTheme.boot();  

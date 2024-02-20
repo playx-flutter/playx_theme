@@ -1,3 +1,6 @@
+## 0.3.2
+- update packages
+
 ## 0.3.1
 - update packages
 - Bump minimum Dart version to 3.0.0

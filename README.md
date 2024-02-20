@@ -4,7 +4,7 @@
 
 Easily change and manage  current app theme with a lot of features like having custom colors for each theme and more.
 
-# Features 🔥
+# Features 
 - Create and manage app theme with the ability to easily change app theme.
 - No need for `BuildContext` (you still can access the theme from the context if you need 😉)
 - Create custom colors for each theme and easily access it like `PlayxTheme.colorScheme.primary`
@@ -20,7 +20,7 @@ in `pubspec.yaml` add these lines to `dependencies`
  playx_theme: ^0.2.3 
 ```   
 ## Usage
-### - Boot the core
+- Boot the core
 
 ```dart    
  void main ()async{    
@@ -36,9 +36,10 @@ in `pubspec.yaml` add these lines to `dependencies`
   runApp(const MyApp());    
 }    
 ```   
-### - Wrap Your App With `PlayXThemeBuilder`
+- Wrap Your App With `PlayXThemeBuilder`
 
-```dart class MyApp extends StatelessWidget {    
+```dart
+ class MyApp extends StatelessWidget {    
   const MyApp({Key? key}) : super(key: key);    
     
   @override    
@@ -70,7 +71,7 @@ As it provides some methods that demonstrate current app theme, it's index, name
         ),    
       ),    
 ``` 
-Here is a ``PlayxTheme `` methods :
+Here is ``PlayxTheme `` methods :
 
 | Method          | Description                                                  |  
 |-----------------|:-------------------------------------------------------------|  
@@ -199,13 +200,19 @@ Also you can blend two color schemes together and returns a new color scheme usi
 Also we have included [`flex_seed_scheme`](https://pub.dev/packages/flex_seed_scheme) package which is more flexible and powerful version of Flutter's ColorScheme.fromSeed.
 Use multiple seed colors, custom chroma and tone mapping to enahce creating a color scheme for Material3.
 
-## Playx:
-Consider using our [Playx Package](https://pub.dev/packages/playx):    
-Which comes prepackaged with Playx Theme with more features and is easy to use.
+## Documentation
+Check out the [documentation](https://pub.dev/documentation/playx_theme/latest/) for detailed information on how to integrate and utilize playx_theme in your Flutter applications.
 
-
+## Support and Contribution
+For any questions, issues, or feature requests, please visit the GitHub repository of [playx_core](https://github.com/playx-flutter/playx_theme). Contributions are welcome!
 
 ## See Also:
-[playx_core](https://pub.dev/packages/playx_core) : core package of playx.
-
 [Playx](https://pub.dev/packages/playx) : Playx eco system helps with redundant features , less code , more productivity , better organizing.
+
+[Playx_core](https://pub.dev/packages/playx_core) : Core of playx eco system which helps with app theming and app localization.
+
+[Playx_localization](https://pub.dev/packages/playx_localization) : Localization and internationalization for flutter apps from playx eco system
+
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/playx-flutter/playx_core/blob/main/LICENSE) file for details

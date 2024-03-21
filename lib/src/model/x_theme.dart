@@ -50,7 +50,7 @@ class XTheme extends Equatable {
     required this.name,
     required ThemeData initialTheme,
     required this.themeBuilder,
-    required this.cupertinoThemeBuilder,
+    this.cupertinoThemeBuilder,
     this.colors = const DefaultColors(),
     this.isDark = false,
   })  : themeData = initialTheme,

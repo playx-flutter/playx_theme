@@ -11,7 +11,7 @@ class PlayxThemeBuilder extends StatefulWidget {
     this.builder,
     this.child,
     this.duration = const Duration(milliseconds: 300),
-  }) : assert(builder != null && child != null);
+  }) : assert(builder != null || child != null);
 
   final ThemeBuilder? builder;
   final Widget? child;

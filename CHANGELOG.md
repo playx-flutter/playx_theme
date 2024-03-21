@@ -1,4 +1,4 @@
-## 0.4.1 - 0.4.2
+## 0.4.1 - 0.4.3
 
 > Note: This release has breaking changes.
 

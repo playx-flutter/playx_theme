@@ -397,7 +397,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   }
 
   void updateThemeAnimationController(AnimationController? controller) {
-    controller = controller;
+    this.controller = controller;
   }
 
   @override

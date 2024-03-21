@@ -17,7 +17,7 @@ Playx Theme is a Flutter package that provides a simple and easy way to manage a
 in `pubspec.yaml` add these lines to `dependencies`
 
 ```yaml    
- playx_theme: ^0.4.2
+ playx_theme: ^0.4.3
 ```   
 ## Usage
 

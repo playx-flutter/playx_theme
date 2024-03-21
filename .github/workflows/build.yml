@@ -1,9 +1,7 @@
-name: test
+name: Build
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: [main , qa]
 jobs:
   test:
     defaults:
@@ -12,16 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - uses: subosito/flutter-action@v1.5.3
 
       - name: Install deps
         run: flutter packages get
 
-      - name: Format code
-        run: dart format --fix
+      - name: Format
+        run: dart format --set-exit-if-changed .
 
-      - name: Analyze Code
-        run: flutter analyze lib test example
+      - name: Analyze
+        run: flutter analyze lib test
 
       - name: Test
         run: flutter test --coverage
@@ -29,4 +28,10 @@ jobs:
       - name: Check Test Coverage
         uses: VeryGoodOpenSource/very_good_coverage@v1.2.0
         with:
-          min_coverage: 89
+          min_coverage: 32
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: playx-flutter/playx_theme

@@ -6,54 +6,58 @@ import 'package:playx_theme/playx_theme.dart';
 /// used to configure out app theme by providing the app with the needed themes.
 /// Create a class that extends the [XThemeConfig] class to implement your own themes.
 /// defaults to [XDefaultThemeConfig].
-abstract class XThemeConfig {
-  const XThemeConfig();
-
+class XThemeConfig {
   /// Index of the initial theme to start the app with.
-  int get initialThemeIndex => 0;
+  final int initialThemeIndex;
 
   /// Whether to save the theme index to the device storage or not.
-  bool get saveTheme => true;
+  final bool saveTheme;
 
   /// List of themes to use in the app.
-  List<XTheme> get themes;
+  List<XTheme> themes;
+
+  XThemeConfig({
+    this.initialThemeIndex = 0,
+    this.saveTheme = true,
+    this.themes = const [],
+  })  : assert(initialThemeIndex >= 0 && initialThemeIndex < themes.length),
+        assert(themes.isNotEmpty);
 }
 
 ///Default theme configuration.
 class XDefaultThemeConfig extends XThemeConfig {
-  const XDefaultThemeConfig() : super();
-
-  @override
-  List<XTheme> get themes => [
-        XTheme(
-            id: 'light',
-            name: 'Light',
-            theme: (locale) => ThemeData(
+  XDefaultThemeConfig()
+      : super(themes: [
+          XTheme(
+              id: 'light',
+              name: 'Light',
+              themeData: ThemeData(
                   brightness: Brightness.light,
-                  colorScheme:  ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.light,),
-              useMaterial3: true,
-                ),
-            cupertinoTheme: (locale) => const CupertinoThemeData(
-                  brightness: Brightness.light,
-                ),
-            isDark: false,
-            colors: const XColors()),
-        XTheme(
+                  colorScheme: ColorScheme.fromSeed(
+                    seedColor: Colors.blue,
+                    brightness: Brightness.light,
+                  )),
+              cupertinoThemeData: const CupertinoThemeData(
+                brightness: Brightness.light,
+              ),
+              isDark: false,
+              colors: const XColors()),
+          XTheme(
             id: 'dark',
             name: 'Dark',
-            theme: (locale) => ThemeData(
-                  brightness: Brightness.dark,
-              colorScheme:  ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark,),
+            themeData: ThemeData(
+              brightness: Brightness.dark,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.blue,
+                brightness: Brightness.dark,
+              ),
               useMaterial3: true,
             ),
-            cupertinoTheme: (locale) => const CupertinoThemeData(
-                  brightness: Brightness.dark,
-                ),
+            cupertinoThemeData: const CupertinoThemeData(
+              brightness: Brightness.dark,
+            ),
             isDark: true,
-            colors: const XColors()),
-      ];
-
-  ///set default theme to light or dark based on device dark mode.
-  @override
-  int get initialThemeIndex => PlayxTheme.isDeviceInDarkMode() ? 1 : 0;
+            colors: const XColors(),
+          ),
+        ], initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0);
 }

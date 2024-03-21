@@ -6,7 +6,6 @@ ColorScheme getBlendedColorScheme(
   ColorScheme firstColorScheme,
   ColorScheme secondColorScheme,
 ) {
-
   final sourceColor = firstColorScheme.primary.value;
   final designColor = secondColorScheme.primary.value;
   final blended = Color(Blend.harmonize(designColor, sourceColor));
@@ -15,7 +14,3 @@ ColorScheme getBlendedColorScheme(
     brightness: firstColorScheme.brightness,
   );
 }
-
-
-
-

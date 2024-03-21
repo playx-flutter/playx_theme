@@ -1,205 +1,118 @@
+## 0.4.1 - 0.4.2
 
-# Playx Theme
-[![pub package](https://img.shields.io/pub/v/playx_theme.svg?color=1284C5)](https://pub.dev/packages/playx_theme)
+> Note: This release has breaking changes.
 
-Easily change and manage current app theme with a unique animation and a lot of features like having custom colors for each theme and more.
+### New Features
 
-# Features
-- Create and manage app theme with the ability to easily change app theme.
-- Animate theme change with a unique animation.
-- Create custom colors for each theme and easily access it like `PlayxTheme.colorScheme.primary`
-- No need to store or load the last used theme by yourself.
-- Custom utilities and widgets to help with app theming.
+- Introducing a unique theme animation feature to visualize theme changes within your app.
+  - Simply add `PlayxThemeSwitchingArea` to the widget to animate the theme change.
+  - Added new properties `child` and `duration` to `PlayxThemeBuilder` for customizing the child widget and animation duration.
+  - Introduced `PlayxThemeSwitchingArea` widget for animating theme changes in specific areas of the app.
+  - Added `PlayxThemeSwitcher` widget for animating theme changes starting from a specific widget.
 
+- Updated `XThemeController` to use `ValueNotifier` instead of `GetxController` to reduce dependency on the `GetX` package.
+- Added test cases for `XThemeController` and `PlayxTheme` to ensure the correct behavior of the theme controller and theme switcher.
 
-## Installation
+### BREAKING Changes
 
-in `pubspec.yaml` add these lines to `dependencies`
+- `XThemeConfig` is no longer an abstract class and can now be instantiated directly.
 
-```yaml    
- playx_theme: ^0.4.1   
-``` ## Usage  
-- Boot the core  
-  
-```dart      
- void main ()async{      
-  WidgetsFlutterBinding.ensureInitialized();    
-    
-  /// * boot the core    
-  await PlayxCore.bootCore();    
-    
-  /// boot the AppTheme    
-  await PlayxTheme.boot();    
-      
-  /// run the app      
-  runApp(const MyApp());      
-}      
-``` - Wrap Your App With `PlayXThemeBuilder`  
-  
-```dart  
- class MyApp extends StatelessWidget {      
-  const MyApp({Key? key}) : super(key: key);      
-      
-  @override      
-  Widget build(BuildContext context) {      
-    final locale = Localizations.localeOf(context);    
-    return PlayXThemeBuilder(      
-      builder: (xTheme) {      
-        return MaterialApp(      
-          title: 'Flutter Demo',      
-          theme: (locale)=> xTheme.theme(locale),      
-          home: const MyHomePage(),      
-        );      
-      },      
-    );      
-  }      
-}      
-``` ### Update App Theme  
-  
-Use `PlayxTheme` to switch between themes.  
-As it provides some methods that demonstrate current app theme, it's index, name and id and allow you to easily update current app theme.  
-  
-```dart       
-    FloatingActionButton(      
-        //Change App theme to the next theme in Theme Config.      
-        onPressed: PlayxTheme.next,  //changes theme to next theme    
-        child: Icon(Icons.next,      
-        color: PlayxTheme.colorScheme.onBackground //color updates by theme.      
-        ),      
-      ),      
-``` Here is ``PlayxTheme `` methods :  
-  
-| Method          | Description                                                  |    
-|-----------------|:-------------------------------------------------------------|    
-| next            | updates the app theme to the next theme.                     |    
-| updateByIndex   | updates the app theme by the index.                          |    
-| updateTo        | updates the app theme to a specific `XTheme`.                |    
-| index           | Get current `XTheme` index.                                  |    
-| xTheme          | Get current `XTheme`.                                        |     
-| name            | Get current theme name.                                      |    
-| id              | Get current theme id.                                        |    
-| supportedThemes | Get current supported themes configured in `XThemeConfig`.   |    
-| colors          | Get current `XTheme` color scheme.                           |    
-| isDeviceInDarkMode   | Determines whether the device is in dark or light mode.  |    
-  
-  
-### Customize Your Themes  
-To customize your themes, Create a class that extends ``XThemeConfig`` then overrides it's themes methods and provides it with all themes that your app needs.  
-  
-For example:  
-```dart    
- class AppThemeConfig extends XThemeConfig {    
-  @override    
-  List<XTheme> get themes => [    
-        XTheme(    
-            id: 'light',    
-            nameBuilder: () => 'Light',    
-            theme: (locale) => ThemeData.light().copyWith(    
-                textTheme: const TextTheme().apply(    
-                    fontFamily:    
-                    locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),  
-            cupertinoTheme:(locale) => const CupertinoThemeData(  
-              brightness: Brightness.light,  
-            ),  
-            colorScheme: LightColorScheme()),    
-        XTheme(    
-            id: 'dark',    
-            nameBuilder: () => 'Dark',    
-            theme: (locale) => ThemeData.dark().copyWith(    
-                textTheme: const TextTheme().apply(    
-                    fontFamily:    
-                    locale.languageCode == 'ar' ? 'Cairo' : 'Poppins')),  
-            cupertinoTheme:(locale) => const CupertinoThemeData(  
-              brightness: Brightness.dark,  
-            ),  
-            colorScheme: DarkColorScheme()),    
-      ];    
-}    
-``` For each theme you need to pass an id , name and theme data and you can also provide colors for each theme.    
-You can customize theme data based on each theme and your preferences.  
-  
-### Customize theme's colors  
-We can create custom colors for each theme.  
-  
-Each theme can have its own colors that is configured in `XThemeConfig`  as each `XTheme` have it's own colors.  
-  
-To create custom colors , We can create for each theme a class that extends `XColors`    
-and define it's color values like `primary` and `secondary`.    
-For example :  
-```dart class LightColors extends XColors{    
-  @override    
-  Color get background => XColors.white;    
-    
-  @override    
-  Color get error => XColors.red;    
-    
-  @override    
-  Color get onBackground => XColors.black;    
-  }    
- ``` If you want to extend the colors that are defined in `XColors`    
-You can define another base class that extends `XColors` and adds more colors to it.      
-For example:  
-```dart abstract class AppColors extends XColors{    
-  ///Colors that needs to implemented for each theme.    
-  Color get containerBackgroundColor;    
-    
-  ///Colors that needs to is used for each theme.    
-  static const Color blue = Colors.blue;    
-}    
-```   
-Then, We can make each theme color scheme class to extend  `AppColors `.      
-For example:
-```dart class LightColorScheme extends AppColors {    
-  @override    
-  Color get containerBackgroundColor => XColors.white;    
-    
-  @override    
-  Color get background => XColors.white;    
-    
-  @override    
-  Color get error => XColors.red;    
-    
-  @override    
-  Color get onBackground => XColors.black;    
-}    
-```   
-Now we can have access to colors that defined in both  `XColors` and  `AppColors ` in each theme color scheme.
+### Theme Updates
 
-Then, We can access each theme color scheme like this:
- ```dart      
-  final colorScheme = PlayxTheme.colorScheme as AppColors ;      
-  final primary = colorScheme.primary;      
- ``` and use it in widget like this :  
- ```dart    
-  @override    
-  Widget build(BuildContext context) {    
-    return ColoredBox(color: colorScheme.primary);    
-  }    
- ```   
-## Material 3:
-You can use the package wheteher you are using Material 2 or Material 3 as you can configure theme data for each theme to whether use Material 3 or not.
+- Removed `theme` and `cupertinoTheme` properties.
+- Introduced new properties `themeData` and `cupertinoThemeData` for specifying theme data and Cupertino theme data.
+- Added `themeBuilder` and `cupertinoThemeBuilder` properties for customizing theme data based on the current locale.
+- Modified `XTheme` constructor to require only `themeData`.
+- Added `Xtheme.builder` for customizing theme data based on the current locale.
 
-The package contatins multiple utilites and widgets that can help you with using Material 3 in your app.
+### PlayxTheme Updates
 
-As you can use `ImageTheme` widget that is themed by image content by providing image provider as it generates color scheme from image content.
-
-Also you can blend two color schemes together and returns a new color scheme using `getBlendedColorScheme` method.  
-Also we have included [`flex_seed_scheme`](https://pub.dev/packages/flex_seed_scheme) package which is more flexible and powerful version of Flutter's ColorScheme.fromSeed.  
-Use multiple seed colors, custom chroma and tone mapping to enahce creating a color scheme for Material3.
-
-## Documentation
-Check out the [documentation](https://pub.dev/documentation/playx_theme/latest/) for detailed information on how to integrate and utilize playx_theme in your Flutter applications.
-
-## Support and Contribution
-For any questions, issues, or feature requests, please visit the GitHub repository of [playx_core](https://github.com/playx-flutter/playx_theme). Contributions are welcome!
-
-## See Also:
-[Playx](https://pub.dev/packages/playx) : Playx eco system helps with redundant features , less code , more productivity , better organizing.
-
-[Playx_core](https://pub.dev/packages/playx_core) : Core of playx eco system which helps with app theming and app localization.
-
-[Playx_localization](https://pub.dev/packages/playx_localization) : Localization and internationalization for flutter apps from playx eco system
+- Renamed `PlayxTheme.xTheme` to `PlayxTheme.currentTheme`.
+- Added `PlayxTheme.themeData` getter to access current theme data.
+- Updated theme update methods (`updateTo`, `updateByIndex`, `updateById`, `next`, `updateToDeviceMode`, `updateToLightMode`, `updateToDarkMode`, `updateByThemeMode`) to include more properties for controlling theme animation.
+- Added `clearLastSavedTheme` method to clear the last saved theme from shared preferences.
 
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/playx-flutter/playx_core/blob/main/LICENSE) file for details
+## 0.3.2
+- update packages
+
+## 0.3.1
+- update packages
+- Bump minimum Dart version to 3.0.0
+
+
+## 0.3.0
+> Note: This release has breaking changes.
+- update packages
+- Rename `XThemeConfig` property `defaultThemeIndex` to `initialThemeIndex`.
+- Add `saveTheme` to `XThemeConfig` to determine whether it should save the current theme index to shared preferences or not.
+- Add `isDark` property to `Xtheme` to determine whether the theme is dark or not.
+- Add `updateToLightMode` method to `PlayxTheme` which updates the theme to the first light theme in supported themes.
+- Add `updateToDarkMode` method to `PlayxTheme` which updates the theme to the first dark theme in supported themes.
+- Add `updateToDeviceMode` method to `PlayxTheme` which updates the theme to the first theme that matches the device mode.
+- Add `updateByThemeMode` method to `PlayxTheme` which updates the theme to the first theme that matches the given mode.
+- Add `initialTheme` property to `PlayxTheme` which is the initial theme that will be used when the app starts.
+
+
+## 0.2.3
+- update packages
+
+## 0.2.2
+- Added material 3 colors to `XColors` which can be configured through the app.
+- Added an optional `fromColorScheme` to `XColors` to help with configuring material 3 style colors that can be used on the app.
+- XDefaultThemeConfig now uses the default `XColors` instead of custom colors.
+
+
+## 0.2.1
+- Added an optional `cupertinoTheme` to `XTheme` to help with configuring cupertino app theme.
+
+## 0.2.0
+> Note: This release has breaking changes.
+### New features
+- PlayxTheme now has `isDeviceInDarkMode` to indicate whether the user device is in dark mode or not.
+- XThemeConfig now has `defaultThemeIndex` to specify the default theme index that will be used first time as default theme.
+- new `ImageTheme` widget which is a widget that is themed by image content by providing image provider to be used with Material3 themes.
+- new utilities to be used like `getBlendedColorScheme` which blends two color schemes together and returns a new color scheme to be used with Material3 themes.
+- Included [`flex_seed_scheme`](https://pub.dev/packages/flex_seed_scheme) package which is more flexible and powerful version of Flutter's ColorScheme.fromSeed and uses multiple seed colors, custom chroma and tone mapping to enahce creating a color scheme for Material3.
+
+### BREAKING Changes
+- `XColorScheme` was renamed to `XColors`.
+- a Removed abstract colors like primary, secondary, background,surface, error ,onPrimary, Color get onSecondary, onBackground, onSurface, onError from `XColors`.
+- `XTheme` colors property now have default value which is `DefaultColors`.
+
+
+
+## 0.1.0 -0.1.1
+- **BREAKING** : Refactor `AppTheme` to be `PlayxTheme`.
+- **BREAKING** : Refactor `XTheme` theme property from `ThemeData` to `ThemeData Function( Locale locale)`
+- Move `PlayxCore.boot()` to be called individually.
+
+
+## 0.0.8 -0.0.9
+- update packages
+
+## 0.0.6 -0.0.7
+- update packages
+- Add `dispose` function to `AppTheme` to clear unused resources.
+
+
+## 0.0.5
+- **BREAKING** : Refactor `XThemeConfig` [nameBuilder] function to String [name]
+- Added [updateById]: Updates theme using it's id.
+- Added [forceUpdateTheme] variable to change theme functions which force the app to rebuild all widget after changing the theme. Useful when depending on colorScheme in your widgets.
+
+
+## 0.0.4
+- Add support for Dart 3.0.0 and Flutter 3.10
+- Add new `XColorScheme` which is a new way to configure custom colors for each themes.  
+  see Readme.md for more details about it.
+
+## 0.0.2
+- update packages
+
+## 0.0.1+1
+- fix typo
+
+## 0.0.1
+
+- initial release.

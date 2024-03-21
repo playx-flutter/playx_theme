@@ -17,7 +17,7 @@ Playx Theme is a Flutter package that provides a simple and easy way to manage a
 in `pubspec.yaml` add these lines to `dependencies`
 
 ```yaml    
- playx_theme: ^0.4.1
+ playx_theme: ^0.4.2
 ```   
 ## Usage
 
@@ -58,14 +58,14 @@ in `pubspec.yaml` add these lines to `dependencies`
     }  
   } 
   ```   
-### Update App Theme
+## Update App Theme
 
 Use `PlayxTheme` to switch between themes.  
 As it provides some methods that demonstrate current app theme, it's index, name and id and allow  
 you to easily update current app theme.
 
 ```dart       
-    FloatingActionButton  (  
+  FloatingActionButton  (  
 	//Change App theme to the next theme in Theme Config.      
 		onPressed: PlayxTheme.next, //changes theme to next theme    
 		child: Icon(Icons.next,  
@@ -73,6 +73,7 @@ you to easily update current app theme.
 		),  
 	)     
 ```  
+
 
 | Method              | Description                                                          |    
 |---------------------|:---------------------------------------------------------------------|    
@@ -95,12 +96,12 @@ you to easily update current app theme.
 | updateByThemeMode   | Updates the app theme to the first theme that matches the given mode |  
 | clearLastSavedTheme | Clears the last saved theme.                                         |  
 
-### Animation
+## Animation
 
 The package provides a unique animation for changing the app theme by providing unique transiction  
 between theme switching.
 
-#### PlayxThemeSwitchingArea
+### PlayxThemeSwitchingArea
 
 Wrap the screen where you want to make them switch with `PlayxThemeSwitchingArea` widget, as it has  
 shown in the following example:
@@ -137,7 +138,7 @@ class MyHomePage extends StatelessWidget {
    }  
 ```
 when you change theme, the widget will animate the theme change starting form the center of the screen.
-#### PlayxThemeSwitcher
+### PlayxThemeSwitcher
 
 You can use `PlayxThemeSwitcher` widget to switch between themes with animation starting from the  
 widget that triggers the theme change.  
@@ -161,7 +162,7 @@ which gives you access to the current theme and widget context which we use to c
 
 when you change theme, the widget will animate the theme change starting form the widget that triggers the theme change.
 
-#### Control Theme Switching Animation
+### Theme Switching Animation  Control
 By default, the package updates the app theme with an animation. This animation can be customized using various parameters:
 
 - **Animate**: By default, theme switching includes animation, which can be disabled using the `animate` parameter. Setting `animate` to `false` will switch themes instantly without animation.
@@ -190,7 +191,7 @@ For example, to use a custom clipper and custom offset, you can use the followin
 These parameters provide flexibility in controlling the animation of theme switching within your app.
 
 
-### Customize Your Themes
+## Customize Your Themes
 
 To customize your themes, you need to create a `XThemeConfig` object and pass it to `PlayxTheme.boot()`.  
 `XThemeConfig` contains a list of `XTheme` objects that represent each theme in your app.  
@@ -237,7 +238,7 @@ For example:
     initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0,  
   );  
 ```  
-### Customize theme's colors
+## Customize theme's colors
 
 We can create custom colors for each theme.
 
@@ -306,6 +307,7 @@ Widget build(BuildContext context) {
   return ColoredBox(color: colorScheme.primary);  
 }    
 ```   
+
 ## Material 3:
 
 You can use the package wheteher you are using Material 2 or Material 3 as you can configure theme  

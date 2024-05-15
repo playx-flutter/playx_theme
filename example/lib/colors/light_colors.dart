@@ -9,5 +9,5 @@ class LightColorScheme extends BaseColors {
                 seedColor: Colors.blue, brightness: Brightness.light));
 
   @override
-  Color get containerBackgroundColor => XColors.white;
+  Color get containerBackgroundColor => PlayxColors.white;
 }

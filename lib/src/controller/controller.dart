@@ -11,7 +11,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   static const lastKnownIndexKey = 'playx.theme.last_known_index';
 
   /// Theme configuration.
-  final XThemeConfig config;
+  final PlayxThemeConfig config;
 
   /// Default theme index.
   int initialIndex = -1;
@@ -67,7 +67,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   }
 
   /// Update the theme to one of the theme list.
-  /// The provided theme should be in the available themes list in [XThemeConfig].
+  /// The provided theme should be in the available themes list in [PlayxThemeConfig].
   /// If [animate] is true, it will animate the theme change.
   /// If [animate ]  is false, it will force the app to update the theme by building the whole widget tree.
   /// if [isReversed] is provided, It will play the animation based on reverse mode.
@@ -119,7 +119,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   }
 
   /// Update the theme to one of the theme list.
-  /// The provided theme should be in the available themes list in [XThemeConfig].
+  /// The provided theme should be in the available themes list in [PlayxThemeConfig].
   Future<void> updateTo(
     XTheme theme, {
     bool animate = true,
@@ -170,7 +170,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   }
 
   /// update the theme to by index
-  /// The index should be in the range of available themes list in [XThemeConfig].
+  /// The index should be in the range of available themes list in [PlayxThemeConfig].
   /// if the index is out of range, it will throw a [RangeError] exception.
   Future<void> updateByIndex(
     int index, {
@@ -199,7 +199,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   }
 
   /// update the theme to by id.
-  /// The [id] should be the id of one of the available themes list in [XThemeConfig]/
+  /// The [id] should be the id of one of the available themes list in [PlayxThemeConfig]/
   Future<void> updateById(
     String id, {
     bool animate = true,

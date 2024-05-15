@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:playx_core/playx_core.dart';
-import 'package:playx_theme/src/model/x_color_scheme.dart';
+import 'package:playx_theme/src/widgets/playx_inherited_theme.dart';
+
+import 'playx_colors.dart';
 
 /// Class that defines the theme for the app.
 class XTheme extends Equatable {
@@ -30,7 +32,7 @@ class XTheme extends Equatable {
   final CupertinoThemeData Function(Locale? locale)? cupertinoThemeBuilder;
 
   /// color scheme for the theme which provides custom colors for each theme.
-  final XColors colors;
+  final PlayxColors colors;
 
   /// Defines Whether the provided theme is dark or not.
   final bool isDark;
@@ -64,4 +66,12 @@ class XTheme extends Equatable {
 
   @override
   bool get stringify => true;
+
+  static XTheme of(BuildContext context) {
+    return PlayxInheritedTheme.of(context).theme;
+  }
+
+  static XTheme? maybeOf(BuildContext context) {
+    return PlayxInheritedTheme.maybeOf(context)?.theme;
+  }
 }

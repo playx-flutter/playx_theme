@@ -229,7 +229,7 @@ void main() {
           'PlayxTheme.updateToDeviceMode() should throw an error if there is no theme that matches the device mode in the availableThemes in config',
           () async {
         final controller = XThemeController(
-          config: XThemeConfig(
+          config: PlayxThemeConfig(
             themes: [
               XTheme(
                 id: 'Dark',
@@ -262,7 +262,7 @@ void main() {
           'PlayxTheme.updateByThemeMode() should throw an error if there is no theme that matches the given mode in the availableThemes in config',
           () async {
         final controller = XThemeController(
-          config: XThemeConfig(
+          config: PlayxThemeConfig(
             themes: [
               XTheme(
                 id: 'Dark',

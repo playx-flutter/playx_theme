@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-
-import '/src/config/config.dart';
+import 'package:playx_theme/playx_theme.dart';
 
 /// This is base class for creating a custom colors for each theme.
-/// Each theme can have its own colors that is configured in [XThemeConfig].
+/// Each theme can have its own colors that is configured in [PlayxThemeConfig].
 /// Each xTheme can have a class that extends this class to provide custom colors for each theme.
-/// If you want to extend the colors that are defined in [XColors]
-/// You can define another base class that extends [XColors] and adds more colors to it.
+/// If you want to extend the colors that are defined in [PlayxColors]
+/// You can define another base class that extends [PlayxColors] and adds more colors to it.
 /// And Make Each Theme Color Scheme to extend the new Class.
 /// You can access each theme color scheme like this:
 /// ```dart
 ///  final colorScheme = PlayxTheme.colorScheme;
 ///  final primary = colorScheme.primary;
 ///  ```
-class XColors {
+class PlayxColors {
   final Color primary;
   final Color onPrimary;
   final Color primaryContainer;
@@ -34,9 +33,9 @@ class XColors {
   final Color outlineVariant;
   final Color background;
   final Color onBackground;
+  final Color surfaceVariant;
   final Color surface;
   final Color onSurface;
-  final Color surfaceVariant;
   final Color onSurfaceVariant;
   final Color inverseSurface;
   final Color onInverseSurface;
@@ -87,7 +86,7 @@ class XColors {
 
   static const Color blueTransparent = Color(0x80032C4C);
 
-  XColors.fromColorScheme({
+  PlayxColors.fromColorScheme({
     required ColorScheme scheme,
     Color? primary,
     Color? onPrimary,
@@ -109,9 +108,9 @@ class XColors {
     Color? outlineVariant,
     Color? background,
     Color? onBackground,
+    Color? surfaceVariant,
     Color? surface,
     Color? onSurface,
-    Color? surfaceVariant,
     Color? onSurfaceVariant,
     Color? inverseSurface,
     Color? onInverseSurface,
@@ -138,11 +137,11 @@ class XColors {
         onErrorContainer = onErrorContainer ?? scheme.onErrorContainer,
         outline = outline ?? scheme.outline,
         outlineVariant = outlineVariant ?? scheme.outlineVariant,
-        background = background ?? scheme.background,
-        onBackground = onBackground ?? scheme.onBackground,
+        background = background ?? scheme.surface,
+        onBackground = onBackground ?? scheme.onSurface,
         surface = surface ?? scheme.surface,
         onSurface = onSurface ?? scheme.onSurface,
-        surfaceVariant = surfaceVariant ?? scheme.surfaceVariant,
+        surfaceVariant = surfaceVariant ?? scheme.surfaceContainerHigh,
         onSurfaceVariant = onSurfaceVariant ?? scheme.onSurfaceVariant,
         inverseSurface = inverseSurface ?? scheme.inverseSurface,
         onInverseSurface = onInverseSurface ?? scheme.onInverseSurface,
@@ -151,7 +150,7 @@ class XColors {
         scrim = scrim ?? scheme.scrim,
         surfaceTint = surfaceTint ?? scheme.primary;
 
-  const XColors({
+  const PlayxColors({
     this.primary = blueMain,
     this.onPrimary = white,
     this.primaryContainer = white,
@@ -183,8 +182,16 @@ class XColors {
     this.scrim = white,
     this.surfaceTint = white,
   });
+
+  static PlayxColors of(BuildContext context) {
+    return XTheme.of(context).colors;
+  }
+
+  static PlayxColors? maybeOf(BuildContext context) {
+    return XTheme.maybeOf(context)?.colors;
+  }
 }
 
-class DefaultColors extends XColors {
+class DefaultColors extends PlayxColors {
   const DefaultColors();
 }

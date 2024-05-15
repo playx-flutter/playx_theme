@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:playx_core/playx_core.dart';
 import 'package:playx_theme/src/config/config.dart';
 import 'package:playx_theme/src/controller/controller.dart';
-import 'package:playx_theme/src/model/x_color_scheme.dart';
+import 'package:playx_theme/src/model/playx_colors.dart';
 import 'package:playx_theme/src/model/x_theme.dart';
 
 /// PlayxTheme :
@@ -15,7 +15,7 @@ abstract class PlayxTheme {
   /// Used to setup AppTheme.
   /// Must be called to initialize dependencies.
   static Future<void> boot({
-    required XThemeConfig config,
+    required PlayxThemeConfig config,
   }) async {
     //TODO(1): Try to not depend on GetX package for DI.
     final controller = XThemeController(config: config);
@@ -33,7 +33,7 @@ abstract class PlayxTheme {
   static ThemeData get currentThemeData => currentTheme.themeData;
 
   /// Returns current `XTheme` colors.
-  static XColors get colors => currentTheme.colors;
+  static PlayxColors get colors => currentTheme.colors;
 
   /// Returns current theme name.
   static String get name => _controller.value.name;

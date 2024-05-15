@@ -1,3 +1,26 @@
+## 0.5.0
+> **Note**: This release contains breaking changes.
+
+### New Features
+
+#### PlayxThemeBuilder
+PlayxThemeBuilder now uses an `InheritedWidget` to provide themes to its child widgets, enhancing theme management and widget rebuilding.
+
+- **Theme Access**:
+  - Use `XTheme.of(context)` or `context.xTheme` to get the current theme.
+  - Use `PlayxColors.of(context)` or `context.playxColors` to get the current theme colors.
+
+Use these methods to access theme or color information in your widgets. This ensures widgets are rebuilt correctly when the theme changes.
+
+- **Legacy Access**:
+  - You can still use `PlayxTheme.currentTheme` to access the current theme when you don't have a `BuildContext`. However, note that using `PlayxTheme.currentTheme` will not trigger a widget rebuild on theme changes.
+
+### Breaking Changes
+- **Class Renaming for Consistency**:
+  - `XColors` is now `PlayxColors` to maintain consistency with the package name.
+  - `XThemeConfig` is now `PlayxThemeConfig` for the same reason.
+
+
 ## 0.4.1 - 0.4.3
 
 > Note: This release has breaking changes.

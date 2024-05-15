@@ -4,9 +4,9 @@ import 'package:playx_theme/playx_theme.dart';
 
 /// Theme config :
 /// used to configure out app theme by providing the app with the needed themes.
-/// Create a class that extends the [XThemeConfig] class to implement your own themes.
+/// Create a class that extends the [PlayxThemeConfig] class to implement your own themes.
 /// defaults to [XDefaultThemeConfig].
-class XThemeConfig {
+class PlayxThemeConfig {
   /// Index of the initial theme to start the app with.
   final int initialThemeIndex;
 
@@ -16,7 +16,7 @@ class XThemeConfig {
   /// List of themes to use in the app.
   List<XTheme> themes;
 
-  XThemeConfig({
+  PlayxThemeConfig({
     this.initialThemeIndex = 0,
     this.saveTheme = true,
     this.themes = const [],
@@ -25,7 +25,7 @@ class XThemeConfig {
 }
 
 ///Default theme configuration.
-class XDefaultThemeConfig extends XThemeConfig {
+class XDefaultThemeConfig extends PlayxThemeConfig {
   XDefaultThemeConfig()
       : super(themes: [
           XTheme(
@@ -41,7 +41,7 @@ class XDefaultThemeConfig extends XThemeConfig {
                 brightness: Brightness.light,
               ),
               isDark: false,
-              colors: const XColors()),
+              colors: const PlayxColors()),
           XTheme(
             id: 'dark',
             name: 'Dark',
@@ -57,7 +57,7 @@ class XDefaultThemeConfig extends XThemeConfig {
               brightness: Brightness.dark,
             ),
             isDark: true,
-            colors: const XColors(),
+            colors: const PlayxColors(),
           ),
         ], initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0);
 }

@@ -105,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         actions: <Widget>[
                           TextButton(
-                            child: Text('buttonText'),
+                            child: const Text('buttonText'),
                             onPressed: () {
                               Navigator.of(dialogContext)
                                   .pop(); // Dismiss alert dialog

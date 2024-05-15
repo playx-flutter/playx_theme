@@ -33,9 +33,9 @@ class PlayxColors {
   final Color outlineVariant;
   final Color background;
   final Color onBackground;
+  final Color surfaceVariant;
   final Color surface;
   final Color onSurface;
-  final Color surfaceVariant;
   final Color onSurfaceVariant;
   final Color inverseSurface;
   final Color onInverseSurface;
@@ -108,9 +108,9 @@ class PlayxColors {
     Color? outlineVariant,
     Color? background,
     Color? onBackground,
+    Color? surfaceVariant,
     Color? surface,
     Color? onSurface,
-    Color? surfaceVariant,
     Color? onSurfaceVariant,
     Color? inverseSurface,
     Color? onInverseSurface,
@@ -137,11 +137,11 @@ class PlayxColors {
         onErrorContainer = onErrorContainer ?? scheme.onErrorContainer,
         outline = outline ?? scheme.outline,
         outlineVariant = outlineVariant ?? scheme.outlineVariant,
-        background = background ?? scheme.background,
-        onBackground = onBackground ?? scheme.onBackground,
+        background = background ?? scheme.surface,
+        onBackground = onBackground ?? scheme.onSurface,
         surface = surface ?? scheme.surface,
         onSurface = onSurface ?? scheme.onSurface,
-        surfaceVariant = surfaceVariant ?? scheme.surfaceVariant,
+        surfaceVariant = surfaceVariant ?? scheme.surfaceContainerHigh,
         onSurfaceVariant = onSurfaceVariant ?? scheme.onSurfaceVariant,
         inverseSurface = inverseSurface ?? scheme.inverseSurface,
         onInverseSurface = onInverseSurface ?? scheme.onInverseSurface,

@@ -5,26 +5,26 @@ final themeOutOFTheList = XTheme(
   id: '_id',
   name: '_name',
   themeData: ThemeData.dark(),
-  colors: const XColors(),
+  colors: const PlayxColors(),
 );
 
 final lightTestTheme = XTheme(
   id: 'Light',
   name: 'Light',
   themeData: ThemeData.light(),
-  colors: const XColors(),
+  colors: const PlayxColors(),
 );
 
 final darkTestTheme = XTheme(
   id: 'Dark',
   name: 'Dark',
   themeData: ThemeData.dark(),
-  colors: const XColors(),
+  colors: const PlayxColors(),
   isDark: true,
 );
 
-XThemeConfig getTestConfig({int initialThemeIndex = 0}) {
-  return XThemeConfig(
+PlayxThemeConfig getTestConfig({int initialThemeIndex = 0}) {
+  return PlayxThemeConfig(
     initialThemeIndex: initialThemeIndex,
     themes: [
       lightTestTheme,

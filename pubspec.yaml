@@ -1,6 +1,6 @@
 name: playx_theme
-description: Easily change and configure current app theme with a unique animation and more.
-version: 0.4.3
+description: Simplify app theming in Flutter with Playx Theme. Effortlessly switch themes, enjoy smooth animations, and customize color schemes with ease.
+version: 0.5.0
 homepage: https://github.com/playx-flutter/playx_theme
 repository: https://github.com/playx-flutter/playx_theme
 issue_tracker: https://github.com/playx-flutter/playx_theme/issues
@@ -9,6 +9,7 @@ topics:
   - theme
   - colorscheme
   - material3
+  - materialdesign
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -17,14 +18,13 @@ dependencies:
   flutter:
     sdk: flutter
   playx_core: ^0.4.1
-  flex_seed_scheme: ^1.4.0
+  flex_seed_scheme: ^1.5.0
   animated_theme_switcher: ^2.0.10
-
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.1
+  flutter_lints: ^4.0.0
 
 flutter:

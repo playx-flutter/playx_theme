@@ -5,23 +5,28 @@ import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
 
 /// used to configure out app theme by providing the app with the needed themes.
-class ThemeConfig extends XThemeConfig {
+class ThemeConfig extends PlayxThemeConfig {
   static LightColorScheme lightColors = LightColorScheme();
   static DarkColorScheme darkColors = DarkColorScheme();
 
-  final config = XThemeConfig(
+  final config = PlayxThemeConfig(
     themes: [
-      XTheme(
+      XTheme.builder(
           id: 'light',
           name: 'Light',
-          themeData: ThemeData(
+          themeBuilder: (l) => ThemeData(
+                brightness: Brightness.light,
+                colorScheme: lightColors.colorScheme,
+                useMaterial3: true,
+              ),
+          initialTheme: ThemeData(
             brightness: Brightness.light,
             colorScheme: lightColors.colorScheme,
             useMaterial3: true,
           ),
-          cupertinoThemeData: const CupertinoThemeData(
-            brightness: Brightness.light,
-          ),
+          cupertinoThemeBuilder: (l) => const CupertinoThemeData(
+                brightness: Brightness.light,
+              ),
           colors: lightColors),
       XTheme.builder(
           id: 'dark',

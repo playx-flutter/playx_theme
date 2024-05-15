@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
+import 'package:playx_theme/src/widgets/playx_inherited_theme.dart';
 
 import '../controller/controller.dart';
 
@@ -41,13 +42,17 @@ class _ThemeProviderState extends State<PlayxThemeBuilder>
   Widget build(BuildContext context) {
     final controller = Get.find<XThemeController>();
     return ValueListenableBuilder(
-        valueListenable: controller,
-        builder: (context, xTheme, _) {
-          return RepaintBoundary(
+      valueListenable: controller,
+      builder: (context, xTheme, _) {
+        return PlayxInheritedTheme(
+          theme: xTheme,
+          child: RepaintBoundary(
             key: controller.previewContainer,
             child: widget.child ?? widget.builder!(context, xTheme),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   @override

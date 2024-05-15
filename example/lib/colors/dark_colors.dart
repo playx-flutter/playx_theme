@@ -9,5 +9,5 @@ class DarkColorScheme extends BaseColors {
                 seedColor: Colors.blue, brightness: Brightness.dark));
 
   @override
-  Color get containerBackgroundColor => XColors.darkGrey;
+  Color get containerBackgroundColor => PlayxColors.darkGrey;
 }

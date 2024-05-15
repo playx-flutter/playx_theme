@@ -137,7 +137,7 @@ void main() {
           "updateToLightMode() should throw an exception if there is no light theme in the availableThemes in config",
           () async {
         final controller = XThemeController(
-          config: XThemeConfig(
+          config: PlayxThemeConfig(
             themes: [
               XTheme(
                 id: 'Dark',
@@ -170,7 +170,7 @@ void main() {
           'updateToDarkMode() should throw an exception if there is no dark theme in the availableThemes in config',
           () async {
         final controller = XThemeController(
-          config: XThemeConfig(
+          config: PlayxThemeConfig(
             themes: [
               XTheme(
                 id: 'Light',
@@ -203,7 +203,7 @@ void main() {
           'updateToDeviceMode() should throw an exception if there is no theme that matches the device mode',
           () async {
         final controller = XThemeController(
-          config: XThemeConfig(
+          config: PlayxThemeConfig(
             themes: [
               XTheme(
                 id: 'Light',

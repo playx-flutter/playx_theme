@@ -10,6 +10,8 @@ import 'package:playx_theme/playx_theme.dart';
 /// You can access each theme color scheme like this:
 /// ```dart
 ///  final colorScheme = PlayxTheme.colorScheme;
+///  // or
+///  // final colorscheme = context.playxColors;
 ///  final primary = colorScheme.primary;
 ///  ```
 class PlayxColors {
@@ -17,32 +19,131 @@ class PlayxColors {
   final Color onPrimary;
   final Color primaryContainer;
   final Color onPrimaryContainer;
+
+  /// A substitute for [primaryContainer] that's the same color for the dark
+  /// and light themes.
+  final Color primaryFixed;
+
+  /// A color used for elements needing more emphasis than [primaryFixed].
+  final Color primaryFixedDim;
+
+  /// A color that is used for text and icons that exist on top of elements having
+  /// [primaryFixed] color.
+  final Color onPrimaryFixed;
+
+  /// A color that provides a lower-emphasis option for text and icons than
+  /// [onPrimaryFixed].
+  final Color onPrimaryFixedVariant;
+
   final Color secondary;
   final Color onSecondary;
   final Color secondaryContainer;
   final Color onSecondaryContainer;
+
+  /// A substitute for [secondaryContainer] that's the same color for the dark
+  /// and light themes.
+  final Color secondaryFixed;
+
+  /// A color used for elements needing more emphasis than [secondaryFixed].
+  final Color secondaryFixedDim;
+
+  /// A color that is used for text and icons that exist on top of elements having
+  /// [secondaryFixed] color.
+  final Color onSecondaryFixed;
+
+  /// A color that provides a lower-emphasis option for text and icons than
+  /// [onSecondaryFixed].
+  final Color onSecondaryFixedVariant;
+
   final Color tertiary;
   final Color onTertiary;
   final Color tertiaryContainer;
   final Color onTertiaryContainer;
+
+  /// A substitute for [tertiaryContainer] that's the same color for dark
+  /// and light themes.
+  final Color tertiaryFixed;
+
+  /// A color used for elements needing more emphasis than [tertiaryFixed].
+  final Color tertiaryFixedDim;
+
+  /// A color that is used for text and icons that exist on top of elements having
+  /// [tertiaryFixed] color.
+  final Color onTertiaryFixed;
+
+  /// A color that provides a lower-emphasis option for text and icons than
+  /// [onTertiaryFixed].
+  final Color onTertiaryFixedVariant;
+
   final Color error;
   final Color onError;
   final Color errorContainer;
   final Color onErrorContainer;
   final Color outline;
   final Color outlineVariant;
-  final Color background;
-  final Color onBackground;
-  final Color surfaceVariant;
   final Color surface;
   final Color onSurface;
+
+  /// A color that's clearly legible when drawn on [surfaceContainerHighest].
+  ///
+  /// See
+  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
   final Color onSurfaceVariant;
+
+  /// A color that's always darkest in the dark or light theme.
+  final Color surfaceDim;
+
+  /// A color that's always the lightest in the dark or light theme.
+  final Color surfaceBright;
+
+  /// A surface container color with the lightest tone and the least emphasis
+  /// relative to the surface.
+  final Color surfaceContainerLowest;
+
+  /// A surface container color with a lighter tone that creates less emphasis
+  /// than [surfaceContainer] but more emphasis than [surfaceContainerLowest].
+  final Color surfaceContainerLow;
+
+  /// A recommended color role for a distinct area within the surface.
+  ///
+  /// Surface container color roles are independent of elevation. They replace the old
+  /// opacity-based model which applied a tinted overlay on top of
+  /// surfaces based on their elevation.
+  ///
+  /// Surface container colors include [surfaceContainerLowest], [surfaceContainerLow],
+  /// [surfaceContainer], [surfaceContainerHigh] and [surfaceContainerHighest].
+  final Color surfaceContainer;
+
+  /// A surface container color with a darker tone. It is used to create more
+  /// emphasis than [surfaceContainer] but less emphasis than [surfaceContainerHighest].
+  final Color surfaceContainerHigh;
+
+  /// A surface container color with the darkest tone. It is used to create the
+  /// most emphasis against the surface.
+  final Color surfaceContainerHighest;
+
   final Color inverseSurface;
   final Color onInverseSurface;
   final Color inversePrimary;
   final Color shadow;
   final Color scrim;
   final Color surfaceTint;
+  //Deprecated
+  @Deprecated('Use surface instead. '
+      'This feature was deprecated after v3.18.0-0.1.pre.'
+      ' It will be removed in the next releases.'
+      'You can still expand the colors of the theme by extending the PlayxColors class.')
+  final Color background;
+  @Deprecated('Use onSurface instead. '
+      'This feature was deprecated after v3.18.0-0.1.pre.'
+      ' It will be removed in the next releases.'
+      'You can still expand the colors of the theme by extending the PlayxColors class.')
+  final Color onBackground;
+  @Deprecated('Use surfaceVariant instead. '
+      'This feature was deprecated after v3.18.0-0.1.pre.'
+      ' It will be removed in the next releases.'
+      'You can still expand the colors of the theme by extending the PlayxColors class.')
+  final Color surfaceVariant;
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
@@ -106,9 +207,6 @@ class PlayxColors {
     Color? onErrorContainer,
     Color? outline,
     Color? outlineVariant,
-    Color? background,
-    Color? onBackground,
-    Color? surfaceVariant,
     Color? surface,
     Color? onSurface,
     Color? onSurfaceVariant,
@@ -118,6 +216,37 @@ class PlayxColors {
     Color? shadow,
     Color? scrim,
     Color? surfaceTint,
+    Color? primaryFixed,
+    Color? primaryFixedDim,
+    Color? onPrimaryFixed,
+    Color? onPrimaryFixedVariant,
+    Color? secondaryFixed,
+    Color? secondaryFixedDim,
+    Color? onSecondaryFixed,
+    Color? onSecondaryFixedVariant,
+    Color? tertiaryFixed,
+    Color? tertiaryFixedDim,
+    Color? onTertiaryFixed,
+    Color? onTertiaryFixedVariant,
+    Color? surfaceDim,
+    Color? surfaceBright,
+    Color? surfaceContainerLowest,
+    Color? surfaceContainerLow,
+    Color? surfaceContainer,
+    Color? surfaceContainerHigh,
+    Color? surfaceContainerHighest,
+    @Deprecated('Use surface instead. '
+        'This feature was deprecated after v3.18.0-0.1.pre.'
+        ' It will be removed in the next releases.')
+    Color? background,
+    @Deprecated('Use onSurface instead. '
+        'This feature was deprecated after v3.18.0-0.1.pre.'
+        ' It will be removed in the next releases.')
+    Color? onBackground,
+    @Deprecated('Use surfaceContainerHighest instead. '
+        'This feature was deprecated after v3.18.0-0.1.pre.'
+        ' It will be removed in the next releases.')
+    Color? surfaceVariant,
   })  : primary = primary ?? scheme.primary,
         onPrimary = onPrimary ?? scheme.onPrimary,
         primaryContainer = primaryContainer ?? scheme.primaryContainer,
@@ -137,18 +266,43 @@ class PlayxColors {
         onErrorContainer = onErrorContainer ?? scheme.onErrorContainer,
         outline = outline ?? scheme.outline,
         outlineVariant = outlineVariant ?? scheme.outlineVariant,
-        background = background ?? scheme.surface,
-        onBackground = onBackground ?? scheme.onSurface,
         surface = surface ?? scheme.surface,
         onSurface = onSurface ?? scheme.onSurface,
-        surfaceVariant = surfaceVariant ?? scheme.surfaceContainerHigh,
         onSurfaceVariant = onSurfaceVariant ?? scheme.onSurfaceVariant,
         inverseSurface = inverseSurface ?? scheme.inverseSurface,
         onInverseSurface = onInverseSurface ?? scheme.onInverseSurface,
         inversePrimary = inversePrimary ?? scheme.inversePrimary,
         shadow = shadow ?? scheme.shadow,
         scrim = scrim ?? scheme.scrim,
-        surfaceTint = surfaceTint ?? scheme.primary;
+        surfaceTint = surfaceTint ?? scheme.primary,
+        primaryFixed = primaryFixed ?? scheme.primaryFixed,
+        primaryFixedDim = primaryFixedDim ?? scheme.primaryFixedDim,
+        onPrimaryFixed = onPrimaryFixed ?? scheme.onPrimaryFixed,
+        onPrimaryFixedVariant =
+            onPrimaryFixedVariant ?? scheme.onPrimaryFixedVariant,
+        secondaryFixed = secondaryFixed ?? scheme.secondaryFixed,
+        secondaryFixedDim = secondaryFixedDim ?? scheme.secondaryFixedDim,
+        onSecondaryFixed = onSecondaryFixed ?? scheme.onSecondaryFixed,
+        onSecondaryFixedVariant =
+            onSecondaryFixedVariant ?? scheme.onSecondaryFixedVariant,
+        tertiaryFixed = tertiaryFixed ?? scheme.tertiaryFixed,
+        tertiaryFixedDim = tertiaryFixedDim ?? scheme.tertiaryFixedDim,
+        onTertiaryFixed = onTertiaryFixed ?? scheme.onTertiaryFixed,
+        onTertiaryFixedVariant =
+            onTertiaryFixedVariant ?? scheme.onTertiaryFixedVariant,
+        surfaceDim = surfaceDim ?? scheme.surfaceDim,
+        surfaceBright = surfaceBright ?? scheme.surfaceBright,
+        surfaceContainerLowest =
+            surfaceContainerLowest ?? scheme.surfaceContainerLowest,
+        surfaceContainerLow = surfaceContainerLow ?? scheme.surfaceContainerLow,
+        surfaceContainer = surfaceContainer ?? scheme.surfaceContainer,
+        surfaceContainerHigh =
+            surfaceContainerHigh ?? scheme.surfaceContainerHigh,
+        surfaceContainerHighest =
+            surfaceContainerHighest ?? scheme.surfaceContainerHighest,
+        background = background ?? scheme.surface,
+        onBackground = onBackground ?? scheme.onSurface,
+        surfaceVariant = surfaceVariant ?? scheme.surfaceContainerHigh;
 
   const PlayxColors({
     this.primary = blueMain,
@@ -181,6 +335,25 @@ class PlayxColors {
     this.shadow = black,
     this.scrim = white,
     this.surfaceTint = white,
+    this.primaryFixed = blueMain,
+    this.primaryFixedDim = blueLight,
+    this.onPrimaryFixed = white,
+    this.onPrimaryFixedVariant = Colors.white70,
+    this.secondaryFixed = purpleMain,
+    this.secondaryFixedDim = purpleLight,
+    this.onSecondaryFixed = white,
+    this.onSecondaryFixedVariant = Colors.white70,
+    this.tertiaryFixed = yellow,
+    this.tertiaryFixedDim = yellow,
+    this.onTertiaryFixed = white,
+    this.onTertiaryFixedVariant = Colors.white70,
+    this.surfaceDim = Colors.black12,
+    this.surfaceBright = Colors.white,
+    this.surfaceContainerLowest = Colors.white12,
+    this.surfaceContainerLow = Colors.white24,
+    this.surfaceContainer = Colors.white30,
+    this.surfaceContainerHigh = Colors.white38,
+    this.surfaceContainerHighest = Colors.white54,
   });
 
   static PlayxColors of(BuildContext context) {

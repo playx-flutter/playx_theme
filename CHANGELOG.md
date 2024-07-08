@@ -1,3 +1,16 @@
+# Changelog
+
+## 0.6.0
+- Update `flex_seed_scheme` package to v3.0.0
+- Update min flutter version to `3.22.0`
+- Added new colors [`primaryFixed`, `primaryFixedDim`, `onPrimaryFixed`,`onPrimaryFixedVariant`, 
+ `secondaryFixed`, `secondaryFixedDim`, `onSecondaryFixed`, `onSecondaryFixedVariant`,
+  `tertiaryFixed`, `tertiaryFixedDim`, `onTertiaryFixed`, `onTertiaryFixedVariant`,
+  `surfaceDim`, `surfaceBright`, `surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainer`, 
+  `surfaceContainerHigh`, `surfaceContainerHighest`] based on latest material changes in flutter v3.22.0.
+- Deprecated `background`, `onBackground`, `surfaceVariant`colors as `surface`, `onSurface`, `surfaceContainerHighest` should be used instead based on latest material changes in flutter v3.22.0.
+
+
 ## 0.5.0
 > **Note**: This release contains breaking changes.
 

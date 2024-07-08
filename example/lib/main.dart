@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlayxThemeSwitchingArea(
       child: Scaffold(
-        backgroundColor: PlayxColors.of(context).background,
+        backgroundColor: PlayxColors.of(context).surface,
         appBar: AppBar(
           title: const Text('Playx Theme'),
         ),
@@ -54,69 +54,86 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
               const Text('Playx Theme Switcher'),
               const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: PlayxColors.of(context).primaryContainer,
-                ),
-                onPressed: () {
-                  showDialog<void>(
-                    context: context,
-                    barrierDismissible: true,
-                    // false = user must tap button, true = tap outside dialog
-                    builder: (BuildContext dialogContext) {
-                      return AlertDialog(
-                        title: const Text('title'),
-                        content: Column(
-                          children: List.generate(
-                              PlayxTheme.supportedThemes.length,
-                              (index) => Card(
-                                    margin: const EdgeInsets.all(8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      side: BorderSide(
-                                        color: PlayxTheme.id ==
-                                                PlayxTheme
-                                                    .supportedThemes[index].id
-                                            ? PlayxColors.of(context).primary
-                                            : Colors.transparent,
-                                      ),
-                                    ),
-                                    child: ListTile(
-                                      contentPadding: const EdgeInsets.all(32),
-                                      title: Text(PlayxTheme
-                                          .supportedThemes[index].name),
-                                      trailing: PlayxTheme.id ==
-                                              PlayxTheme
-                                                  .supportedThemes[index].id
-                                          ? const Icon(Icons.check)
-                                          : null,
-                                      onTap: () async {
-                                        // PlayxTheme.updateByIndex(
-                                        //   index,
-                                        // );
-                                        Navigator.of(dialogContext)
-                                            .pop(); // Dismiss alert dialog
+              SizedBox(
+                width: 200,
+                child: Card(
+                  color: context.playxColors.surfaceContainerHigh,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            PlayxColors.of(context).primaryContainer,
+                      ),
+                      onPressed: () {
+                        showDialog<void>(
+                          context: context,
+                          barrierDismissible: true,
+                          // false = user must tap button, true = tap outside dialog
+                          builder: (BuildContext dialogContext) {
+                            return AlertDialog(
+                              title: const Text('title'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: List.generate(
+                                    PlayxTheme.supportedThemes.length,
+                                    (index) => Card(
+                                          margin: const EdgeInsets.all(8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                            side: BorderSide(
+                                              color: PlayxTheme.id ==
+                                                      PlayxTheme
+                                                          .supportedThemes[
+                                                              index]
+                                                          .id
+                                                  ? PlayxColors.of(context)
+                                                      .primary
+                                                  : Colors.transparent,
+                                            ),
+                                          ),
+                                          child: ListTile(
+                                            contentPadding:
+                                                const EdgeInsets.all(32),
+                                            title: Text(PlayxTheme
+                                                .supportedThemes[index].name),
+                                            trailing: PlayxTheme.id ==
+                                                    PlayxTheme
+                                                        .supportedThemes[index]
+                                                        .id
+                                                ? const Icon(Icons.check)
+                                                : null,
+                                            onTap: () async {
+                                              // PlayxTheme.updateByIndex(
+                                              //   index,
+                                              // );
+                                              Navigator.of(dialogContext)
+                                                  .pop(); // Dismiss alert dialog
 
-                                        PlayxTheme.updateById(PlayxTheme
-                                            .supportedThemes[index].id);
-                                      },
-                                    ),
-                                  )),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('buttonText'),
-                            onPressed: () {
-                              Navigator.of(dialogContext)
-                                  .pop(); // Dismiss alert dialog
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: const Text('Theme'),
+                                              PlayxTheme.updateById(PlayxTheme
+                                                  .supportedThemes[index].id);
+                                            },
+                                          ),
+                                        )),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Confirm'),
+                                  onPressed: () {
+                                    Navigator.of(dialogContext)
+                                        .pop(); // Dismiss alert dialog
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Text('Theme'),
+                    ),
+                  ),
+                ),
               ),
               PlayxThemeSwitcher(
                 builder: (ctx, theme) => ElevatedButton(

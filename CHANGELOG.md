@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.7.0
+> **Note**: This release contains breaking changes.
+
+**New Features:**
+- Added new animation types: fade, horizontal slide, vertical slide, and scale.
+- Introduced `PlayxThemeAnimation` class to manage animation settings like type, offset, and duration.
+
+**Enhancements:**
+- Migrated shared preferences to `SharedPreferencesAsync` for improved performance and async handling.
+- Streamlined package by removing the GetX dependency, reducing the overall footprint.
+- **Dependency Removal**: Removed dependencies on the GetX package. Ensure your project setup aligns with this change before upgrading.
+
+**Breaking Changes:**
+- **Theme Functions Update**: All `PlayxTheme` functions now accept a `PlayxThemeAnimation` object instead of separate animation parameters.
+- **Shared Preferences Migration**: Migrated from `SharedPreferences` to `SharedPreferencesAsync`. If you're upgrading, set `migratePrefsToAsyncPrefs` to `true` in `PlayxThemeConfig` to ensure a smooth transition.
+
 ## 0.6.0
 - Update `flex_seed_scheme` package to v3.0.0
 - Update min flutter version to `3.22.0`

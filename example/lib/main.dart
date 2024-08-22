@@ -107,10 +107,8 @@ class HomeScreen extends StatelessWidget {
                                                       .supportedThemes[index]
                                                       .id,
                                                   animation:
-                                                      const PlayxThemeAnimation(
-                                                    clipper:
-                                                        ThemeSwitcherBoxClipper(),
-                                                  ));
+                                                      const PlayxThemeAnimation
+                                                          .horizontalSlide());
                                             },
                                           ),
                                         )),
@@ -133,21 +131,18 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              PlayxThemeSwitcher(
-                builder: (ctx, theme) => ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: PlayxColors.of(context).primaryContainer,
-                  ),
-                  onPressed: () {
-                    PlayxTheme.next(
-                      context: ctx,
-                      animation: const PlayxThemeAnimation(
-                          duration: Duration(milliseconds: 500),
-                          type: PlayxThemeAnimationType.fade),
-                    );
-                  },
-                  child: const Text('Next Theme'),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: PlayxColors.of(context).primaryContainer,
                 ),
+                onPressed: () {
+                  PlayxTheme.next(
+                    animation: const PlayxThemeAnimation.fade(
+                      duration: Duration(milliseconds: 500),
+                    ),
+                  );
+                },
+                child: const Text('Next Theme'),
               ),
             ],
           ),
@@ -156,7 +151,8 @@ class HomeScreen extends StatelessWidget {
           builder: (ctx, theme) => FloatingActionButton(
             onPressed: () {
               PlayxTheme.next(
-                context: ctx,
+                animation: PlayxThemeAnimation.clipper(
+                    clipper: const ThemeSwitcherCircleClipper(), context: ctx),
               );
             },
             tooltip: 'Next Theme',

@@ -1,132 +1,161 @@
 import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
 
-/// This is base class for creating a custom colors for each theme.
-/// Each theme can have its own colors that is configured in [PlayxThemeConfig].
-/// Each xTheme can have a class that extends this class to provide custom colors for each theme.
-/// If you want to extend the colors that are defined in [PlayxColors]
-/// You can define another base class that extends [PlayxColors] and adds more colors to it.
-/// And Make Each Theme Color Scheme to extend the new Class.
-/// You can access each theme color scheme like this:
+/// Base class for defining custom colors for each theme.
+///
+/// Themes can have their own unique color schemes configured in [PlayxThemeConfig].
+/// To provide custom colors for a specific theme, create a class that extends [PlayxColors].
+///
+/// If you need to expand the default color options provided by [PlayxColors],
+/// you can create a new base class that extends [PlayxColors] and add additional color properties.
+/// Then, each theme’s color scheme can extend this new class.
+///
+/// Accessing a theme's color scheme is straightforward:
+///
 /// ```dart
-///  final colorScheme = PlayxTheme.colorScheme;
-///  // or
-///  // final colorscheme = context.playxColors;
-///  final primary = colorScheme.primary;
-///  ```
+/// final colorScheme = PlayxTheme.colorScheme;
+/// // or
+/// // final colorScheme = context.playxColors;
+/// final primary = colorScheme.primary;
+/// ```
 class PlayxColors {
+  /// The primary color used throughout the theme.
   final Color primary;
+
+  /// The color used for text and icons that are drawn on top of the [primary] color.
   final Color onPrimary;
+
+  /// A color variant of the primary color used in containers and larger areas.
   final Color primaryContainer;
+
+  /// The color used for text and icons that are drawn on top of the [primaryContainer] color.
   final Color onPrimaryContainer;
 
-  /// A substitute for [primaryContainer] that's the same color for the dark
-  /// and light themes.
+  /// A substitute for [primaryContainer] that maintains the same color in both dark and light themes.
   final Color primaryFixed;
 
-  /// A color used for elements needing more emphasis than [primaryFixed].
+  /// A more emphasized color than [primaryFixed] used for elements requiring additional prominence.
   final Color primaryFixedDim;
 
-  /// A color that is used for text and icons that exist on top of elements having
-  /// [primaryFixed] color.
+  /// The color used for text and icons that are drawn on top of elements with the [primaryFixed] color.
   final Color onPrimaryFixed;
 
-  /// A color that provides a lower-emphasis option for text and icons than
-  /// [onPrimaryFixed].
+  /// A lower-emphasis color option for text and icons compared to [onPrimaryFixed].
   final Color onPrimaryFixedVariant;
 
+  /// The secondary color used to complement the primary color throughout the theme.
   final Color secondary;
+
+  /// The color used for text and icons that are drawn on top of the [secondary] color.
   final Color onSecondary;
+
+  /// A color variant of the secondary color used in containers and larger areas.
   final Color secondaryContainer;
+
+  /// The color used for text and icons that are drawn on top of the [secondaryContainer] color.
   final Color onSecondaryContainer;
 
-  /// A substitute for [secondaryContainer] that's the same color for the dark
-  /// and light themes.
+  /// A substitute for [secondaryContainer] that maintains the same color in both dark and light themes.
   final Color secondaryFixed;
 
-  /// A color used for elements needing more emphasis than [secondaryFixed].
+  /// A more emphasized color than [secondaryFixed] used for elements requiring additional prominence.
   final Color secondaryFixedDim;
 
-  /// A color that is used for text and icons that exist on top of elements having
-  /// [secondaryFixed] color.
+  /// The color used for text and icons that are drawn on top of elements with the [secondaryFixed] color.
   final Color onSecondaryFixed;
 
-  /// A color that provides a lower-emphasis option for text and icons than
-  /// [onSecondaryFixed].
+  /// A lower-emphasis color option for text and icons compared to [onSecondaryFixed].
   final Color onSecondaryFixedVariant;
 
+  /// The tertiary color used as an accent in the theme.
   final Color tertiary;
+
+  /// The color used for text and icons that are drawn on top of the [tertiary] color.
   final Color onTertiary;
+
+  /// A color variant of the tertiary color used in containers and larger areas.
   final Color tertiaryContainer;
+
+  /// The color used for text and icons that are drawn on top of the [tertiaryContainer] color.
   final Color onTertiaryContainer;
 
-  /// A substitute for [tertiaryContainer] that's the same color for dark
-  /// and light themes.
+  /// A substitute for [tertiaryContainer] that maintains the same color in both dark and light themes.
   final Color tertiaryFixed;
 
-  /// A color used for elements needing more emphasis than [tertiaryFixed].
+  /// A more emphasized color than [tertiaryFixed] used for elements requiring additional prominence.
   final Color tertiaryFixedDim;
 
-  /// A color that is used for text and icons that exist on top of elements having
-  /// [tertiaryFixed] color.
+  /// The color used for text and icons that are drawn on top of elements with the [tertiaryFixed] color.
   final Color onTertiaryFixed;
 
-  /// A color that provides a lower-emphasis option for text and icons than
-  /// [onTertiaryFixed].
+  /// A lower-emphasis color option for text and icons compared to [onTertiaryFixed].
   final Color onTertiaryFixedVariant;
 
+  /// The color used to indicate errors, typically used for warnings and error states.
   final Color error;
+
+  /// The color used for text and icons that are drawn on top of the [error] color.
   final Color onError;
+
+  /// A color variant used for containers and areas indicating error states.
   final Color errorContainer;
+
+  /// The color used for text and icons that are drawn on top of the [errorContainer] color.
   final Color onErrorContainer;
+
+  /// The color used for outlines of elements, providing a subtle border.
   final Color outline;
+
+  /// A variant of [outline] with a different emphasis.
   final Color outlineVariant;
+
+  /// The primary background color used in the theme.
   final Color surface;
+
+  /// The color used for text and icons that are drawn on top of the [surface] color.
   final Color onSurface;
 
-  /// A color that's clearly legible when drawn on [surfaceContainerHighest].
-  ///
-  /// See
-  /// <https://www.w3.org/TR/UNDERSTANDING-WCAG20/visual-audio-contrast-contrast.html>.
+  /// A variant of [onSurface] that is more legible when drawn on [surfaceContainerHighest].
   final Color onSurfaceVariant;
 
-  /// A color that's always darkest in the dark or light theme.
+  /// A color that's always the darkest in both dark and light themes, providing contrast on the [surface].
   final Color surfaceDim;
 
-  /// A color that's always the lightest in the dark or light theme.
+  /// A color that's always the lightest in both dark and light themes, providing contrast on the [surface].
   final Color surfaceBright;
 
-  /// A surface container color with the lightest tone and the least emphasis
-  /// relative to the surface.
+  /// A surface container color with the lightest tone and the least emphasis relative to the surface.
   final Color surfaceContainerLowest;
 
-  /// A surface container color with a lighter tone that creates less emphasis
-  /// than [surfaceContainer] but more emphasis than [surfaceContainerLowest].
+  /// A surface container color with a lighter tone that creates less emphasis than [surfaceContainer] but more emphasis than [surfaceContainerLowest].
   final Color surfaceContainerLow;
 
   /// A recommended color role for a distinct area within the surface.
-  ///
-  /// Surface container color roles are independent of elevation. They replace the old
-  /// opacity-based model which applied a tinted overlay on top of
-  /// surfaces based on their elevation.
-  ///
-  /// Surface container colors include [surfaceContainerLowest], [surfaceContainerLow],
-  /// [surfaceContainer], [surfaceContainerHigh] and [surfaceContainerHighest].
+  /// Surface container colors include [surfaceContainerLowest], [surfaceContainerLow], [surfaceContainer], [surfaceContainerHigh], and [surfaceContainerHighest].
   final Color surfaceContainer;
 
-  /// A surface container color with a darker tone. It is used to create more
-  /// emphasis than [surfaceContainer] but less emphasis than [surfaceContainerHighest].
+  /// A surface container color with a darker tone, used to create more emphasis than [surfaceContainer] but less than [surfaceContainerHighest].
   final Color surfaceContainerHigh;
 
-  /// A surface container color with the darkest tone. It is used to create the
-  /// most emphasis against the surface.
+  /// The surface container color with the darkest tone, used to create the most emphasis against the surface.
   final Color surfaceContainerHighest;
 
+  /// The inverse of the [surface] color, typically used for contrast in areas where the surface is the primary background.
   final Color inverseSurface;
+
+  /// The color used for text and icons that are drawn on top of the [inverseSurface] color.
   final Color onInverseSurface;
+
+  /// The color used to highlight elements against the inverse of the [primary] color.
   final Color inversePrimary;
+
+  /// The color used to create shadows, providing depth to the UI.
   final Color shadow;
+
+  /// The color used to obscure the content beneath overlays, such as modals.
   final Color scrim;
+
+  /// The color used to tint surfaces, providing a subtle effect to emphasize the surface tone.
   final Color surfaceTint;
   //Deprecated
   @Deprecated('Use surface instead. '

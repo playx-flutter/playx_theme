@@ -14,15 +14,17 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = XThemeController.instance;
+    final themeAnimation = controller.themeAnimation;
     if (controller.oldTheme == null ||
         controller.oldTheme == controller.theme ||
-        !(controller.controller?.isAnimating == true)) {
+        !(controller.controller?.isAnimating == true) ||
+        themeAnimation == null) {
       // If there is no old theme, or no animation in progress, just show the current theme
       return Material(child: _getPage(controller.theme.themeData));
     } else {
       // Create the widgets for the transition
       late final Widget oldThemeWidget, newThemeWidget;
-      if (controller.isReversed) {
+      if (themeAnimation.isReversed) {
         oldThemeWidget =
             _getPage(controller.theme.themeData); // Show the new theme first
         newThemeWidget =
@@ -36,31 +38,37 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
 
       // Create a widget based on the selected animation type
       Widget transitionWidget;
-      final animationType = controller.animationType;
-      switch (animationType) {
-        case PlayxThemeAnimationType.clipper:
-          transitionWidget =
-              _buildClipperAnimation(oldThemeWidget, newThemeWidget);
+      switch (themeAnimation) {
+        case PlayxThemeClipperAnimation _:
+          transitionWidget = _buildClipperAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
           break;
-        case PlayxThemeAnimationType.fade:
-          transitionWidget =
-              _buildFadeAnimation(oldThemeWidget, newThemeWidget);
+        case PlayxThemeFadeAnimation _:
+          transitionWidget = _buildFadeAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
           break;
-        case PlayxThemeAnimationType.scale:
-          transitionWidget =
-              _buildScaleAnimation(oldThemeWidget, newThemeWidget);
+        case PlayxThemeScaleAnimation _:
+          transitionWidget = _buildScaleAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
           break;
-        case PlayxThemeAnimationType.horizontalSlide:
-          transitionWidget =
-              _buildHorizontalSlideAnimation(oldThemeWidget, newThemeWidget);
+        case PlayxThemeHorizontalSlideAnimation _:
+          transitionWidget = _buildHorizontalSlideAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
           break;
-        case PlayxThemeAnimationType.verticalSlide:
-          transitionWidget =
-              _buildVerticalSlideAnimation(oldThemeWidget, newThemeWidget);
+        case PlayxThemeVerticalSlideAnimation _:
+          transitionWidget = _buildVerticalSlideAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
           break;
-        default:
-          transitionWidget =
-              _buildClipperAnimation(oldThemeWidget, newThemeWidget);
       }
 
       return Material(child: transitionWidget);
@@ -68,7 +76,10 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
   }
 
   // Circular animation, similar to your original implementation
-  Widget _buildClipperAnimation(Widget oldThemeWidget, Widget newThemeWidget) {
+  Widget _buildClipperAnimation(
+      {required PlayxThemeClipperAnimation animation,
+      required Widget oldThemeWidget,
+      required Widget newThemeWidget}) {
     final controller = XThemeController.instance;
     return Stack(
       children: [
@@ -83,8 +94,8 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
           builder: (_, child) {
             return ClipPath(
               clipper: ThemeSwitcherClipperBridge(
-                clipper: controller.clipper,
-                offset: controller.switcherOffset,
+                clipper: animation.clipper,
+                offset: animation.switcherOffset,
                 sizeRate: controller.controller?.value ?? 1,
               ),
               child: child,
@@ -96,7 +107,11 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
   }
 
   // Fade animation
-  Widget _buildFadeAnimation(Widget oldThemeWidget, Widget newThemeWidget) {
+  Widget _buildFadeAnimation({
+    required PlayxThemeFadeAnimation animation,
+    required Widget oldThemeWidget,
+    required Widget newThemeWidget,
+  }) {
     final controller = XThemeController.instance;
     return Stack(
       children: [
@@ -113,7 +128,10 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
   }
 
   // Scale animation
-  Widget _buildScaleAnimation(Widget oldThemeWidget, Widget newThemeWidget) {
+  Widget _buildScaleAnimation(
+      {required PlayxThemeScaleAnimation animation,
+      required Widget oldThemeWidget,
+      required Widget newThemeWidget}) {
     final controller = XThemeController.instance;
     return Stack(
       children: [
@@ -131,7 +149,9 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
 
   // Slide animation
   Widget _buildHorizontalSlideAnimation(
-      Widget oldThemeWidget, Widget newThemeWidget) {
+      {required PlayxThemeHorizontalSlideAnimation animation,
+      required Widget oldThemeWidget,
+      required Widget newThemeWidget}) {
     final controller = XThemeController.instance;
     return Stack(
       children: [
@@ -150,7 +170,9 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
   }
 
   Widget _buildVerticalSlideAnimation(
-      Widget oldThemeWidget, Widget newThemeWidget) {
+      {required PlayxThemeVerticalSlideAnimation animation,
+      required Widget oldThemeWidget,
+      required Widget newThemeWidget}) {
     final controller = XThemeController.instance;
     return Stack(
       children: [

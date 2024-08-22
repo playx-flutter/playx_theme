@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
 
 /// Theme config :
-/// used to configure out app theme by providing the app with the needed themes.
-/// Create a class that extends the [PlayxThemeConfig] class to implement your own themes.
-/// defaults to [XDefaultThemeConfig].
+/// Used to configure the app's theme by specifying the available themes,
+/// the initial theme index, and whether to save the selected theme to device storage.
 class PlayxThemeConfig {
   /// Index of the initial theme to start the app with.
   final int initialThemeIndex;
@@ -16,8 +15,13 @@ class PlayxThemeConfig {
   /// List of themes to use in the app.
   List<XTheme> themes;
 
+  /// Whether to migrate preferences to asynchronous preferences.
   final bool migratePrefsToAsyncPrefs;
 
+  /// Creates a [PlayxThemeConfig] instance.
+  ///
+  /// The [initialThemeIndex] must be non-negative and less than the length of [themes].
+  /// The [themes] list must not be empty.
   PlayxThemeConfig({
     this.initialThemeIndex = 0,
     this.saveTheme = true,
@@ -27,8 +31,11 @@ class PlayxThemeConfig {
         assert(themes.isNotEmpty);
 }
 
-///Default theme configuration.
+/// Default theme configuration.
 class XDefaultThemeConfig extends PlayxThemeConfig {
+  /// Creates a default [XDefaultThemeConfig] instance with predefined light and dark themes.
+  ///
+  /// The initial theme is determined based on the device's current theme mode.
   XDefaultThemeConfig()
       : super(themes: [
           XTheme(

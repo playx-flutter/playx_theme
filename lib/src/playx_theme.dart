@@ -1,4 +1,3 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:playx_theme/src/config/config.dart';
 import 'package:playx_theme/src/controller/controller.dart';
@@ -6,8 +5,7 @@ import 'package:playx_theme/src/model/playx_colors.dart';
 import 'package:playx_theme/src/model/playx_theme_animation.dart';
 import 'package:playx_theme/src/model/x_theme.dart';
 
-/// PlayxTheme :
-/// It controls current app theme and how to change current theme.
+/// Manages the app's theme and provides methods to update it.
 abstract class PlayxTheme {
   static XThemeController? _themeControllerInstance;
 
@@ -19,8 +17,10 @@ abstract class PlayxTheme {
     return _themeControllerInstance!;
   }
 
-  /// Used to setup AppTheme.
-  /// Must be called to initialize dependencies.
+  /// Initializes the theme management system.
+  ///
+  /// This method sets up the theme controller with the provided configuration.
+  /// Ensure to call this method before using other `PlayxTheme` methods.
   static Future<void> boot({
     required PlayxThemeConfig config,
   }) async {
@@ -29,235 +29,214 @@ abstract class PlayxTheme {
     return controller.boot();
   }
 
-  /// Returns current theme index
+  /// Gets the index of the currently active theme.
+  ///
+  /// The index represents the position of the current theme in the list of supported themes.
   static int get index => _controller.currentIndex;
 
-  /// Returns current `XTheme`.
+  /// Gets the currently active theme.
+  ///
+  /// This returns the `XTheme` object that represents the current theme.
   static XTheme get currentTheme => _controller.value;
 
-  /// Returns current `ThemeData`
+  /// Gets the `ThemeData` for the current theme.
+  ///
+  /// This provides the `ThemeData` that Flutter uses to style the app based on the current theme.
   static ThemeData get currentThemeData => currentTheme.themeData;
 
-  /// Returns current `XTheme` colors.
+  /// Gets the colors used in the current theme.
+  ///
+  /// This returns an object containing the color palette for the current theme.
   static PlayxColors get colors => currentTheme.colors;
 
-  /// Returns current theme name.
+  /// Gets the name of the currently active theme.
+  ///
+  /// This returns a human-readable name for the current theme.
   static String get name => _controller.value.name;
 
-  /// Returns current theme id.
+  /// Gets the ID of the currently active theme.
+  ///
+  /// This returns a unique identifier for the current theme.
   static String get id => _controller.value.id;
 
-  /// Returns Start theme if provided.
+  /// Gets the initial theme based on the configuration.
+  ///
+  /// This returns the theme that was set to be the initial theme, or `null` if no initial theme is set.
   static XTheme? get initialTheme =>
       _controller.config.initialThemeIndex >= 0 &&
               _controller.config.initialThemeIndex < supportedThemes.length
           ? supportedThemes[_controller.config.initialThemeIndex]
           : null;
 
-  /// Returns list of supported XThemes.
+  /// Gets the list of all supported themes.
+  ///
+  /// This returns a list of `XTheme` objects that are available for use.
   static List<XTheme> get supportedThemes => _controller.config.themes;
 
-  /// Updates the app theme to the provided theme.
-  /// By Default, It Updates the app theme with an animation which can be disabled using the [animate] parameter.
-  /// The animation's starting point can be customized using the [offset] parameter or automatically set to the widget's position using the [context] parameter.
-  /// If both [offset] and [context] are provided, [offset] takes precedence.
-  /// If neither [offset] nor [context] is provided, the animation starts from the center of the screen.
-  /// The direction of the animation can be controlled using the [isReversed] parameter; if provided, the animation will reverse based on its value,
-  /// otherwise, it will be determined by the current theme index.
-  /// Optionally, a custom [clipper] can be provided to clip the animation. Accepted values are [ThemeSwitcherBoxClipper] or [ThemeSwitcherCircleClipper].
-  /// If animate is disabled, [ forceUpdateNonAnimatedTheme] can be used to force update the theme without animation.
-  /// if the theme is available in the availableThemes in config, it throw an [Exception].
+  /// Updates the app's theme to the provided theme.
   ///
-  /// Example:
-  /// ```dart
-  /// // Update them and start animation from a specific offset
-  /// PlayxTheme.updateTo(XTheme(
-  ///  id: '1',
-  ///  name: 'Light Theme',
-  ///  themeData: ThemeData.light(),),
-  /// animate: true, offset: Offset(0.5, 0.5));
-  /// ```
-  static Future<void> updateTo(XTheme theme,
-          {bool animate = true,
-          BuildContext? context,
-          PlayxThemeAnimation? animation,
-          bool forceUpdateNonAnimatedTheme = false}) =>
-      _controller.updateTo(theme,
-          animate: animate,
-          context: context,
-          animation: animation,
-          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
-
-  /// Updates the app theme by the index.
-  /// By Default, It Updates the app theme with an animation which can be disabled using the [animate] parameter.
-  /// The animation's starting point can be customized using the [offset] parameter or automatically set to the widget's position using the [context] parameter.
-  /// If both [offset] and [context] are provided, [offset] takes precedence.
-  /// If neither [offset] nor [context] is provided, the animation starts from the center of the screen.
-  /// The direction of the animation can be controlled using the [isReversed] parameter; if provided, the animation will reverse based on its value,
-  /// otherwise, it will be determined by the current theme index.
-  /// Optionally, a custom [clipper] can be provided to clip the animation. Accepted values are [ThemeSwitcherBoxClipper] or [ThemeSwitcherCircleClipper].
-  /// If animate is disabled, [ forceUpdateNonAnimatedTheme] can be used to force update the theme without animation.
-  /// if index is out of range , it will throw a [RangeError] exception.
-  static Future<void> updateByIndex(int index,
-          {bool animate = true,
-          BuildContext? context,
-          PlayxThemeAnimation? animation,
-          bool forceUpdateNonAnimatedTheme = false}) =>
-      _controller.updateByIndex(index,
-          animate: animate,
-          context: context,
-          animation: animation,
-          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
-
-  /// Updates the app theme to the provided id.
-  /// By Default, It Updates the app theme with an animation which can be disabled using the [animate] parameter.
-  /// The animation's starting point can be customized using the [offset] parameter or automatically set to the widget's position using the [context] parameter.
-  /// If both [offset] and [context] are provided, [offset] takes precedence.
-  /// If neither [offset] nor [context] is provided, the animation starts from the center of the screen.
-  /// The direction of the animation can be controlled using the [isReversed] parameter; if provided, the animation will reverse based on its value,
-  /// otherwise, it will be determined by the current theme index.
-  /// Optionally, a custom [clipper] can be provided to clip the animation. Accepted values are [ThemeSwitcherBoxClipper] or [ThemeSwitcherCircleClipper].
-  /// If animate is disabled, [ forceUpdateNonAnimatedTheme] can be used to force update the theme without animation.
-  /// if the id isn't available in the availableThemes in config, it will throw an [Exception].
-  static Future<void> updateById(
-    String id, {
-    bool animate = true,
-    BuildContext? context,
-    PlayxThemeAnimation? animation,
+  /// You can specify an animation for the theme change using the [animation] parameter.
+  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
+  /// the theme change will be animated according to the type of animation specified.
+  /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
+  ///
+  /// Throws an [Exception] if the provided theme is not available in the supported themes.
+  static Future<void> updateTo(
+    XTheme theme, {
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) =>
-      _controller.updateById(id,
-          animate: animate,
-          context: context,
-          animation: animation,
-          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+      _controller.updateTo(
+        theme,
+        animation: animation,
+        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      );
 
-  /// Updates the app theme to the next theme.
-  /// By Default, It Updates the app theme with an animation which can be disabled using the [animate] parameter.
-  /// The animation's starting point can be customized using the [offset] parameter or automatically set to the widget's position using the [context] parameter.
-  /// If both [offset] and [context] are provided, [offset] takes precedence.
-  /// If neither [offset] nor [context] is provided, the animation starts from the center of the screen.
-  /// The direction of the animation can be controlled using the [isReversed] parameter; if provided, the animation will reverse based on its value,
-  /// otherwise, it will be determined by the current theme index.
-  /// Optionally, a custom [clipper] can be provided to clip the animation. Accepted values are [ThemeSwitcherBoxClipper] or [ThemeSwitcherCircleClipper].
-  /// If animate is disabled, [ forceUpdateNonAnimatedTheme] can be used to force update the theme without animation.
+  /// Updates the app's theme to the theme at the specified index.
+  ///
+  /// You can specify an animation for the theme change using the [animation] parameter.
+  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
+  /// the theme change will be animated according to the type of animation specified.
+  /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
+  ///
+  /// Throws a [RangeError] if the index is out of range.
+  static Future<void> updateByIndex(
+    int index, {
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    bool forceUpdateNonAnimatedTheme = false,
+  }) =>
+      _controller.updateByIndex(
+        index,
+        animation: animation,
+        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      );
+
+  /// Updates the app's theme to the theme with the specified ID.
+  ///
+  /// You can specify an animation for the theme change using the [animation] parameter.
+  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
+  /// the theme change will be animated according to the type of animation specified.
+  /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
+  ///
+  /// Throws an [Exception] if the ID is not available in the supported themes.
+  static Future<void> updateById(
+    String id, {
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    bool forceUpdateNonAnimatedTheme = false,
+  }) =>
+      _controller.updateById(
+        id,
+        animation: animation,
+        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      );
+
+  /// Updates the app's theme to the next theme in the list.
+  ///
+  /// You can specify an animation for the theme change using the [animation] parameter.
+  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
+  /// the theme change will be animated according to the type of animation specified.
+  /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   static Future<void> next({
-    bool animate = true,
-    BuildContext? context,
-    PlayxThemeAnimation? animation,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) =>
       _controller.nextTheme(
-          animate: animate,
-          context: context,
-          animation: animation,
-          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+        animation: animation,
+        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      );
 
-  /// Determines whether the device is in dark or light mode.
+  /// Determines if the device is currently in dark mode.
+  ///
+  /// Returns `true` if the device is in dark mode, otherwise returns `false`.
   static bool isDeviceInDarkMode() {
     return XThemeController.isDeviceInDarkMode();
   }
 
-  /// Updates the app theme to the first light theme in supported themes.
-  /// By Default, It Updates the app theme with an animation which can be disabled using the [animate] parameter.
-  /// The animation's starting point can be customized using the [offset] parameter or automatically set to the widget's position using the [context] parameter.
-  /// If both [offset] and [context] are provided, [offset] takes precedence.
-  /// If neither [offset] nor [context] is provided, the animation starts from the center of the screen.
-  /// The direction of the animation can be controlled using the [isReversed] parameter; if provided, the animation will reverse based on its value,
-  /// otherwise, it will be determined by the current theme index.
-  /// Optionally, a custom [clipper] can be provided to clip the animation. Accepted values are [ThemeSwitcherBoxClipper] or [ThemeSwitcherCircleClipper].
-  /// If animate is disabled, [ forceUpdateNonAnimatedTheme] can be used to force update the theme without animation.
-  /// if there is no light theme in the availableThemes in config, it will throw an [Exception].
+  /// Updates the app's theme to the first light theme available.
+  ///
+  /// You can specify an animation for the theme change using the [animation] parameter.
+  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
+  /// the theme change will be animated according to the type of animation specified.
+  /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
+  ///
+  /// Throws an [Exception] if no light theme is available in the supported themes.
   static Future<void> updateToLightMode({
-    bool animate = true,
-    BuildContext? context,
-    PlayxThemeAnimation? animation,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToLightMode(
-        animate: animate,
-        context: context,
-        animation: animation,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+      animation: animation,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    );
   }
 
-  /// Updates the app theme to the first dark theme in supported themes.
-  /// By Default, It Updates the app theme with an animation which can be disabled using the [animate] parameter.
-  /// The animation's starting point can be customized using the [offset] parameter or automatically set to the widget's position using the [context] parameter.
-  /// If both [offset] and [context] are provided, [offset] takes precedence.
-  /// If neither [offset] nor [context] is provided, the animation starts from the center of the screen.
-  /// The direction of the animation can be controlled using the [isReversed] parameter; if provided, the animation will reverse based on its value,
-  /// otherwise, it will be determined by the current theme index.
-  /// Optionally, a custom [clipper] can be provided to clip the animation. Accepted values are [ThemeSwitcherBoxClipper] or [ThemeSwitcherCircleClipper].
-  /// If animate is disabled, [ forceUpdateNonAnimatedTheme] can be used to force update the theme without animation.
-  /// if there is no dark theme in the availableThemes in config, it will throw an [Exception].
+  /// Updates the app's theme to the first dark theme available.
+  ///
+  /// You can specify an animation for the theme change using the [animation] parameter.
+  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
+  /// the theme change will be animated according to the type of animation specified.
+  /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
+  ///
+  /// Throws an [Exception] if no dark theme is available in the supported themes.
   static Future<void> updateToDarkMode({
-    bool animate = true,
-    BuildContext? context,
-    PlayxThemeAnimation? animation,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToDarkMode(
-        animate: animate,
-        context: context,
-        animation: animation,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+      animation: animation,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    );
   }
 
-  /// Updates the app theme to the first theme that matches the given mode.
-  /// By Default, It Updates the app theme with an animation which can be disabled using the [animate] parameter.
-  /// The animation's starting point can be customized using the [offset] parameter or automatically set to the widget's position using the [context] parameter.
-  /// If both [offset] and [context] are provided, [offset] takes precedence.
-  /// If neither [offset] nor [context] is provided, the animation starts from the center of the screen.
-  /// The direction of the animation can be controlled using the [isReversed] parameter; if provided, the animation will reverse based on its value,
-  /// otherwise, it will be determined by the current theme index.
-  /// Optionally, a custom [clipper] can be provided to clip the animation. Accepted values are [ThemeSwitcherBoxClipper] or [ThemeSwitcherCircleClipper].
-  /// If animate is disabled, [ forceUpdateNonAnimatedTheme] can be used to force update the theme without animation.
-  /// if there is no theme that matches the given mode in the availableThemes in config, it will throw an [Exception].
+  /// Updates the app's theme to the first theme that matches the device's current mode.
+  ///
+  /// You can specify an animation for the theme change using the [animation] parameter.
+  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
+  /// the theme change will be animated according to the type of animation specified.
+  /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
+  ///
+  /// Throws an [Exception] if no theme matching the device's mode is available in the supported themes.
   static Future<void> updateToDeviceMode({
-    bool animate = true,
-    BuildContext? context,
-    PlayxThemeAnimation? animation,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToDeviceMode(
-        animate: animate,
-        context: context,
-        animation: animation,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+      animation: animation,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    );
   }
 
-  /// Updates the app theme to the first theme that matches the given mode.
-  /// By Default, It Updates the app theme with an animation which can be disabled using the [animate] parameter.
-  /// The animation's starting point can be customized using the [offset] parameter or automatically set to the widget's position using the [context] parameter.
-  /// If both [offset] and [context] are provided, [offset] takes precedence.
-  /// If neither [offset] nor [context] is provided, the animation starts from the center of the screen.
-  /// The direction of the animation can be controlled using the [isReversed] parameter; if provided, the animation will reverse based on its value,
-  /// otherwise, it will be determined by the current theme index.
-  /// Optionally, a custom [clipper] can be provided to clip the animation. Accepted values are [ThemeSwitcherBoxClipper] or [ThemeSwitcherCircleClipper].
-  /// If animate is disabled, [ forceUpdateNonAnimatedTheme] can be used to force update the theme without animation.
-  /// if there is no theme that matches the given mode in the availableThemes in config, it will throw an [Exception].
+  /// Updates the app's theme to the first theme that matches the given [ThemeMode].
+  ///
+  /// You can specify an animation for the theme change using the [animation] parameter.
+  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
+  /// the theme change will be animated according to the type of animation specified.
+  /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
+  ///
+  /// Throws an [Exception] if no theme matching the given [ThemeMode] is found in the [supportedThemes].
   static Future<void> updateByThemeMode({
     required ThemeMode mode,
-    bool animate = true,
-    BuildContext? context,
-    PlayxThemeAnimation? animation,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateByThemeMode(
-        mode: mode,
-        animate: animate,
-        context: context,
-        animation: animation,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+      mode: mode,
+      animation: animation,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    );
   }
 
-  /// Clears the last saved theme from the local storage.
+  /// Clears the last saved theme from local storage.
+  ///
+  /// This method removes the theme data that was previously saved to allow the app to revert to default settings or choose a new theme.
   static Future<void> clearLastSavedTheme() async {
     return XThemeController.clearLastSavedTheme();
   }
 
-  /// Dispose playx theme dependencies.
+  /// Disposes of the Playx theme dependencies.
+  ///
+  /// This method should be called when theme management is no longer needed to clean up resources.
+  /// It returns `true` if the disposal was successful, otherwise returns `false`.
   static Future<bool> dispose() async {
     if (_themeControllerInstance != null) {
       _themeControllerInstance!.dispose();

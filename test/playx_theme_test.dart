@@ -50,7 +50,7 @@ void main() {
         );
         bool isRegistered = false;
         try {
-          final instance = XThemeController.instance;
+          XThemeController.instance;
           isRegistered = true;
         } catch (e) {
           isRegistered = false;
@@ -312,7 +312,7 @@ void main() {
       await PlayxTheme.dispose();
       bool isRegistered = false;
       try {
-        final instance = XThemeController.instance;
+        XThemeController.instance;
         isRegistered = true;
       } catch (e) {
         isRegistered = false;

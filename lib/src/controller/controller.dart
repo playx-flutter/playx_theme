@@ -3,12 +3,26 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:playx_theme/playx_theme.dart';
-import 'package:playx_theme/src/utils/animation_utils.dart';
 
-/// XThemeController used to handle all operations on themes like how to change theme, etc.
+import '../../playx_theme.dart';
+import '../utils/animation_utils.dart';
+
+/// XThemeController is responsible for managing and updating the app's theme,
+/// including handling theme changes, animations, and theme persistence.
 class XThemeController extends ValueNotifier<XTheme> {
   static const lastKnownIndexKey = 'playx.theme.last_known_index';
+
+  static XThemeController? _instance;
+
+  /// Get the instance of the [XThemeController].
+  /// Throws an exception if [boot] has not been called before accessing the instance.
+  static XThemeController get instance {
+    if (_instance == null) {
+      throw Exception(
+          'PlayxTheme is not initialized. Please call `boot` before accessing the instance.');
+    }
+    return _instance!;
+  }
 
   /// Theme configuration.
   final PlayxThemeConfig config;
@@ -16,26 +30,27 @@ class XThemeController extends ValueNotifier<XTheme> {
   /// Default theme index.
   int initialIndex = -1;
 
+  /// The current theme being used.
   XTheme get theme => value;
 
-  //Animation
+  // Animation
   ui.Image? image;
   final previewContainer = GlobalKey();
 
   Timer? timer;
-  ThemeSwitcherClipper clipper = const ThemeSwitcherCircleClipper();
   AnimationController? controller;
+  PlayxThemeAnimation? themeAnimation;
 
   XTheme? oldTheme;
 
-  bool isReversed = false;
-  late Offset switcherOffset;
-
+  /// Creates an instance of [XThemeController].
+  ///
+  /// The provided [theme] will be used as the initial theme if provided; otherwise,
+  /// the theme at the [initialThemeIndex] from the configuration will be used.
   XThemeController({
     XTheme? theme,
     required this.config,
   }) : super(theme ?? config.themes[config.initialThemeIndex]) {
-    ///Default theme index.
     int initialThemeIndex = theme != null
         ? availableThemes.indexOf(theme)
         : config.initialThemeIndex;
@@ -52,11 +67,12 @@ class XThemeController extends ValueNotifier<XTheme> {
   /// List of available themes.
   List<XTheme> get availableThemes => config.themes;
 
-  /// set up the base controller
+  /// Initializes the theme controller by loading the last saved theme index if applicable.
   Future<void> boot() async {
-    final lastKnownIndex = config.saveTheme
-        ? PlayxPrefs.getInt(lastKnownIndexKey, fallback: initialIndex)
-        : initialIndex;
+    final lastSavedIndex = await getLastSavedIndexFromPrefs(
+        migratePrefsToAsync: config.migratePrefsToAsyncPrefs);
+    final lastKnownIndex =
+        config.saveTheme ? lastSavedIndex ?? initialIndex : initialIndex;
 
     currentIndex = lastKnownIndex;
 
@@ -64,37 +80,49 @@ class XThemeController extends ValueNotifier<XTheme> {
           lastKnownIndex,
         ) ??
         config.themes.first;
+    _instance = this;
   }
 
-  /// Update the theme to one of the theme list.
-  /// The provided theme should be in the available themes list in [PlayxThemeConfig].
-  /// If [animate] is true, it will animate the theme change.
-  /// If [animate ]  is false, it will force the app to update the theme by building the whole widget tree.
-  /// if [isReversed] is provided, It will play the animation based on reverse mode.
-  /// if [isReversed] is not provided, It will decide to play the animation based on the current index.
+  /// Retrieves the last saved theme index from preferences.
+  ///
+  /// If [migratePrefsToAsync] is true, preferences are migrated to asynchronous storage.
+  Future<int?> getLastSavedIndexFromPrefs({
+    bool migratePrefsToAsync = false,
+  }) async {
+    await PlayxAsyncPrefs.create();
+    int? lastSavedIndex = await PlayxAsyncPrefs.maybeGetInt(
+      lastKnownIndexKey,
+    );
+    if (migratePrefsToAsync && lastSavedIndex == null) {
+      await PlayxPrefs.create();
+      final lastKnownIndexInPrefs =
+          PlayxPrefs.getInt(lastKnownIndexKey, fallback: initialIndex);
+      await PlayxAsyncPrefs.setInt(lastKnownIndexKey, lastKnownIndexInPrefs);
+      lastSavedIndex = lastKnownIndexInPrefs;
+    }
+    return lastSavedIndex;
+  }
+
+  /// Updates the theme to one from the available theme list.
+  ///
+  /// The provided [theme] should be in the available themes list in [PlayxThemeConfig].
+  /// If [animation] is null, the theme change will not be animated.
+  /// If [animation] is provided, the theme change will be animated based on the animation type.
+  /// If [forceUpdateNonAnimatedTheme] is true, the app's widget tree will be rebuilt.
   Future<void> _updateTheme({
     required XTheme theme,
     required int index,
-    bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
-    isReversed = isReversed ?? index < currentIndex;
+    if (value == theme) {
+      return;
+    }
     currentIndex = index;
-    if (animate && controller != null) {
+    final animate = animation != null && controller != null;
+    if (animate) {
       await animateTheme(
-        theme: theme,
-        context: context,
-        controller: controller!,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
-      );
+          theme: theme, controller: controller!, animation: animation);
     } else {
       value = theme;
       if (forceUpdateNonAnimatedTheme) {
@@ -102,84 +130,65 @@ class XThemeController extends ValueNotifier<XTheme> {
       }
     }
     if (config.saveTheme) {
-      await PlayxPrefs.setInt(lastKnownIndexKey, currentIndex);
+      await PlayxAsyncPrefs.setInt(lastKnownIndexKey, currentIndex);
     }
   }
 
-  /// Force the app to update the theme by building the whole widget tree.
+  /// Forces the app to update the theme by rebuilding the entire widget tree.
   Future<void> _forceAppUpdate() async {
     return WidgetsFlutterBinding.ensureInitialized().performReassemble();
   }
 
-  /// Force the app to update the theme by building the whole widget tree.
+  /// Forces the app to update the theme by rebuilding the entire widget tree.
   void forceUpdateTheme() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _forceAppUpdate();
     });
   }
 
-  /// Update the theme to one of the theme list.
-  /// The provided theme should be in the available themes list in [PlayxThemeConfig].
+  /// Updates the theme to a specific theme from the available theme list.
+  ///
+  /// The provided [theme] should be in the available themes list in [PlayxThemeConfig].
+  /// If [animation] is null, the theme change will not be animated.
+  /// If [animation] is provided, the theme change will be animated based on the animation type.
+  /// If [forceUpdateNonAnimatedTheme] is true, the app's widget tree will be rebuilt.
   Future<void> updateTo(
     XTheme theme, {
-    bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     if (!availableThemes.contains(theme)) {
-      throw Exception('The provided theme is not in the available themes list');
+      throw Exception('The provided theme is not in the available theme list');
     }
     return _updateTheme(
       theme: theme,
       index: availableThemes.indexOf(theme),
-      animate: animate,
-      context: context,
-      isReversed: isReversed,
-      clipper: clipper,
-      offset: offset,
-      onAnimationFinish: onAnimationFinish,
+      animation: animation,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
     );
   }
 
-  /// switch the theme to the next in the list
-  /// if there is no next theme, it will switch to the first one
+  /// Switches the theme to the next one in the list.
+  ///
+  /// If there is no next theme, it will switch to the first one.
   Future<void> nextTheme({
-    bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     final isLastTheme = currentIndex == config.themes.length - 1;
 
     return updateByIndex(isLastTheme ? 0 : currentIndex + 1,
-        animate: animate,
-        context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
-  /// update the theme to by index
-  /// The index should be in the range of available themes list in [PlayxThemeConfig].
-  /// if the index is out of range, it will throw a [RangeError] exception.
+  /// Updates the theme to one by its index in the available themes list.
+  ///
+  /// The [index] should be within the range of the available themes list.
+  /// Throws a [RangeError] if the index is out of range.
   Future<void> updateByIndex(
     int index, {
-    bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     if (index < 0 || index >= availableThemes.length) {
@@ -189,25 +198,17 @@ class XThemeController extends ValueNotifier<XTheme> {
     return _updateTheme(
         theme: availableThemes[index],
         index: index,
-        animate: animate,
-        context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
-  /// update the theme to by id.
-  /// The [id] should be the id of one of the available themes list in [PlayxThemeConfig]/
+  /// Updates the theme to one by its ID in the available themes list.
+  ///
+  /// The [id] should match the ID of a theme in the available themes list.
+  /// Throws an exception if the ID is not found.
   Future<void> updateById(
     String id, {
-    bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     if (!availableThemes.any((element) => element.id == id)) {
@@ -218,31 +219,23 @@ class XThemeController extends ValueNotifier<XTheme> {
     return _updateTheme(
         theme: availableThemes[index],
         index: index,
-        animate: animate,
-        context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
-  /// Returns Whether the device is currently in dark mode or not.
+  /// Returns whether the device is currently in dark mode.
   static bool isDeviceInDarkMode() {
     var brightness =
         SchedulerBinding.instance.platformDispatcher.platformBrightness;
     return brightness == Brightness.dark;
   }
 
-  /// update the theme to the first light theme in supported themes.
-  /// If there is no light theme, it will throw an exception.
+  /// Updates the theme to the first light theme in the available themes list.
+  ///
+  /// Throws an exception if no light theme is found.
   Future<void> updateToLightMode({
     bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     final theme = config.themes.firstWhereOrNull((element) => !element.isDark);
@@ -250,9 +243,7 @@ class XThemeController extends ValueNotifier<XTheme> {
       throw Exception('Could not find any light theme in the available themes');
     }
     return updateTo(theme,
-        animate: animate,
-        isReversed: isReversed,
-        clipper: clipper,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -260,11 +251,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   ///If there is no dark theme, it will throw an exception.
   Future<void> updateToDarkMode({
     bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     final theme = config.themes.firstWhereOrNull((element) => element.isDark);
@@ -273,12 +260,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     }
     return updateTo(
       theme,
-      animate: animate,
-      context: context,
-      isReversed: isReversed,
-      clipper: clipper,
-      offset: offset,
-      onAnimationFinish: onAnimationFinish,
+      animation: animation,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
     );
   }
@@ -287,11 +269,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   /// If there is no theme that matches the device mode, it will throw an exception.
   Future<void> updateToDeviceMode({
     bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     final theme = config.themes
@@ -300,102 +278,67 @@ class XThemeController extends ValueNotifier<XTheme> {
       throw Exception('Could not find any theme that matches the device mode');
     }
     return updateTo(theme,
-        animate: animate,
-        context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
   /// Update the theme to the first theme that matches the given mode.
   Future<void> updateByThemeMode({
     required ThemeMode mode,
-    bool animate = true,
-    BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     switch (mode) {
       case ThemeMode.system:
         return updateToDeviceMode(
-            animate: animate,
-            context: context,
-            isReversed: isReversed,
-            clipper: clipper,
-            offset: offset,
-            onAnimationFinish: onAnimationFinish,
+            animation: animation,
             forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
       case ThemeMode.light:
         return updateToLightMode(
-            animate: animate,
-            context: context,
-            isReversed: isReversed,
-            clipper: clipper,
-            offset: offset,
-            onAnimationFinish: onAnimationFinish,
+            animation: animation,
             forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
       case ThemeMode.dark:
         return updateToDarkMode(
-            animate: animate,
-            context: context,
-            isReversed: isReversed,
-            clipper: clipper,
-            offset: offset,
-            onAnimationFinish: onAnimationFinish,
+            animation: animation,
             forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
     }
   }
 
   /// Clear the last saved theme index.
   static Future<void> clearLastSavedTheme() {
-    return PlayxPrefs.remove(lastKnownIndexKey);
+    return PlayxAsyncPrefs.remove(lastKnownIndexKey);
   }
 
   /// Animate the theme change.
   Future<void> animateTheme({
     required XTheme theme,
     required AnimationController controller,
-    BuildContext? context,
-    ThemeSwitcherClipper? clipper,
-    required bool isReversed,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    required PlayxThemeAnimation animation,
   }) async {
     if (controller.isAnimating) {
-      return;
+      controller.reset();
+      if (oldTheme != null) {
+        value = oldTheme!;
+      }
     }
-
-    if (clipper != null) {
-      this.clipper = clipper;
-    }
-    this.isReversed = isReversed;
+    controller.duration = animation.duration;
 
     oldTheme = value;
 
-    switcherOffset = AnimationUtils.getSwitcherCoordinates(context, offset);
     image =
         await AnimationUtils.saveScreenshot(previewContainer: previewContainer);
     value = theme;
 
-    if (isReversed) {
-      await controller
-          .reverse(from: 1.0)
-          .then((value) => onAnimationFinish?.call());
-    } else {
-      await controller
-          .forward(from: 0.0)
-          .then((value) => onAnimationFinish?.call());
-    }
+    themeAnimation = animation;
+    await animation.animate(
+      controller: controller,
+    );
 
     // Notify listeners when the animation finishes.
     notifyListeners();
   }
 
+  /// Update the theme animation controller.
   void updateThemeAnimationController(AnimationController? controller) {
     this.controller = controller;
   }
@@ -403,6 +346,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   @override
   void dispose() {
     timer?.cancel();
+    _instance = null;
     super.dispose();
   }
 }

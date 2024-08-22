@@ -90,5 +90,6 @@ class ThemeConfig extends PlayxThemeConfig {
           ],
           initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0,
           saveTheme: true,
+          migratePrefsToAsyncPrefs: true,
         );
 }

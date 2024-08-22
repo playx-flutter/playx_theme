@@ -13,47 +13,181 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<XThemeController>();
-    Widget child;
+    final controller = XThemeController.instance;
+    final themeAnimation = controller.themeAnimation;
     if (controller.oldTheme == null ||
         controller.oldTheme == controller.theme ||
-        !(controller.controller?.isAnimating == true)) {
-      child = _getPage(controller.theme.themeData);
+        !(controller.controller?.isAnimating == true) ||
+        themeAnimation == null) {
+      // If there is no old theme, or no animation in progress, just show the current theme
+      return Material(child: _getPage(controller.theme.themeData));
     } else {
-      late final Widget firstWidget, animWidget;
-      if (controller.isReversed) {
-        firstWidget = _getPage(controller.theme.themeData);
-        animWidget = RawImage(image: controller.image);
+      // Create the widgets for the transition
+      late final Widget oldThemeWidget, newThemeWidget;
+      if (themeAnimation.isReversed) {
+        oldThemeWidget =
+            _getPage(controller.theme.themeData); // Show the new theme first
+        newThemeWidget =
+            RawImage(image: controller.image); // Transition from screenshot
       } else {
-        firstWidget = RawImage(image: controller.image);
-        animWidget = _getPage(controller.theme.themeData);
+        oldThemeWidget = RawImage(
+            image: controller.image); // Show the old theme screenshot first
+        newThemeWidget =
+            _getPage(controller.theme.themeData); // Transition to the new theme
       }
-      child = Stack(
-        children: [
-          Container(
-            key: const ValueKey('ThemeSwitchingAreaFirstChild'),
-            child: firstWidget,
-          ),
-          AnimatedBuilder(
-            key: const ValueKey('ThemeSwitchingAreaSecondChild'),
-            animation: controller.controller!,
-            child: animWidget,
-            builder: (_, child) {
-              return ClipPath(
-                clipper: ThemeSwitcherClipperBridge(
-                  clipper: controller.clipper,
-                  offset: controller.switcherOffset,
-                  sizeRate: controller.controller?.value ?? 1,
-                ),
-                child: child,
-              );
-            },
-          ),
-        ],
-      );
-    }
 
-    return Material(child: child);
+      // Create a widget based on the selected animation type
+      Widget transitionWidget;
+      switch (themeAnimation) {
+        case PlayxThemeClipperAnimation _:
+          transitionWidget = _buildClipperAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
+          break;
+        case PlayxThemeFadeAnimation _:
+          transitionWidget = _buildFadeAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
+          break;
+        case PlayxThemeScaleAnimation _:
+          transitionWidget = _buildScaleAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
+          break;
+        case PlayxThemeHorizontalSlideAnimation _:
+          transitionWidget = _buildHorizontalSlideAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
+          break;
+        case PlayxThemeVerticalSlideAnimation _:
+          transitionWidget = _buildVerticalSlideAnimation(
+              animation: themeAnimation,
+              oldThemeWidget: oldThemeWidget,
+              newThemeWidget: newThemeWidget);
+          break;
+      }
+
+      return Material(child: transitionWidget);
+    }
+  }
+
+  // Circular animation, similar to your original implementation
+  Widget _buildClipperAnimation(
+      {required PlayxThemeClipperAnimation animation,
+      required Widget oldThemeWidget,
+      required Widget newThemeWidget}) {
+    final controller = XThemeController.instance;
+    return Stack(
+      children: [
+        Container(
+          key: const ValueKey('ThemeSwitchingAreaOldTheme'),
+          child: oldThemeWidget,
+        ),
+        AnimatedBuilder(
+          key: const ValueKey('ThemeSwitchingAreaNewTheme'),
+          animation: controller.controller!,
+          child: newThemeWidget,
+          builder: (_, child) {
+            return ClipPath(
+              clipper: ThemeSwitcherClipperBridge(
+                clipper: animation.clipper,
+                offset: animation.switcherOffset,
+                sizeRate: controller.controller?.value ?? 1,
+              ),
+              child: child,
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  // Fade animation
+  Widget _buildFadeAnimation({
+    required PlayxThemeFadeAnimation animation,
+    required Widget oldThemeWidget,
+    required Widget newThemeWidget,
+  }) {
+    final controller = XThemeController.instance;
+    return Stack(
+      children: [
+        FadeTransition(
+          opacity: ReverseAnimation(controller.controller!),
+          child: oldThemeWidget,
+        ),
+        FadeTransition(
+          opacity: controller.controller!,
+          child: newThemeWidget,
+        ),
+      ],
+    );
+  }
+
+  // Scale animation
+  Widget _buildScaleAnimation(
+      {required PlayxThemeScaleAnimation animation,
+      required Widget oldThemeWidget,
+      required Widget newThemeWidget}) {
+    final controller = XThemeController.instance;
+    return Stack(
+      children: [
+        ScaleTransition(
+          scale: ReverseAnimation(controller.controller!),
+          child: oldThemeWidget,
+        ),
+        ScaleTransition(
+          scale: controller.controller!,
+          child: newThemeWidget,
+        ),
+      ],
+    );
+  }
+
+  // Slide animation
+  Widget _buildHorizontalSlideAnimation(
+      {required PlayxThemeHorizontalSlideAnimation animation,
+      required Widget oldThemeWidget,
+      required Widget newThemeWidget}) {
+    final controller = XThemeController.instance;
+    return Stack(
+      children: [
+        SlideTransition(
+          position: controller.controller!.drive(Tween(
+              begin: const Offset(0.0, 0.0), end: const Offset(1.0, 0.0))),
+          child: oldThemeWidget,
+        ),
+        SlideTransition(
+          position: controller.controller!.drive(Tween(
+              begin: const Offset(-1.0, 0.0), end: const Offset(0.0, 0.0))),
+          child: newThemeWidget,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVerticalSlideAnimation(
+      {required PlayxThemeVerticalSlideAnimation animation,
+      required Widget oldThemeWidget,
+      required Widget newThemeWidget}) {
+    final controller = XThemeController.instance;
+    return Stack(
+      children: [
+        SlideTransition(
+          position: controller.controller!.drive(Tween(
+              begin: const Offset(0.0, 0.0), end: const Offset(0.0, 1.0))),
+          child: oldThemeWidget,
+        ),
+        SlideTransition(
+          position: controller.controller!.drive(Tween(
+              begin: const Offset(0.0, -1.0), end: const Offset(0.0, 0.0))),
+          child: newThemeWidget,
+        ),
+      ],
+    );
   }
 
   Widget _getPage(ThemeData brandTheme) {

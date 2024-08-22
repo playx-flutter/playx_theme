@@ -5,9 +5,6 @@ import 'package:playx_theme/playx_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /// * boot the core
-  await PlayxCore.bootCore();
-
   /// boot the AppTheme
   await PlayxTheme.boot(config: ThemeConfig());
 
@@ -20,19 +17,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlayxThemeBuilder(
-        duration: const Duration(milliseconds: 300),
-        builder: (ctx, xTheme) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            theme: xTheme.themeBuilder?.call(const Locale('en')) ??
-                xTheme.themeData,
-            initialRoute: '/',
-            routes: {
-              '/': (context) => const HomeScreen(),
-            },
-          );
-        });
+    return PlayxThemeBuilder(builder: (ctx, xTheme) {
+      return MaterialApp(
+        title: 'Flutter Demo',
+        theme:
+            xTheme.themeBuilder?.call(const Locale('en')) ?? xTheme.themeData,
+        home: const HomeScreen(),
+      );
+    });
   }
 }
 
@@ -88,8 +80,7 @@ class HomeScreen extends StatelessWidget {
                                                           .supportedThemes[
                                                               index]
                                                           .id
-                                                  ? PlayxColors.of(context)
-                                                      .primary
+                                                  ? context.playxColors.primary
                                                   : Colors.transparent,
                                             ),
                                           ),
@@ -111,8 +102,13 @@ class HomeScreen extends StatelessWidget {
                                               Navigator.of(dialogContext)
                                                   .pop(); // Dismiss alert dialog
 
-                                              PlayxTheme.updateById(PlayxTheme
-                                                  .supportedThemes[index].id);
+                                              PlayxTheme.updateById(
+                                                  PlayxTheme
+                                                      .supportedThemes[index]
+                                                      .id,
+                                                  animation:
+                                                      const PlayxThemeAnimation
+                                                          .horizontalSlide());
                                             },
                                           ),
                                         )),
@@ -135,18 +131,18 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              PlayxThemeSwitcher(
-                builder: (ctx, theme) => ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: PlayxColors.of(context).primaryContainer,
-                  ),
-                  onPressed: () {
-                    PlayxTheme.next(
-                      context: ctx,
-                    );
-                  },
-                  child: const Text('Next Theme'),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: PlayxColors.of(context).primaryContainer,
                 ),
+                onPressed: () {
+                  PlayxTheme.next(
+                    animation: const PlayxThemeAnimation.fade(
+                      duration: Duration(milliseconds: 500),
+                    ),
+                  );
+                },
+                child: const Text('Next Theme'),
               ),
             ],
           ),
@@ -155,7 +151,9 @@ class HomeScreen extends StatelessWidget {
           builder: (ctx, theme) => FloatingActionButton(
             onPressed: () {
               PlayxTheme.next(
-                  context: ctx, clipper: const ThemeSwitcherBoxClipper());
+                animation: PlayxThemeAnimation.clipper(
+                    clipper: const ThemeSwitcherCircleClipper(), context: ctx),
+              );
             },
             tooltip: 'Next Theme',
             child: Icon(

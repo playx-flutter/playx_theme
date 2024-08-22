@@ -34,7 +34,11 @@ PlayxThemeConfig getTestConfig({int initialThemeIndex = 0}) {
 }
 
 class TestApp extends StatelessWidget {
-  const TestApp({super.key});
+  final Widget? child;
+  const TestApp({
+    super.key,
+    this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +46,10 @@ class TestApp extends StatelessWidget {
       builder: (cxt, xTheme) => MaterialApp(
         theme: xTheme.themeData,
         home: Scaffold(
-          body: Center(
-            child: Text(PlayxTheme.index.toString()),
-          ),
+          body: child ??
+              Center(
+                child: Text(PlayxTheme.index.toString()),
+              ),
         ),
       ),
     );

@@ -16,10 +16,13 @@ class PlayxThemeConfig {
   /// List of themes to use in the app.
   List<XTheme> themes;
 
+  final bool migratePrefsToAsyncPrefs;
+
   PlayxThemeConfig({
     this.initialThemeIndex = 0,
     this.saveTheme = true,
     this.themes = const [],
+    this.migratePrefsToAsyncPrefs = false,
   })  : assert(initialThemeIndex >= 0 && initialThemeIndex < themes.length),
         assert(themes.isNotEmpty);
 }

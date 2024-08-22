@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:playx_theme/playx_theme.dart';
 import 'package:playx_theme/src/controller/controller.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 import 'config/config.dart';
 
@@ -15,14 +17,14 @@ void main() {
   setUp(
     () async {
       PlayxPrefs.setMockInitialValues({});
-      await PlayxCore.bootCore();
+      SharedPreferencesAsyncPlatform.instance =
+          InMemorySharedPreferencesAsync.empty();
       await PlayxTheme.boot(config: getTestConfig());
     },
   );
   tearDown(
     () async {
       await PlayxTheme.clearLastSavedTheme();
-      await PlayxCore.dispose();
       await PlayxTheme.dispose();
     },
   );
@@ -46,7 +48,13 @@ void main() {
         await PlayxTheme.boot(
           config: getTestConfig(initialThemeIndex: 1),
         );
-        final isRegistered = Get.isRegistered<XThemeController>();
+        bool isRegistered = false;
+        try {
+          final instance = XThemeController.instance;
+          isRegistered = true;
+        } catch (e) {
+          isRegistered = false;
+        }
         expect(true, isRegistered);
       });
     });
@@ -67,12 +75,13 @@ void main() {
       test(
           'PlayxTheme.index should return the Last saved and current theme index',
           () async {
-        await PlayxCore.dispose();
         await PlayxTheme.dispose();
 
         PlayxPrefs.setMockInitialValues(
             {XThemeController.lastKnownIndexKey: 1});
-        await PlayxCore.bootCore();
+        SharedPreferencesAsyncPlatform.instance =
+            InMemorySharedPreferencesAsync.withData(
+                {XThemeController.lastKnownIndexKey: 1});
         await PlayxTheme.boot(config: getTestConfig());
 
         expect(PlayxTheme.index, 1);
@@ -288,8 +297,9 @@ void main() {
         1,
       );
 
-      final index =
-          PlayxPrefs.getInt(XThemeController.lastKnownIndexKey, fallback: 0);
+      final index = await PlayxAsyncPrefs.getInt(
+          XThemeController.lastKnownIndexKey,
+          fallback: 0);
       expect(index, 1);
 
       // await PlayxTheme.clearLastSavedTheme();
@@ -300,7 +310,13 @@ void main() {
     test('PlayxTheme.dispose() should dispose the PlayxThemeController',
         () async {
       await PlayxTheme.dispose();
-      final isRegistered = Get.isRegistered<XThemeController>();
+      bool isRegistered = false;
+      try {
+        final instance = XThemeController.instance;
+        isRegistered = true;
+      } catch (e) {
+        isRegistered = false;
+      }
       expect(false, isRegistered);
     });
   });

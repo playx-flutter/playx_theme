@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:playx_theme/playx_theme.dart';
 import 'package:playx_theme/src/controller/controller.dart';
+import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
 import '../config/config.dart';
 
@@ -16,14 +18,14 @@ void main() {
 
   setUp(() async {
     PlayxPrefs.setMockInitialValues({});
-    await PlayxCore.bootCore();
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
     controller = XThemeController(config: getTestConfig());
     await controller.boot();
   });
   tearDown(() async {
-    await PlayxPrefs.clear();
-    await PlayxCore.dispose();
-    // await PlayxTheme.dispose();
+    await PlayxAsyncPrefs.clear();
+    await PlayxTheme.dispose();
   });
 
   group('XThemeController Test', () {

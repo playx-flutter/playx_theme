@@ -10,6 +10,17 @@ import 'package:playx_theme/src/utils/animation_utils.dart';
 class XThemeController extends ValueNotifier<XTheme> {
   static const lastKnownIndexKey = 'playx.theme.last_known_index';
 
+  static XThemeController? _instance;
+
+  /// Get the instance of the [XThemeController].
+  static XThemeController get instance {
+    if (_instance == null) {
+      throw Exception(
+          'PlayxTheme is not initialized. Please call `boot` before accessing the instance.');
+    }
+    return _instance!;
+  }
+
   /// Theme configuration.
   final PlayxThemeConfig config;
 
@@ -54,9 +65,10 @@ class XThemeController extends ValueNotifier<XTheme> {
 
   /// set up the base controller
   Future<void> boot() async {
-    final lastKnownIndex = config.saveTheme
-        ? PlayxPrefs.getInt(lastKnownIndexKey, fallback: initialIndex)
-        : initialIndex;
+    final lastSavedIndex = await getLastSavedIndexFromPrefs(
+        migratePrefsToAsync: config.migratePrefsToAsyncPrefs);
+    final lastKnownIndex =
+        config.saveTheme ? lastSavedIndex ?? initialIndex : initialIndex;
 
     currentIndex = lastKnownIndex;
 
@@ -64,6 +76,24 @@ class XThemeController extends ValueNotifier<XTheme> {
           lastKnownIndex,
         ) ??
         config.themes.first;
+    _instance = this;
+  }
+
+  Future<int?> getLastSavedIndexFromPrefs({
+    bool migratePrefsToAsync = false,
+  }) async {
+    await PlayxAsyncPrefs.create();
+    int? lastSavedIndex = await PlayxAsyncPrefs.maybeGetInt(
+      lastKnownIndexKey,
+    );
+    if (migratePrefsToAsync && lastSavedIndex == null) {
+      await PlayxPrefs.create();
+      final lastKnownIndexInPrefs =
+          PlayxPrefs.getInt(lastKnownIndexKey, fallback: initialIndex);
+      await PlayxAsyncPrefs.setInt(lastKnownIndexKey, lastKnownIndexInPrefs);
+      lastSavedIndex = lastKnownIndexInPrefs;
+    }
+    return lastSavedIndex;
   }
 
   /// Update the theme to one of the theme list.
@@ -102,7 +132,7 @@ class XThemeController extends ValueNotifier<XTheme> {
       }
     }
     if (config.saveTheme) {
-      await PlayxPrefs.setInt(lastKnownIndexKey, currentIndex);
+      await PlayxAsyncPrefs.setInt(lastKnownIndexKey, currentIndex);
     }
   }
 
@@ -131,7 +161,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     if (!availableThemes.contains(theme)) {
-      throw Exception('The provided theme is not in the available themes list');
+      throw Exception('The provided theme is not in the available theme list');
     }
     return _updateTheme(
       theme: theme,
@@ -353,7 +383,7 @@ class XThemeController extends ValueNotifier<XTheme> {
 
   /// Clear the last saved theme index.
   static Future<void> clearLastSavedTheme() {
-    return PlayxPrefs.remove(lastKnownIndexKey);
+    return PlayxAsyncPrefs.remove(lastKnownIndexKey);
   }
 
   /// Animate the theme change.
@@ -403,6 +433,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   @override
   void dispose() {
     timer?.cancel();
+    _instance = null;
     super.dispose();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
-import 'package:playx_core/playx_core.dart';
 import 'package:playx_theme/src/config/config.dart';
 import 'package:playx_theme/src/controller/controller.dart';
 import 'package:playx_theme/src/model/playx_colors.dart';
@@ -9,17 +8,23 @@ import 'package:playx_theme/src/model/x_theme.dart';
 /// PlayxTheme :
 /// It controls current app theme and how to change current theme.
 abstract class PlayxTheme {
-  /// shortcut for the rest of the functions
-  static XThemeController get _controller => Get.find<XThemeController>();
+  static XThemeController? _themeControllerInstance;
+
+  static XThemeController get _controller {
+    if (_themeControllerInstance == null) {
+      throw Exception(
+          "PlayxTheme is not initialized. Please call boot() before accessing PlayxTheme.");
+    }
+    return _themeControllerInstance!;
+  }
 
   /// Used to setup AppTheme.
   /// Must be called to initialize dependencies.
   static Future<void> boot({
     required PlayxThemeConfig config,
   }) async {
-    //TODO(1): Try to not depend on GetX package for DI.
     final controller = XThemeController(config: config);
-    Get.put<XThemeController>(controller);
+    _themeControllerInstance = controller;
     return controller.boot();
   }
 
@@ -301,8 +306,9 @@ abstract class PlayxTheme {
 
   /// Dispose playx theme dependencies.
   static Future<bool> dispose() async {
-    if (Get.isRegistered<XThemeController>()) {
-      return Get.delete<XThemeController>();
+    if (_themeControllerInstance != null) {
+      _themeControllerInstance!.dispose();
+      _themeControllerInstance = null;
     }
     return true;
   }

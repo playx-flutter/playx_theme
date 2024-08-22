@@ -13,7 +13,7 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<XThemeController>();
+    final controller = XThemeController.instance;
     Widget child;
     if (controller.oldTheme == null ||
         controller.oldTheme == controller.theme ||

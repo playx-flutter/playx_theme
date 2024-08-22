@@ -26,7 +26,7 @@ class _ThemeProviderState extends State<PlayxThemeBuilder>
     with TickerProviderStateMixin {
   late AnimationController _controller;
 
-  final themeController = Get.find<XThemeController>();
+  final themeController = XThemeController.instance;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _ThemeProviderState extends State<PlayxThemeBuilder>
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<XThemeController>();
+    final controller = XThemeController.instance;
     return ValueListenableBuilder(
       valueListenable: controller,
       builder: (context, xTheme, _) {

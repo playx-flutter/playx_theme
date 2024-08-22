@@ -1,19 +1,23 @@
 # Changelog
 
 ## 0.7.0
-> **Note**: This release contains breaking changes.
+**Note**: This release contains breaking changes.
 
 **New Features:**
 - Added new animation types: fade, horizontal slide, vertical slide, and scale.
-- Introduced `PlayxThemeAnimation` class to manage animation settings like type, offset, and duration.
+- Introduced `PlayxThemeAnimation` class to manage animations. This class includes:
+    - Specific animation types are represented by subclasses such as `[PlayxThemeClipperAnimation]`, `[PlayxThemeFadeAnimation]`, `[PlayxThemeScaleAnimation]`, `[PlayxThemeHorizontalSlideAnimation]`, and `[PlayxThemeVerticalSlideAnimation]`.
+    - Ability to reverse the animation.
+    - Set the duration of the animation.
+    - Handle specific animations settings and actions.
 
 **Enhancements:**
 - Migrated shared preferences to `SharedPreferencesAsync` for improved performance and async handling.
 - Streamlined package by removing the GetX dependency, reducing the overall footprint.
-- **Dependency Removal**: Removed dependencies on the GetX package. Ensure your project setup aligns with this change before upgrading.
+- No need to call `PlayxCore.bootCore()` anymore. The package now initializes automatically.
 
 **Breaking Changes:**
-- **Theme Functions Update**: All `PlayxTheme` functions now accept a `PlayxThemeAnimation` object instead of separate animation parameters.
+- **Theme Functions Update**: All `PlayxTheme` functions now use the `[PlayxThemeAnimation]` parameter to specify animations. The previous `animate` parameter has been removed. If `[animation]` is `null`, the theme change will be instant. If `[animation]` is provided, the theme change will be animated based on the animation type.
 - **Shared Preferences Migration**: Migrated from `SharedPreferences` to `SharedPreferencesAsync`. If you're upgrading, set `migratePrefsToAsyncPrefs` to `true` in `PlayxThemeConfig` to ensure a smooth transition.
 
 ## 0.6.0

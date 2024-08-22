@@ -14,127 +14,129 @@ Playx Theme: Effortlessly control your app's visual style. Seamlessly switch the
 
 Add the following line to your `dependencies` in `pubspec.yaml`:
 
-```yaml
-playx_theme: ^0.5.0
-```
+```yaml  
+playx_theme: ^0.7.0  
+```  
 
 ## Usage
 
-### Boot the Core
+### Boot PlayxTheme
 
-Initialize the core and boot the themes before running your app.
+Initialize and boot the themes before running your app.
 
-```dart
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Boot the core
-  await PlayxCore.bootCore();
-
-  // Boot the AppTheme
-  await PlayxTheme.boot(
-    config: PlayxThemeConfig(
-      themes: [
-        XTheme(
-          id: 'light',
-          name: 'Light',
-          themeData: ThemeData.light(),
-        ),
-        XTheme(
-          id: 'dark',
-          name: 'Dark',
-          themeData: ThemeData.dark(),
-        ),
-      ],
-    ),
-  );
-
-  // Run the app
-  runApp(const MyApp());
-}
-```
+```dart  
+void main() async {  
+  WidgetsFlutterBinding.ensureInitialized();  
+    
+  // Boot the AppTheme  
+  await PlayxTheme.boot(  
+    config: PlayxThemeConfig(  
+      themes: [  
+        XTheme(  
+          id: 'light',  
+          name: 'Light',  
+          themeData: ThemeData.light(),  
+        ),  
+        XTheme(  
+          id: 'dark',  
+          name: 'Dark',  
+          themeData: ThemeData.dark(),  
+        ),  
+      ],  
+    ),  
+  );  
+  
+  // Run the app  
+  runApp(const MyApp());  
+}  
+```  
 
 ### Wrap Your App with `PlayXThemeBuilder`
 
 Use `PlayXThemeBuilder` to wrap your app and apply the themes.
 
-```dart
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return PlayXThemeBuilder(
-      builder: (context, theme) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: theme.themeData,
-          home: const MyHomePage(),
-        );
-      },
-    );
-  }
-}
-```
+```dart  
+class MyApp extends StatelessWidget {  
+  const MyApp({Key? key}) : super(key: key);  
+  
+  @override  
+  Widget build(BuildContext context) {  
+    return PlayXThemeBuilder(  
+      builder: (context, theme) {  
+        return MaterialApp(  
+          title: 'Flutter Demo',  
+          theme: theme.themeData,  
+          home: const MyHomePage(),  
+        );  
+      },  
+    );  
+  }  
+}  
+```  
 
 ### Update App Theme
 
 Switch between themes using `PlayxTheme`.
 
-```dart
-FloatingActionButton(
-  onPressed: () {
-    PlayxTheme.updateById('dark');
-  },
-  child: Icon(
-    Icons.next,
-    color: PlayxTheme.colorScheme.onBackground,
-  ),
-)
-```
+```dart  
+FloatingActionButton(  
+  onPressed: () {  
+    PlayxTheme.updateById('dark');  
+  },  
+  child: Icon(  
+    Icons.next,  
+    color: PlayxTheme.colorScheme.onBackground,  
+  ),  
+)  
+```  
 
 ### Accessing Current Theme
 
 Retrieve the current theme information using context extensions.
 
-```dart
-final themeId = context.xTheme.id;
-
-// Legacy Access
-final currentThemeId = PlayxTheme.currentTheme.id;
-final currentThemeData = PlayxTheme.currentThemeData;
-```
+```dart  
+final themeId = context.xTheme.id;  
+  
+// Legacy Access  
+final currentThemeId = PlayxTheme.currentTheme.id;  
+final currentThemeData = PlayxTheme.currentThemeData;  
+```  
 
 ### Available Methods
 
-| Method              | Description                                                         |
-|---------------------|---------------------------------------------------------------------|
-| `index`             | Returns current theme index.                                        |
-| `id`                | Returns current theme id.                                           |
-| `name`              | Returns current theme name.                                         |
-| `currentTheme`      | Returns current `XTheme`.                                           |
-| `currentThemeData`  | Returns current `ThemeData`.                                        |
-| `colors`            | Returns current `XTheme` colors.                                    |
-| `initialTheme`      | Returns start theme if provided.                                    |
-| `supportedThemes`   | Returns list of supported themes configured in `PlayxThemeConfig`.  |
-| `next`              | Updates the app theme to the next theme.                            |
-| `updateByIndex`     | Updates the app theme by the index.                                 |
-| `updateTo`          | Updates the app theme to a specific `XTheme`.                       |
-| `updateById`        | Updates the app theme to a specific theme id.                       |
-| `isDeviceInDarkMode`| Determines whether the device is in dark or light mode.             |
-| `updateToLightMode` | Updates the app theme to the first light theme in supported themes. |
-| `updateToDarkMode`  | Updates the app theme to the first dark theme in supported themes.  |
-| `updateToDeviceMode`| Updates the app theme to the device mode.                           |
-| `updateByThemeMode` | Updates the app theme to the first theme that matches the given mode|
-| `clearLastSavedTheme`| Clears the last saved theme.                                       |
+| Method              | Description                                                         |  
+|---------------------|---------------------------------------------------------------------|  
+| `index` | Returns current theme index.                                        |  
+| `id` | Returns current theme id.                                           |  
+| `name` | Returns current theme name.                                         |  
+| `currentTheme` | Returns current `XTheme`.                                           |  
+| `currentThemeData` | Returns current `ThemeData`.                                        |  
+| `colors` | Returns current `XTheme` colors.                                    |  
+| `initialTheme` | Returns start theme if provided.                                    |  
+| `supportedThemes` | Returns list of supported themes configured in `PlayxThemeConfig`.  |  
+| `next` | Updates the app theme to the next theme.                            |  
+| `updateByIndex` | Updates the app theme by the index.                                 |  
+| `updateTo` | Updates the app theme to a specific `XTheme`.                       |  
+| `updateById` | Updates the app theme to a specific theme id.                       |  
+| `isDeviceInDarkMode`| Determines whether the device is in dark or light mode.             |  
+| `updateToLightMode` | Updates the app theme to the first light theme in supported themes. |  
+| `updateToDarkMode` | Updates the app theme to the first dark theme in supported themes.  |  
+| `updateToDeviceMode`| Updates the app theme to the device mode.                           |  
+| `updateByThemeMode` | Updates the app theme to the first theme that matches the given mode|  
+| `clearLastSavedTheme`| Clears the last saved theme.                                       |  
+
+
+Here's the updated README section for animations in the Playx theme package, reflecting the new animation types and their implementations:
+
+---
 
 ## Animation
 
-The package provides a unique animation for changing the app theme.
+The Playx theme package offers various animations to enhance the theme change experience in your app.
 
 ### PlayxThemeSwitchingArea
 
-Wrap the screen where you want to show the animation with `PlayxThemeSwitchingArea`.
+To show animations when changing themes, wrap the relevant screen with `PlayxThemeSwitchingArea`.
 
 ```dart
 class MyHomePage extends StatelessWidget {
@@ -166,15 +168,46 @@ class MyHomePage extends StatelessWidget {
 }
 ```
 
-### PlayxThemeSwitcher
 
-Use `PlayxThemeSwitcher` to switch themes with an animation starting from the triggering widget.
+### Theme Switching Animation Control
+
+Customize theme switching animations using the `PlayxThemeAnimation` class and its subclasses. You can control various aspects of the animation.
+
+#### PlayxThemeAnimation
+
+The base class for theme animations provides common settings, including:
+
+- **`isReversed`**: Reverses the animation direction.
+- **`onAnimationFinish`**: Callback triggered when the animation finishes.
+- **`duration`**: Duration of the animation.
+
+#### PlayxThemeClipperAnimation
+
+Defines clipping-based animations with custom clipper settings.
+
+```dart
+PlayxThemeAnimation.clipper(
+  clipper: const ThemeSwitcherCircleClipper(),
+  offset: Offset.zero,
+)
+```
+
+You can customize theme switching animation with various parameters.
+
+- **Starting Point**: Customize the animation's starting point with `offset` or `context`.
+- **Custom Clipper**: Use a custom `clipper` like `ThemeSwitcherBoxClipper` or `ThemeSwitcherCircleClipper`.
+
+You can use `PlayxThemeSwitcher` to switch themes with an animation starting from the triggering widget.
 
 ```dart
 PlayxThemeSwitcher(
   builder: (ctx, theme) => FloatingActionButton(
     onPressed: () {
-      PlayxTheme.next(context: ctx);
+      PlayxTheme.next( 
+	      animation:PlayxThemeAnimation.clipper(
+			  clipper: const ThemeSwitcherCircleClipper(),
+			  context: ctx,),
+	      );
     },
     tooltip: 'Next Theme',
     child: Icon(
@@ -184,130 +217,156 @@ PlayxThemeSwitcher(
   ),
 );
 ```
+This will change the theme with  a circle clipping animation starting from the FloatingActionButton.
 
-### Theme Switching Animation Control
 
-Customize theme switching animation with various parameters.
+#### PlayxThemeFadeAnimation
 
-- **Animate**: Disable animation with `animate: false`.
-- **Starting Point**: Customize the animation's starting point with `offset` or `context`.
-- **Animation Direction**: Control direction with `isReversed`.
-- **Custom Clipper**: Use a custom `clipper` like `ThemeSwitcherBoxClipper` or `ThemeSwitcherCircleClipper`.
-- **Force Update**: Force theme update without animation using `forceUpdateNonAnimatedTheme`.
-
-Example:
+Controls fade effects with adjustable opacity levels.
 
 ```dart
-PlayxTheme.next(
-  context: ctx,
-  clipper: const ThemeSwitcherBoxClipper(),
-  offset: Offset.zero,
-);
+PlayxThemeAnimation.fade(
+  begin: 0.0,
+  end: 1.0,
+)
+```
+
+#### PlayxThemeScaleAnimation
+
+Handles scaling effects with adjustable scale values.
+
+```dart
+PlayxThemeAnimation.scale(
+  begin: 0.5,
+  end: 1.0,
+)
+```
+
+#### PlayxThemeHorizontalSlideAnimation
+
+Creates horizontal slide effects with start and end offsets.
+
+```dart
+PlayxThemeAnimation.horizontalSlide(
+  beginOffset: Offset(-1.0, 0.0),
+  endOffset: Offset(0.0, 0.0),
+)
+```
+
+#### PlayxThemeVerticalSlideAnimation
+
+Creates vertical slide effects with start and end offsets.
+
+```dart
+PlayxThemeAnimation.verticalSlide(
+  beginOffset: Offset(0.0, -1.0),
+  endOffset: Offset(0.0, 0.0),
+)
 ```
 
 ## Customize Your Themes
 
 Create a `PlayxThemeConfig` object and pass it to `PlayxTheme.boot()` to customize themes.
 
-```dart
-final config = PlayxThemeConfig(
-  themes: [
-    XTheme(
-      id: 'light',
-      name: 'Light',
-      themeData: ThemeData(
-        brightness: Brightness.light,
-        colorScheme: lightColors.colorScheme,
-        useMaterial3: true,
-      ),
-      cupertinoThemeData: const CupertinoThemeData(
-        brightness: Brightness.light,
-      ),
-      colors: lightColors,
-    ),
-    XTheme.builder(
-      id: 'dark',
-      name: 'Dark',
-      initialTheme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: darkColors.colorScheme,
-        useMaterial3: true,
-      ),
-      themeBuilder: (locale) => ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: darkColors.colorScheme,
-        useMaterial3: true,
-      ),
-      cupertinoThemeBuilder: (locale) => const CupertinoThemeData(
-        brightness: Brightness.dark,
-      ),
-      isDark: true,
-      colors: darkColors,
-    ),
-  ],
-  initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0,
-);
-```
+```dart  
+final config = PlayxThemeConfig(  
+  themes: [  
+    XTheme(  
+      id: 'light',  
+      name: 'Light',  
+      themeData: ThemeData(  
+        brightness: Brightness.light,  
+        colorScheme: lightColors.colorScheme,  
+        useMaterial3: true,  
+      ),  
+      cupertinoThemeData: const CupertinoThemeData(  
+        brightness: Brightness.light,  
+      ),  
+      colors: lightColors,  
+    ),  
+    XTheme.builder(  
+      id: 'dark',  
+      name: 'Dark',  
+      initialTheme: ThemeData(  
+        brightness: Brightness.dark,  
+        colorScheme: darkColors.colorScheme,  
+        useMaterial3: true,  
+      ),  
+      themeBuilder: (locale) => ThemeData(  
+        brightness: Brightness.dark,  
+        colorScheme: darkColors.colorScheme,  
+        useMaterial3: true,  
+      ),  
+      cupertinoThemeBuilder: (locale) => const CupertinoThemeData(  
+        brightness: Brightness.dark,  
+      ),  
+      isDark: true,  
+      colors: darkColors,  
+    ),  
+  ],  
+  initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0,  
+);  
+```  
 
 ### Customize Theme's Colors
 
-Create custom colors for each theme by extending `XColors`.
+Create custom colors for each theme by extending `PlayxColors`.
 
-```dart
-class LightColors extends XColors {
-  @override
-  Color get background => XColors.white;
-
-  @override
-  Color get error => XColors.red;
-
-  @override
-  Color get onBackground => XColors.black;
-}
-```
+```dart  
+class LightColors extends PlayxColors{  
+  @override  
+  Color get background => XColors.white;  
+  
+  @override  
+  Color get error => XColors.red;  
+  
+  @override  
+  Color get onBackground => XColors.black;  
+}  
+```  
 
 Use custom colors in your widget tree.
 
-```dart
-ColoredBox(color: context.playxColors.primary);
-```
+```dart  
+ColoredBox(color: context.playxColors.primary);  
+```  
 
-Extend `XColors` to add more colors.
+Extend `PlayxColors` to add more colors.
 
-```dart
-abstract class AppColors extends XColors {
-  Color get containerBackgroundColor;
-  static const Color blue = Colors.blue;
-}
-
-class LightColorScheme extends AppColors {
-  @override
-  Color get containerBackgroundColor => XColors.white;
-
-  @override
-  Color get background => XColors.white;
-
-  @override
-  Color get error => XColors.red;
-
-  @override
-  Color get onBackground => XColors.black;
-}
-```
+```dart  
+abstract class AppColors extends PlayxColors{  
+  Color get containerBackgroundColor;  
+  static const Color blue = Colors.blue;  
+}  
+  
+class LightColorScheme extends AppColors {  
+  @override  
+  Color get containerBackgroundColor => XColors.white;  
+  
+  @override  
+  Color get background => XColors.white;  
+  
+  @override  
+  Color get error => XColors.red;  
+  
+  @override  
+  Color get onBackground => XColors.black;  
+}  
+```  
 
 Access the extended colors.
 
-```dart
-static AppColors of(BuildContext context) => context.playxColors as AppColors;
-
-final primary = AppColors.of(context).primary;
-
-extension AppColorsExtension on BuildContext {
-  AppColors get colors => AppColors.of(this);
-}
-
-ColoredBox(color: context.colors.primary);
-```
+```dart  
+static AppColors of(BuildContext context) => context.playxColors as AppColors;  
+  
+final primary = AppColors.of(context).primary;  
+  
+extension AppColorsExtension on BuildContext {  
+  AppColors get colors => AppColors.of(this);  
+}  
+  
+ColoredBox(color: context.colors.primary);  
+```  
 
 ## Material 3 Support
 

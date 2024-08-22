@@ -10,6 +10,8 @@ export 'package:playx_core/playx_core.dart';
 
 export 'src/config/config.dart';
 export 'src/model/playx_colors.dart';
+export 'src/model/playx_theme_animation.dart';
+export 'src/model/playx_theme_animation_type.dart';
 export 'src/model/x_theme.dart';
 export 'src/playx_theme.dart';
 export 'src/utils/build_context_extension.dart';

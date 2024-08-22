@@ -3,8 +3,9 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:playx_theme/playx_theme.dart';
-import 'package:playx_theme/src/utils/animation_utils.dart';
+
+import '../../playx_theme.dart';
+import '../utils/animation_utils.dart';
 
 /// XThemeController used to handle all operations on themes like how to change theme, etc.
 class XThemeController extends ValueNotifier<XTheme> {
@@ -36,11 +37,12 @@ class XThemeController extends ValueNotifier<XTheme> {
   Timer? timer;
   ThemeSwitcherClipper clipper = const ThemeSwitcherCircleClipper();
   AnimationController? controller;
+  PlayxThemeAnimationType animationType = PlayxThemeAnimationType.clipper;
 
   XTheme? oldTheme;
 
   bool isReversed = false;
-  late Offset switcherOffset;
+  Offset switcherOffset = Offset.zero;
 
   XThemeController({
     XTheme? theme,
@@ -107,27 +109,21 @@ class XThemeController extends ValueNotifier<XTheme> {
     required int index,
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     if (value == theme) {
       return;
     }
-    isReversed = isReversed ?? index < currentIndex;
+    isReversed = animation?.type != PlayxThemeAnimationType.fade &&
+        (animation?.isReversed ?? index < currentIndex);
     currentIndex = index;
     if (animate && controller != null) {
       await animateTheme(
-        theme: theme,
-        context: context,
-        controller: controller!,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
-      );
+          theme: theme,
+          context: context,
+          controller: controller!,
+          animation: animation);
     } else {
       value = theme;
       if (forceUpdateNonAnimatedTheme) {
@@ -157,10 +153,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     XTheme theme, {
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     if (!availableThemes.contains(theme)) {
@@ -171,10 +164,7 @@ class XThemeController extends ValueNotifier<XTheme> {
       index: availableThemes.indexOf(theme),
       animate: animate,
       context: context,
-      isReversed: isReversed,
-      clipper: clipper,
-      offset: offset,
-      onAnimationFinish: onAnimationFinish,
+      animation: animation,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
     );
   }
@@ -184,10 +174,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   Future<void> nextTheme({
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     final isLastTheme = currentIndex == config.themes.length - 1;
@@ -195,10 +182,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     return updateByIndex(isLastTheme ? 0 : currentIndex + 1,
         animate: animate,
         context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -209,10 +193,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     int index, {
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     if (index < 0 || index >= availableThemes.length) {
@@ -224,10 +205,7 @@ class XThemeController extends ValueNotifier<XTheme> {
         index: index,
         animate: animate,
         context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -237,10 +215,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     String id, {
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
     if (!availableThemes.any((element) => element.id == id)) {
@@ -253,10 +228,7 @@ class XThemeController extends ValueNotifier<XTheme> {
         index: index,
         animate: animate,
         context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -272,10 +244,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   Future<void> updateToLightMode({
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     final theme = config.themes.firstWhereOrNull((element) => !element.isDark);
@@ -284,8 +253,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     }
     return updateTo(theme,
         animate: animate,
-        isReversed: isReversed,
-        clipper: clipper,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -294,10 +262,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   Future<void> updateToDarkMode({
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     final theme = config.themes.firstWhereOrNull((element) => element.isDark);
@@ -308,10 +273,7 @@ class XThemeController extends ValueNotifier<XTheme> {
       theme,
       animate: animate,
       context: context,
-      isReversed: isReversed,
-      clipper: clipper,
-      offset: offset,
-      onAnimationFinish: onAnimationFinish,
+      animation: animation,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
     );
   }
@@ -321,10 +283,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   Future<void> updateToDeviceMode({
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     final theme = config.themes
@@ -335,10 +294,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     return updateTo(theme,
         animate: animate,
         context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -347,10 +303,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     required ThemeMode mode,
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     switch (mode) {
@@ -358,28 +311,19 @@ class XThemeController extends ValueNotifier<XTheme> {
         return updateToDeviceMode(
             animate: animate,
             context: context,
-            isReversed: isReversed,
-            clipper: clipper,
-            offset: offset,
-            onAnimationFinish: onAnimationFinish,
+            animation: animation,
             forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
       case ThemeMode.light:
         return updateToLightMode(
             animate: animate,
             context: context,
-            isReversed: isReversed,
-            clipper: clipper,
-            offset: offset,
-            onAnimationFinish: onAnimationFinish,
+            animation: animation,
             forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
       case ThemeMode.dark:
         return updateToDarkMode(
             animate: animate,
             context: context,
-            isReversed: isReversed,
-            clipper: clipper,
-            offset: offset,
-            onAnimationFinish: onAnimationFinish,
+            animation: animation,
             forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
     }
   }
@@ -394,36 +338,33 @@ class XThemeController extends ValueNotifier<XTheme> {
     required XTheme theme,
     required AnimationController controller,
     BuildContext? context,
-    ThemeSwitcherClipper? clipper,
-    required bool isReversed,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
   }) async {
     if (controller.isAnimating) {
-      return;
+      controller.reset();
+      if (oldTheme != null) {
+        value = oldTheme!;
+      }
+    }
+    if (animation?.duration != null) {
+      controller.duration = animation!.duration;
     }
 
-    if (clipper != null) {
-      this.clipper = clipper;
-    }
-    this.isReversed = isReversed;
+    clipper = animation?.clipper ?? const ThemeSwitcherCircleClipper();
 
     oldTheme = value;
 
-    switcherOffset = AnimationUtils.getSwitcherCoordinates(context, offset);
+    switcherOffset =
+        AnimationUtils.getSwitcherCoordinates(context, animation?.offset);
     image =
         await AnimationUtils.saveScreenshot(previewContainer: previewContainer);
     value = theme;
 
-    if (isReversed) {
-      await controller
-          .reverse(from: 1.0)
-          .then((value) => onAnimationFinish?.call());
-    } else {
-      await controller
-          .forward(from: 0.0)
-          .then((value) => onAnimationFinish?.call());
-    }
+    animationType = animation?.type ?? PlayxThemeAnimationType.clipper;
+    await animationType.animate(
+        controller: controller,
+        isReversed: isReversed,
+        onAnimationFinish: animation?.onAnimationFinish);
 
     // Notify listeners when the animation finishes.
     notifyListeners();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:playx_theme/src/config/config.dart';
 import 'package:playx_theme/src/controller/controller.dart';
 import 'package:playx_theme/src/model/playx_colors.dart';
+import 'package:playx_theme/src/model/playx_theme_animation.dart';
 import 'package:playx_theme/src/model/x_theme.dart';
 
 /// PlayxTheme :
@@ -79,18 +80,12 @@ abstract class PlayxTheme {
   static Future<void> updateTo(XTheme theme,
           {bool animate = true,
           BuildContext? context,
-          bool? isReversed,
-          ThemeSwitcherClipper? clipper,
-          Offset? offset,
-          VoidCallback? onAnimationFinish,
+          PlayxThemeAnimation? animation,
           bool forceUpdateNonAnimatedTheme = false}) =>
       _controller.updateTo(theme,
           animate: animate,
           context: context,
-          isReversed: isReversed,
-          clipper: clipper,
-          offset: offset,
-          onAnimationFinish: onAnimationFinish,
+          animation: animation,
           forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
 
   /// Updates the app theme by the index.
@@ -106,18 +101,12 @@ abstract class PlayxTheme {
   static Future<void> updateByIndex(int index,
           {bool animate = true,
           BuildContext? context,
-          bool? isReversed,
-          ThemeSwitcherClipper? clipper,
-          Offset? offset,
-          VoidCallback? onAnimationFinish,
+          PlayxThemeAnimation? animation,
           bool forceUpdateNonAnimatedTheme = false}) =>
       _controller.updateByIndex(index,
           animate: animate,
           context: context,
-          isReversed: isReversed,
-          clipper: clipper,
-          offset: offset,
-          onAnimationFinish: onAnimationFinish,
+          animation: animation,
           forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
 
   /// Updates the app theme to the provided id.
@@ -134,19 +123,13 @@ abstract class PlayxTheme {
     String id, {
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) =>
       _controller.updateById(id,
           animate: animate,
           context: context,
-          isReversed: isReversed,
-          clipper: clipper,
-          offset: offset,
-          onAnimationFinish: onAnimationFinish,
+          animation: animation,
           forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
 
   /// Updates the app theme to the next theme.
@@ -161,19 +144,13 @@ abstract class PlayxTheme {
   static Future<void> next({
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) =>
       _controller.nextTheme(
           animate: animate,
           context: context,
-          isReversed: isReversed,
-          clipper: clipper,
-          offset: offset,
-          onAnimationFinish: onAnimationFinish,
+          animation: animation,
           forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
 
   /// Determines whether the device is in dark or light mode.
@@ -194,19 +171,13 @@ abstract class PlayxTheme {
   static Future<void> updateToLightMode({
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToLightMode(
         animate: animate,
         context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -223,19 +194,13 @@ abstract class PlayxTheme {
   static Future<void> updateToDarkMode({
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToDarkMode(
         animate: animate,
         context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -252,19 +217,13 @@ abstract class PlayxTheme {
   static Future<void> updateToDeviceMode({
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToDeviceMode(
         animate: animate,
         context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 
@@ -282,20 +241,14 @@ abstract class PlayxTheme {
     required ThemeMode mode,
     bool animate = true,
     BuildContext? context,
-    bool? isReversed,
-    ThemeSwitcherClipper? clipper,
-    Offset? offset,
-    VoidCallback? onAnimationFinish,
+    PlayxThemeAnimation? animation,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateByThemeMode(
         mode: mode,
         animate: animate,
         context: context,
-        isReversed: isReversed,
-        clipper: clipper,
-        offset: offset,
-        onAnimationFinish: onAnimationFinish,
+        animation: animation,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
   }
 

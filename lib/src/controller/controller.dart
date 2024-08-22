@@ -113,6 +113,9 @@ class XThemeController extends ValueNotifier<XTheme> {
     VoidCallback? onAnimationFinish,
     bool forceUpdateNonAnimatedTheme = false,
   }) async {
+    if (value == theme) {
+      return;
+    }
     isReversed = isReversed ?? index < currentIndex;
     currentIndex = index;
     if (animate && controller != null) {

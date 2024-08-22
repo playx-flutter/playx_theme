@@ -19,6 +19,7 @@
 **Breaking Changes:**
 - **Theme Functions Update**: All `PlayxTheme` functions now use the `[PlayxThemeAnimation]` parameter to specify animations. The previous `animate` parameter has been removed. If `[animation]` is `null`, the theme change will be instant. If `[animation]` is provided, the theme change will be animated based on the animation type.
 - **Shared Preferences Migration**: Migrated from `SharedPreferences` to `SharedPreferencesAsync`. If you're upgrading, set `migratePrefsToAsyncPrefs` to `true` in `PlayxThemeConfig` to ensure a smooth transition.
+- **Theme Colors**: Removed `background`, `onBackground`, `surfaceVariant`colors as `surface`, `onSurface`, `surfaceContainerHighest` should be used instead based on latest material changes in flutter v3.22.0.
 
 ## 0.6.0
 - Update `flex_seed_scheme` package to v3.0.0

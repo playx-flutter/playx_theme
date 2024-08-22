@@ -1,7 +1,7 @@
 # Changelog
 
-## 0.7.0
-**Note**: This release contains breaking changes.
+## 1.0.0
+> **Note**: This release contains breaking changes.
 
 **New Features:**
 - Added new animation types: fade, horizontal slide, vertical slide, and scale.

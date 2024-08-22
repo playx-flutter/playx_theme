@@ -157,22 +157,6 @@ class PlayxColors {
 
   /// The color used to tint surfaces, providing a subtle effect to emphasize the surface tone.
   final Color surfaceTint;
-  //Deprecated
-  @Deprecated('Use surface instead. '
-      'This feature was deprecated after v3.18.0-0.1.pre.'
-      ' It will be removed in the next releases.'
-      'You can still expand the colors of the theme by extending the PlayxColors class.')
-  final Color background;
-  @Deprecated('Use onSurface instead. '
-      'This feature was deprecated after v3.18.0-0.1.pre.'
-      ' It will be removed in the next releases.'
-      'You can still expand the colors of the theme by extending the PlayxColors class.')
-  final Color onBackground;
-  @Deprecated('Use surfaceVariant instead. '
-      'This feature was deprecated after v3.18.0-0.1.pre.'
-      ' It will be removed in the next releases.'
-      'You can still expand the colors of the theme by extending the PlayxColors class.')
-  final Color surfaceVariant;
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
@@ -328,10 +312,7 @@ class PlayxColors {
         surfaceContainerHigh =
             surfaceContainerHigh ?? scheme.surfaceContainerHigh,
         surfaceContainerHighest =
-            surfaceContainerHighest ?? scheme.surfaceContainerHighest,
-        background = background ?? scheme.surface,
-        onBackground = onBackground ?? scheme.onSurface,
-        surfaceVariant = surfaceVariant ?? scheme.surfaceContainerHigh;
+            surfaceContainerHighest ?? scheme.surfaceContainerHighest;
 
   const PlayxColors({
     this.primary = blueMain,
@@ -352,11 +333,8 @@ class PlayxColors {
     this.onErrorContainer = white,
     this.outline = black,
     this.outlineVariant = Colors.black12,
-    this.background = white,
-    this.onBackground = black,
     this.surface = white,
     this.onSurface = black,
-    this.surfaceVariant = Colors.white12,
     this.onSurfaceVariant = Colors.black12,
     this.inverseSurface = black,
     this.onInverseSurface = white,

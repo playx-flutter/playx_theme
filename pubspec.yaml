@@ -29,4 +29,3 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   shared_preferences_platform_interface: ^2.4.1
 
-flutter:

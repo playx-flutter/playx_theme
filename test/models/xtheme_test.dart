@@ -48,7 +48,7 @@ void main() {
           isInstanceOf<CupertinoThemeData>());
     });
 
-    test('XTheme equality and props', () {
+    test('XTheme equality and props and toString()', () {
       final xTheme1 = XTheme(
         id: 'theme1',
         name: 'Light Theme',
@@ -71,6 +71,9 @@ void main() {
       expect(xTheme1 == xTheme3,
           isFalse); // Different id and name, should not be equal
       expect(xTheme1.props, [xTheme1.id, xTheme1.name]);
+
+      expect(xTheme1.toString(), 'XTheme(id: theme1, name: Light Theme)');
+      expect(xTheme3.toString(), 'XTheme(id: theme2, name: Dark Theme)');
     });
 
     testWidgets('XTheme.of should return current theme from context',

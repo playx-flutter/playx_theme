@@ -1,4 +1,4 @@
-library playx_theme;
+library;
 
 export 'package:animated_theme_switcher/animated_theme_switcher.dart'
     show

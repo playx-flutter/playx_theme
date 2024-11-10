@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+- Update packages
+- Add test cases for the package
+- refactor `_getCenterOffset` method in `AnimationUtils` to be a public `getCenterOffset` function.
+
 ## 1.0.0
 > **Note**: This release contains breaking changes.
 

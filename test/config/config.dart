@@ -35,9 +35,12 @@ PlayxThemeConfig getTestConfig({int initialThemeIndex = 0}) {
 
 class TestApp extends StatelessWidget {
   final Widget? child;
+  final bool attachThemeSwitcher;
+
   const TestApp({
     super.key,
     this.child,
+    this.attachThemeSwitcher = false,
   });
 
   @override
@@ -46,10 +49,18 @@ class TestApp extends StatelessWidget {
       builder: (cxt, xTheme) => MaterialApp(
         theme: xTheme.themeData,
         home: Scaffold(
-          body: child ??
-              Center(
-                child: Text(PlayxTheme.index.toString()),
-              ),
+          body: Builder(builder: (context) {
+            return attachThemeSwitcher
+                ? PlayxThemeSwitchingArea(
+                    child: child ??
+                        Center(
+                          child: Text(PlayxTheme.index.toString()),
+                        ))
+                : child ??
+                    Center(
+                      child: Text(PlayxTheme.index.toString()),
+                    );
+          }),
         ),
       ),
     );

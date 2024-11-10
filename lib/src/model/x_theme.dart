@@ -76,7 +76,9 @@ class XTheme extends Equatable {
       ];
 
   @override
-  bool get stringify => true;
+  String toString() {
+    return 'XTheme(id: $id, name: $name)';
+  }
 
   /// Retrieves the current [XTheme] from the [BuildContext].
   ///

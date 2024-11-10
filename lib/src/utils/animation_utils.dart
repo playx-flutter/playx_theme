@@ -10,17 +10,18 @@ class AnimationUtils {
   }) async {
     final boundary = previewContainer.currentContext!.findRenderObject()
         as RenderRepaintBoundary;
-    return boundary.toImage(pixelRatio: getCurrentView().devicePixelRatio);
+    return boundary.toImage(
+        pixelRatio: getCurrentView()?.devicePixelRatio ?? 1);
   }
 
   static Offset getSwitcherCoordinates(BuildContext? context,
       [Offset? tapOffset]) {
     if (context == null) {
-      return tapOffset ?? _getCenterOffset();
+      return tapOffset ?? getCenterOffset();
     }
     final renderObject = context.findRenderObject() as RenderBox?;
     if (renderObject == null) {
-      return tapOffset ?? _getCenterOffset();
+      return tapOffset ?? getCenterOffset();
     }
     final size = renderObject.size;
     return renderObject.localToGlobal(Offset.zero).translate(
@@ -29,12 +30,15 @@ class AnimationUtils {
         );
   }
 
-  static ui.FlutterView getCurrentView() {
-    return WidgetsBinding.instance.platformDispatcher.views.first;
+  static ui.FlutterView? getCurrentView() {
+    return WidgetsBinding.instance.platformDispatcher.views.firstOrNull;
   }
 
-  static Offset _getCenterOffset() {
+  static Offset getCenterOffset() {
     final view = getCurrentView();
+    if (view == null) {
+      return Offset.zero;
+    }
     final Size windowSize = view.physicalSize / view.devicePixelRatio;
     return Offset(windowSize.width / 2, windowSize.height / 2);
   }

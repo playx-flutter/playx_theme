@@ -137,7 +137,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   PlayxTheme.next(
-                    animation: const PlayxThemeAnimation.fade(
+                    animation: const PlayxThemeFadeAnimation(
                       duration: Duration(milliseconds: 500),
                     ),
                   );

@@ -30,6 +30,20 @@ void main() {
       );
     });
 
+    // Throws error when PlayxInheritedTheme not in the widget tree
+    testWidgets(
+        'XTheme throws error when PlayxInheritedTheme not in the widget tree',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        Builder(
+          builder: (context) {
+            expect(() => context.xTheme, throwsAssertionError);
+            return Container();
+          },
+        ),
+      );
+    });
+
     testWidgets('PlayxColors can be accessed from BuildContext',
         (WidgetTester tester) async {
       await tester.pumpWidget(
@@ -51,6 +65,19 @@ void main() {
               return Container();
             },
           ),
+        ),
+      );
+    });
+
+    testWidgets(
+        'PlayxColors throws error when PlayxInheritedTheme not in the widget tree',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        Builder(
+          builder: (context) {
+            expect(() => context.playxColors, throwsAssertionError);
+            return Container();
+          },
         ),
       );
     });

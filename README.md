@@ -15,7 +15,7 @@ Playx Theme: Effortlessly control your app's visual style. Seamlessly switch the
 Add the following line to your `dependencies` in `pubspec.yaml`:
 
 ```yaml  
-playx_theme: ^1.0.1  
+playx_theme: ^1.0.2  
 ```  
 
 ## Usage

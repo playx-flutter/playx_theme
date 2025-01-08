@@ -166,5 +166,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-// XColors get colorScheme => PlayxTheme.colors;

@@ -10,7 +10,8 @@ typedef ThemeSwitcherBuilder = Widget Function(
 ///
 /// This widget uses a [ThemeSwitcherBuilder] to build its child widget with the current
 /// theme provided by [PlayxTheme]. It provides context and theme information
-//   /// for changing the theme, especially useful for animations like [PlayxThemeClipperAnimation]. allowing you to use the widget’s offset and context for precise animation control.
+/// for changing the theme, especially useful for animations like [PlayxThemeClipperAnimation].
+/// allowing you to use the widget’s offset and context for precise animation control.
 class PlayxThemeSwitcher extends StatelessWidget {
   /// Creates a [PlayxThemeSwitcher] that provides context and theme information
   /// for changing the theme, especially useful for animations like [PlayxThemeClipperAnimation].

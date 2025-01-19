@@ -28,4 +28,5 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
   lints: ^5.1.1
+  shared_preferences_platform_interface: ^2.4.1
 

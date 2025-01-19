@@ -31,18 +31,15 @@ void main() {
               builder: (context) {
                 // Test accessing the theme using of()
                 final inheritedTheme = PlayxInheritedTheme.of(context);
-                expect(inheritedTheme.theme.colors.primary.value,
-                    Colors.blue.value);
-                expect(inheritedTheme.theme.colors.secondary.value,
-                    Colors.green.value);
+                expect(inheritedTheme.theme.colors.primary, Colors.blue);
+                expect(inheritedTheme.theme.colors.secondary, Colors.green);
 
                 // Test accessing the theme using maybeOf()
                 final inheritedThemeMaybe =
                     PlayxInheritedTheme.maybeOf(context);
-                expect(inheritedThemeMaybe?.theme.colors.primary.value,
-                    Colors.blue.value);
-                expect(inheritedThemeMaybe?.theme.colors.secondary.value,
-                    Colors.green.value);
+                expect(inheritedThemeMaybe?.theme.colors.primary, Colors.blue);
+                expect(
+                    inheritedThemeMaybe?.theme.colors.secondary, Colors.green);
 
                 return Container();
               },
@@ -123,15 +120,15 @@ void main() {
           PlayxInheritedTheme.of(tester.element(find.byType(Container)));
 
       // Tap the IconButton to change the theme
-      expect(inheritedTheme.theme.colors.primary.value, Colors.blue.value);
-      expect(inheritedTheme.theme.colors.secondary.value, Colors.green.value);
+      expect(inheritedTheme.theme.colors.primary, Colors.blue);
+      expect(inheritedTheme.theme.colors.secondary, Colors.green);
 
       await tester.pump(Duration(milliseconds: 400));
       // Access the theme after update
       final inheritedTheme2 =
           PlayxInheritedTheme.of(tester.element(find.byType(Container)));
-      expect(inheritedTheme2.theme.colors.primary.value, Colors.red.value);
-      expect(inheritedTheme2.theme.colors.secondary.value, Colors.yellow.value);
+      expect(inheritedTheme2.theme.colors.primary, Colors.red);
+      expect(inheritedTheme2.theme.colors.secondary, Colors.yellow);
     });
   });
 }

@@ -1,7 +1,7 @@
 name: playx_theme
 description: Simplify app theming in Flutter with Playx Theme. Effortlessly switch themes, enjoy smooth animations, and customize color schemes with ease.
 version: 1.0.3
-homepage: https://github.com/playx-flutter/playx_theme
+homepage: https://sourcya.io
 repository: https://github.com/playx-flutter/playx_theme
 issue_tracker: https://github.com/playx-flutter/playx_theme/issues
 topics:

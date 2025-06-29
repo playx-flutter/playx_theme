@@ -6,8 +6,8 @@ ColorScheme getBlendedColorScheme(
   ColorScheme firstColorScheme,
   ColorScheme secondColorScheme,
 ) {
-  final sourceColor = firstColorScheme.primary.value;
-  final designColor = secondColorScheme.primary.value;
+  final sourceColor = firstColorScheme.primary.toARGB32();
+  final designColor = secondColorScheme.primary.toARGB32();
   final blended = Color(Blend.harmonize(designColor, sourceColor));
 
   return ColorScheme.fromSeed(

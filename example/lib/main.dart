@@ -106,6 +106,7 @@ class HomeScreen extends StatelessWidget {
                                                   PlayxTheme
                                                       .supportedThemes[index]
                                                       .id,
+                                                  animate: false,
                                                   animation:
                                                       const PlayxThemeAnimation
                                                           .horizontalSlide());
@@ -140,6 +141,7 @@ class HomeScreen extends StatelessWidget {
                     animation: const PlayxThemeFadeAnimation(
                       duration: Duration(milliseconds: 500),
                     ),
+                    animate: false,
                   );
                 },
                 child: const Text('Next Theme'),
@@ -153,6 +155,7 @@ class HomeScreen extends StatelessWidget {
               PlayxTheme.next(
                 animation: PlayxThemeAnimation.clipper(
                     clipper: const ThemeSwitcherCircleClipper(), context: ctx),
+                animate: false,
               );
             },
             tooltip: 'Next Theme',

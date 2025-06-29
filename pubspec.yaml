@@ -18,7 +18,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  playx_core: ^0.7.2
+  playx_core: ^0.7.3
   flex_seed_scheme: ^3.5.1
   animated_theme_switcher: ^2.0.10
 

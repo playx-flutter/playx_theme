@@ -19,8 +19,6 @@ abstract class PlayxTheme {
     return _themeControllerInstance!;
   }
 
-  static PlayxBaseLogger get logger => PlayxLogger.getLogger('PLAYX THEME')!;
-
   /// Initializes the theme management system.
   ///
   /// This method sets up the theme controller with the provided configuration.
@@ -28,6 +26,9 @@ abstract class PlayxTheme {
   static Future<void> boot({
     required PlayxThemeConfig config,
   }) async {
+    PlayxLogger.initLogger(name: 'PLAYX THEME', useColoredFormatter: true);
+    final logger = PlayxLogger.getLogger('PLAYX THEME')!;
+
     if (_themeControllerInstance != null) {
       logger.w('PlayxTheme is already initialized. '
           'Calling boot() again will replace the existing instance.');
@@ -88,74 +89,81 @@ abstract class PlayxTheme {
   static List<XTheme> get supportedThemes => _controller.config.themes;
 
   /// Updates the app's theme to the provided theme.
-  ///
+  /// If [animate] is `true`, the theme change will be animated based on the specified [animation].
+  /// If [animate] is `false`, the theme will change instantly.
   /// You can specify an animation for the theme change using the [animation] parameter.
-  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
-  /// the theme change will be animated according to the type of animation specified.
   /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   ///
   /// Throws an [Exception] if the provided theme is not available in the supported themes.
   static Future<void> updateTo(
     XTheme theme, {
-    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) =>
       _controller.updateTo(
         theme,
         animation: animation,
+        animate: animate,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
       );
 
   /// Updates the app's theme to the theme at the specified index.
   ///
   /// You can specify an animation for the theme change using the [animation] parameter.
-  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
-  /// the theme change will be animated according to the type of animation specified.
+  /// If [animate] is `true`, the theme change will be animated based on the specified [animation].
+  /// If [animate] is `false`, the theme will change instantly.
   /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   ///
   /// Throws a [RangeError] if the index is out of range.
   static Future<void> updateByIndex(
     int index, {
-    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) =>
       _controller.updateByIndex(
         index,
         animation: animation,
+        animate: animate,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
       );
 
   /// Updates the app's theme to the theme with the specified ID.
   ///
   /// You can specify an animation for the theme change using the [animation] parameter.
-  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
-  /// the theme change will be animated according to the type of animation specified.
+  /// If [animate] is `true`, the theme change will be animated based on the specified [animation].
+  /// If [animate] is `false`, the theme will change instantly.
   /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   ///
   /// Throws an [Exception] if the ID is not available in the supported themes.
   static Future<void> updateById(
     String id, {
-    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) =>
       _controller.updateById(
         id,
         animation: animation,
+        animate: animate,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
       );
 
   /// Updates the app's theme to the next theme in the list.
   ///
   /// You can specify an animation for the theme change using the [animation] parameter.
-  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
-  /// the theme change will be animated according to the type of animation specified.
+  /// If [animate] is `true`, the theme change will be animated based on the specified [animation].
+  /// If [animate] is `false`, the theme will change instantly.
   /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   static Future<void> next({
-    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) =>
       _controller.nextTheme(
         animation: animation,
+        animate: animate,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
       );
 
@@ -169,17 +177,19 @@ abstract class PlayxTheme {
   /// Updates the app's theme to the first light theme available.
   ///
   /// You can specify an animation for the theme change using the [animation] parameter.
-  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
-  /// the theme change will be animated according to the type of animation specified.
+  /// If [animate] is `true`, the theme change will be animated based on the specified [animation].
+  /// If [animate] is `false`, the theme will change instantly.
   /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   ///
   /// Throws an [Exception] if no light theme is available in the supported themes.
   static Future<void> updateToLightMode({
-    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToLightMode(
       animation: animation,
+      animate: animate,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
     );
   }
@@ -187,17 +197,19 @@ abstract class PlayxTheme {
   /// Updates the app's theme to the first dark theme available.
   ///
   /// You can specify an animation for the theme change using the [animation] parameter.
-  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
-  /// the theme change will be animated according to the type of animation specified.
+  /// If [animate] is `true`, the theme change will be animated based on the specified [animation].
+  /// If [animate] is `false`, the theme will change instantly.
   /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   ///
   /// Throws an [Exception] if no dark theme is available in the supported themes.
   static Future<void> updateToDarkMode({
-    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToDarkMode(
       animation: animation,
+      animate: animate,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
     );
   }
@@ -205,17 +217,19 @@ abstract class PlayxTheme {
   /// Updates the app's theme to the first theme that matches the device's current mode.
   ///
   /// You can specify an animation for the theme change using the [animation] parameter.
-  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
-  /// the theme change will be animated according to the type of animation specified.
+  /// If [animate] is `true`, the theme change will be animated based on the specified [animation].
+  /// If [animate] is `false`, the theme will change instantly.
   /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   ///
   /// Throws an [Exception] if no theme matching the device's mode is available in the supported themes.
   static Future<void> updateToDeviceMode({
-    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateToDeviceMode(
       animation: animation,
+      animate: animate,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
     );
   }
@@ -223,19 +237,21 @@ abstract class PlayxTheme {
   /// Updates the app's theme to the first theme that matches the given [ThemeMode].
   ///
   /// You can specify an animation for the theme change using the [animation] parameter.
-  /// If [animation] is `null`, the theme will change instantly. If [animation] is provided,
-  /// the theme change will be animated according to the type of animation specified.
+  /// If [animate] is `true`, the theme change will be animated based on the specified [animation].
+  /// If [animate] is `false`, the theme will change instantly.
   /// Use [forceUpdateNonAnimatedTheme] to force a theme update without animation if animation is disabled.
   ///
   /// Throws an [Exception] if no theme matching the given [ThemeMode] is found in the [supportedThemes].
   static Future<void> updateByThemeMode({
     required ThemeMode mode,
-    PlayxThemeAnimation? animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) {
     return _controller.updateByThemeMode(
       mode: mode,
       animation: animation,
+      animate: animate,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
     );
   }

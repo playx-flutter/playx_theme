@@ -76,6 +76,7 @@ class _ThemeProviderState extends State<PlayxThemeBuilder>
   @override
   void dispose() {
     themeController.updateThemeAnimationController(null);
+    themeController.dispose();
     super.dispose();
   }
 }

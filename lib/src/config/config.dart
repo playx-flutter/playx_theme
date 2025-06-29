@@ -18,6 +18,9 @@ class PlayxThemeConfig {
   /// Whether to migrate preferences to asynchronous preferences.
   final bool migratePrefsToAsyncPrefs;
 
+  /// Whether to log theme changes or not.
+  final bool logThemeChanges ;
+
   /// Creates a [PlayxThemeConfig] instance.
   ///
   /// The [initialThemeIndex] must be non-negative and less than the length of [themes].
@@ -27,6 +30,7 @@ class PlayxThemeConfig {
     this.saveTheme = true,
     this.themes = const [],
     this.migratePrefsToAsyncPrefs = false,
+    this.logThemeChanges = true,
   })  : assert(initialThemeIndex >= 0 && initialThemeIndex < themes.length),
         assert(themes.isNotEmpty);
 }

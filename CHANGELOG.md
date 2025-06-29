@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.0
+> **Note**: This release contains breaking changes.
+- Updated to Flutter 3.27 / Dart 3.5.
+- Updated dependencies.
+- Added `context.themeData` and `context.isDarkMode` extensions.
+- Added `logThemeChanges` option to `PlayxThemeConfig` to log theme changes.
+- Theme update methods now support `animate` parameter to enable animation or not:
+    * `updateTo`, `updateByIndex`, `updateById`, `next`,
+      `updateToDeviceMode`, `updateToLightMode`, `updateToDarkMode`, `updateByThemeMode`.
+
+
 ## 1.0.4
 - Update packages
 - Updates minimum supported SDK version to Flutter 3.24/Dart 3.5.

@@ -5,6 +5,8 @@ import 'package:playx_theme/src/model/playx_colors.dart';
 import 'package:playx_theme/src/model/playx_theme_animation.dart';
 import 'package:playx_theme/src/model/x_theme.dart';
 
+import '../playx_theme.dart';
+
 /// Manages the app's theme and provides methods to update it.
 abstract class PlayxTheme {
   static XThemeController? _themeControllerInstance;
@@ -17,6 +19,8 @@ abstract class PlayxTheme {
     return _themeControllerInstance!;
   }
 
+  static PlayxBaseLogger get logger => PlayxLogger.getLogger('PLAYX THEME')!;
+
   /// Initializes the theme management system.
   ///
   /// This method sets up the theme controller with the provided configuration.
@@ -24,6 +28,16 @@ abstract class PlayxTheme {
   static Future<void> boot({
     required PlayxThemeConfig config,
   }) async {
+    if (_themeControllerInstance != null) {
+      logger.w('PlayxTheme is already initialized. '
+          'Calling boot() again will replace the existing instance.');
+      await dispose();
+    }
+    if (config.themes.isEmpty) {
+      logger.e('No themes provided in the configuration.');
+      throw Exception('No themes provided in the configuration.');
+    }
+    logger.i('Booting PlayxTheme with ${config.themes.length} themes.');
     final controller = XThemeController(config: config);
     _themeControllerInstance = controller;
     return controller.boot();

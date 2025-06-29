@@ -66,6 +66,7 @@ class XThemeController extends ValueNotifier<XTheme> {
 
   /// List of available themes.
   List<XTheme> get availableThemes => config.themes;
+  static PlayxBaseLogger get logger => PlayxLogger.getLogger('PLAYX THEME')!;
 
   /// Initializes the theme controller by loading the last saved theme index if applicable.
   Future<void> boot() async {
@@ -81,6 +82,9 @@ class XThemeController extends ValueNotifier<XTheme> {
         ) ??
         config.themes.first;
     _instance = this;
+    logger.info(
+      'Initialized with theme: ${value.id} at index: $currentIndex',
+    );
   }
 
   /// Retrieves the last saved theme index from preferences.

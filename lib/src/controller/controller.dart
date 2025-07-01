@@ -236,7 +236,7 @@ class XThemeController extends ValueNotifier<XTheme> {
   /// Throws an exception if the ID is not found.
   Future<void> updateById(
     String id, {
-        PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
   }) async {

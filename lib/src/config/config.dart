@@ -19,7 +19,7 @@ class PlayxThemeConfig {
   final bool migratePrefsToAsyncPrefs;
 
   /// Whether to log theme changes or not.
-  final bool logThemeChanges ;
+  final bool logThemeChanges;
 
   /// Creates a [PlayxThemeConfig] instance.
   ///

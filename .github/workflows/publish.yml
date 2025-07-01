@@ -19,8 +19,8 @@ jobs:
         run: flutter pub get
       - name: Format code
         run: dart format .
-      - name: Publish
-        uses: k-paxian/dart-package-publisher@v1.5.1
+      - name: 'Publish package'
+        uses: k-paxian/dart-package-publisher@master
         with:
           credentialJson: ${{ secrets.CREDENTIAL_JSON }}
           flutter: true

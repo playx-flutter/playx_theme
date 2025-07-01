@@ -133,7 +133,7 @@ class XThemeController extends ValueNotifier<XTheme> {
     }
     if (config.logThemeChanges) {
       logger.info(
-        'Updating theme from ${value.id} to ${theme.id} at index $index with animation enabled : ${animation != null}',
+        'Updating theme from ${value.id} to ${theme.id} at index $index with animation enabled : $animate',
       );
     }
     currentIndex = index;

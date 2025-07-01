@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
       - name: Format code
-        run: dart format --fix .
+        run: dart format .
       - name: Publish
         uses: k-paxian/dart-package-publisher@v1.5.1
         with:

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:playx_theme/playx_theme.dart';
 
@@ -24,10 +23,8 @@ extension BuildContextExtension on BuildContext {
     return xTheme.themeData;
   }
 
-
   /// Returns Whether the current theme is a dark theme.
-  bool get isDarkMode{
+  bool get isDarkMode {
     return xTheme.isDark;
   }
-
 }

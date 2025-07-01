@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:playx_theme/src/config/config.dart';
 import 'package:playx_theme/src/controller/controller.dart';
-import 'package:playx_theme/src/model/playx_colors.dart';
-import 'package:playx_theme/src/model/playx_theme_animation.dart';
-import 'package:playx_theme/src/model/x_theme.dart';
 
 import '../playx_theme.dart';
 

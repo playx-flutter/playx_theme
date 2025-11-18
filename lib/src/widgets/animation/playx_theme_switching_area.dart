@@ -15,25 +15,25 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = XThemeController.instance;
     final themeAnimation = controller.themeAnimation;
+    final xTheme = context.xTheme;
     if (controller.oldTheme == null ||
-        controller.oldTheme == controller.theme ||
+        controller.oldTheme == xTheme ||
         !(controller.controller?.isAnimating == true) ||
         themeAnimation == null) {
       // If there is no old theme, or no animation in progress, just show the current theme
-      return Material(child: _getPage(controller.theme.themeData));
+      return Material(child: _getPage(xTheme.themeData));
     } else {
       // Create the widgets for the transition
       late final Widget oldThemeWidget, newThemeWidget;
       if (themeAnimation.isReversed) {
-        oldThemeWidget =
-            _getPage(controller.theme.themeData); // Show the new theme first
+        oldThemeWidget = _getPage(xTheme.themeData); // Show the new theme first
         newThemeWidget =
             RawImage(image: controller.image); // Transition from screenshot
       } else {
         oldThemeWidget = RawImage(
             image: controller.image); // Show the old theme screenshot first
         newThemeWidget =
-            _getPage(controller.theme.themeData); // Transition to the new theme
+            _getPage(xTheme.themeData); // Transition to the new theme
       }
 
       // Create a widget based on the selected animation type

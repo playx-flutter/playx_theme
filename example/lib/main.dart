@@ -106,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                                                   PlayxTheme
                                                       .supportedThemes[index]
                                                       .id,
-                                                  animate: false,
+                                                  animate: true,
                                                   animation:
                                                       const PlayxThemeAnimation
                                                           .horizontalSlide());
@@ -138,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   PlayxTheme.next(
-                    animation: const PlayxThemeFadeAnimation(
+                    animation: PlayxThemeClipperAnimation(
                       duration: Duration(milliseconds: 500),
                     ),
                     animate: false,

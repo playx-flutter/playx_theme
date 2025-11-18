@@ -64,9 +64,12 @@ class _ThemeProviderState extends State<PlayxThemeBuilder>
       builder: (context, xTheme, _) {
         return PlayxInheritedTheme(
           theme: xTheme,
-          child: RepaintBoundary(
-            key: controller.previewContainer,
-            child: widget.child ?? widget.builder!(context, xTheme),
+          child: Theme(
+            data: xTheme.themeData,
+            child: RepaintBoundary(
+              key: controller.previewContainer,
+              child: widget.child ?? widget.builder!(context, xTheme),
+            ),
           ),
         );
       },

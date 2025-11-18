@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+- Bump `playx_core` dependency to `^0.7.4`.
+- Wrap `PlayxThemeBuilder`'s child in a `Theme` widget to ensure correct theme data is applied down the widget tree.
+- Refactor `PlayxThemeSwitchingArea` to use `context.xTheme` for better theme access.
+
 ## 1.1.0
 > **Note**: This release contains breaking changes.
 - Updated to Flutter 3.27 / Dart 3.5.

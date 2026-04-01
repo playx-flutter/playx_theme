@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.0
+> **Note**: This release contains breaking changes.
+
+**New Features:**
+- **System Theme Mode Integration**: `PlayxTheme` now fully supports and tracks device theme modes natively across the app (`ThemeMode.system`, `ThemeMode.light`, `ThemeMode.dark`).
+- **Reactive UI**: Added `PlayxTheme.themeModeNotifier` (`ValueNotifier<ThemeMode>`) allowing dynamic UI rebuilds anytime the app's internal theme mode state shifts.
+- **Improved Platform Synchronization**: Instantiated a `WidgetsBindingObserver` in the controller to passively catch system brightness updates and apply changes dynamically when `ThemeMode.system` is activated.
+
+**Enhancements:**
+- **Config Customization**: Added `lightThemeIndex` and `darkThemeIndex` in `PlayxThemeConfig` to explicitly point out light and dark configuration targets when toggling between themes automatically via system modes.
+- **Robust Initial Booting**: Added `initialThemeMode` to flexibly specify initial defaults without forcing numeric indices. `initialThemeIndex` is now nullable to create a clean fallback hierarchy.
+- **API Expansion**: Introduced the `updateMode` flag inside update mechanics (`updateTo`, `updateById`, `updateByIndex`, `next`). This gives exact control to avoid overriding mode state during temporary localized theme shifts.
+- **SDK Update**: Enforced new SDK constraints: `sdk: '>=3.10.0 <4.0.0'` and `flutter: '>=3.38.0'`.
+- Updated all underlying package dependencies to latest.
+
 ## 1.1.1
 - Bump `playx_core` dependency to `^0.7.4`.
 - Wrap `PlayxThemeBuilder`'s child in a `Theme` widget to ensure correct theme data is applied down the widget tree.

@@ -44,8 +44,42 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              const Text('Playx Theme Switcher'),
+              const Text('Playx Theme Mode'),
+              const SizedBox(height: 8),
+              ValueListenableBuilder<ThemeMode>(
+                valueListenable: PlayxTheme.themeModeNotifier,
+                builder: (context, mode, child) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildThemeModeCard(
+                        context,
+                        title: 'Light',
+                        icon: Icons.light_mode,
+                        isSelected: mode == ThemeMode.light,
+                        onTap: () => PlayxTheme.updateToLightMode(),
+                      ),
+                      _buildThemeModeCard(
+                        context,
+                        title: 'Dark',
+                        icon: Icons.dark_mode,
+                        isSelected: mode == ThemeMode.dark,
+                        onTap: () => PlayxTheme.updateToDarkMode(),
+                      ),
+                      _buildThemeModeCard(
+                        context,
+                        title: 'System',
+                        icon: Icons.settings_system_daydream,
+                        isSelected: mode == ThemeMode.system,
+                        onTap: () => PlayxTheme.updateToDeviceMode(),
+                      ),
+                    ],
+                  );
+                },
+              ),
               const SizedBox(height: 20),
+              const Text('Playx Theme Switcher'),
+              const SizedBox(height: 8),
               SizedBox(
                 width: 200,
                 child: Card(
@@ -163,6 +197,49 @@ class HomeScreen extends StatelessWidget {
               Icons.add,
               color: context.colorScheme.onPrimary,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildThemeModeCard(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        color: isSelected
+            ? context.playxColors.primary
+            : context.playxColors.surfaceContainerHigh,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: isSelected
+              ? BorderSide(color: context.playxColors.onPrimary, width: 2)
+              : BorderSide.none,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+          child: Column(
+            children: [
+              Icon(icon,
+                  color: isSelected
+                      ? context.playxColors.onPrimary
+                      : context.playxColors.onSurface),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: TextStyle(
+                  color: isSelected
+                      ? context.playxColors.onPrimary
+                      : context.playxColors.onSurface,
+                ),
+              ),
+            ],
           ),
         ),
       ),

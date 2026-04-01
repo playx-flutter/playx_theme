@@ -7,7 +7,18 @@ import 'package:playx_theme/playx_theme.dart';
 /// the initial theme index, and whether to save the selected theme to device storage.
 class PlayxThemeConfig {
   /// Index of the initial theme to start the app with.
-  final int initialThemeIndex;
+  /// If provided, it overrides `initialThemeMode`.
+  final int? initialThemeIndex;
+
+  /// Optional initial theme mode to start the app with.
+  /// Used if `initialThemeIndex` is null.
+  final ThemeMode? initialThemeMode;
+
+  /// Optional index for the light theme to be used in theme mode switching.
+  final int? lightThemeIndex;
+
+  /// Optional index for the dark theme to be used in theme mode switching.
+  final int? darkThemeIndex;
 
   /// Whether to save the theme index to the device storage or not.
   final bool saveTheme;
@@ -23,15 +34,23 @@ class PlayxThemeConfig {
 
   /// Creates a [PlayxThemeConfig] instance.
   ///
-  /// The [initialThemeIndex] must be non-negative and less than the length of [themes].
+  /// The [initialThemeIndex] must be non-negative and less than the length of [themes] if provided.
   /// The [themes] list must not be empty.
   PlayxThemeConfig({
-    this.initialThemeIndex = 0,
+    this.initialThemeIndex,
+    this.initialThemeMode,
+    this.lightThemeIndex,
+    this.darkThemeIndex,
     this.saveTheme = true,
     this.themes = const [],
     this.migratePrefsToAsyncPrefs = false,
     this.logThemeChanges = true,
-  })  : assert(initialThemeIndex >= 0 && initialThemeIndex < themes.length),
+  })  : assert(initialThemeIndex == null ||
+            (initialThemeIndex >= 0 && initialThemeIndex < themes.length)),
+        assert(lightThemeIndex == null ||
+            (lightThemeIndex >= 0 && lightThemeIndex < themes.length)),
+        assert(darkThemeIndex == null ||
+            (darkThemeIndex >= 0 && darkThemeIndex < themes.length)),
         assert(themes.isNotEmpty);
 }
 
@@ -73,5 +92,8 @@ class XDefaultThemeConfig extends PlayxThemeConfig {
             isDark: true,
             colors: const PlayxColors(),
           ),
-        ], initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0);
+        ],
+        lightThemeIndex: 0,
+        darkThemeIndex: 1,
+        initialThemeMode: ThemeMode.system);
 }

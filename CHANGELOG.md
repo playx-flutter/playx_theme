@@ -4,6 +4,14 @@
 - Bump `playx_core` dependency to `^2.0.0`. Its breaking changes (synchronous `PlayxEnv` getters, `PlayxSecurePrefs` settings) don't affect `playx_theme`; `PlayxPrefs` is unchanged.
 - **SDK Update**: minimum SDK constraints are now `sdk: '>=3.12.0 <4.0.0'` and `flutter: '>=3.44.0'`, as required by `playx_core` 2.0.0.
 - Refreshed transitive dependencies.
+- **New**: `PlayxTheme.nextIndex` / `PlayxTheme.nextTheme` to preview the theme `next()` switches to.
+- **New**: `PlayxTheme.toggleMode()` and `context.themeMode`.
+- **New**: `ThemeExtension` helpers: `XTheme.extension<T>()`, `context.themeExtension<T>()`, `context.maybeThemeExtension<T>()`.
+- **New**: pluggable persistence via `PlayxThemeStorage` and `PlayxThemeConfig.storage` (`PlayxPrefsThemeStorage` default, `PlayxMemoryThemeStorage`).
+- **New**: `PlayxThemeAnimation.lerp` which interpolates `ThemeData` between themes.
+- **Fix**: a saved theme index without a saved mode (e.g. from v1) is restored on boot.
+- **Fix**: `XThemeController.dispose` is idempotent, and the controller logger no longer crashes when used without `PlayxTheme.boot`.
+- Tests: fixed the failing suite and raised coverage to ~93%. CI now runs on pull requests, tests the minimum and latest Flutter, and gates coverage at 85%.
 - Updated example app SDK constraint to match.
 
 ## 2.0.0

@@ -102,6 +102,28 @@ final currentThemeId = PlayxTheme.currentTheme.id;
 final currentThemeData = PlayxTheme.currentThemeData;  
 ```  
 
+```dart
+// Show a preview of what the next tap will switch to
+final upcoming = PlayxTheme.nextTheme; // XTheme
+PlayxTheme.toggleMode(); // light <-> dark
+final mode = context.themeMode; // ThemeMode
+```
+
+#### Custom theme tokens (`ThemeExtension`)
+
+Register `ThemeExtension`s in `ThemeData.extensions` and read them from the current theme:
+
+```dart
+final spacing = context.themeExtension<AppSpacing>(); // throws if missing
+final maybe = context.maybeThemeExtension<AppSpacing>();
+```
+
+### Custom Persistence
+
+By default the selected theme is saved with `SharedPreferencesAsync`. Provide your own
+`PlayxThemeStorage` through `PlayxThemeConfig(storage: ...)` to store it anywhere
+(`PlayxMemoryThemeStorage` is available for tests).
+
 ### Available Methods
 
 | Method              | Description                                                         |  
@@ -115,6 +137,8 @@ final currentThemeData = PlayxTheme.currentThemeData;
 | `initialTheme` | Returns start theme if provided.                                    |  
 | `supportedThemes` | Returns list of supported themes configured in `PlayxThemeConfig`.  |  
 | `next` | Updates the app theme to the next theme.                            |  
+| `nextIndex` / `nextTheme` | Preview the index / theme that `next` would switch to.   |  
+| `toggleMode` | Toggles between light and dark based on the current theme.          |  
 | `updateByIndex` | Updates the app theme by the index.                                 |  
 | `updateTo` | Updates the app theme to a specific `XTheme`.                       |  
 | `updateById` | Updates the app theme to a specific theme id.                       |  
@@ -180,6 +204,11 @@ The base class for theme animations provides common settings, including:
 - **`isReversed`**: Reverses the animation direction.
 - **`onAnimationFinish`**: Callback triggered when the animation finishes.
 - **`duration`**: Duration of the animation.
+
+#### PlayxThemeLerpAnimation
+
+Smoothly interpolates between the old and new `ThemeData` in place, without screenshots:
+`PlayxThemeAnimation.lerp(curve: Curves.easeInOut)`. Requires `PlayxThemeSwitchingArea`.
 
 #### PlayxThemeClipperAnimation
 

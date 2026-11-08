@@ -81,7 +81,16 @@ class XThemeController extends ValueNotifier<XTheme>
 
   /// List of available themes.
   List<XTheme> get availableThemes => config.themes;
-  static PlayxBaseLogger get logger => PlayxLogger.getLogger('PLAYX THEME')!;
+  static PlayxBaseLogger get logger {
+    var logger = PlayxLogger.getLogger('PLAYX THEME');
+    if (logger == null) {
+      // The controller can be used without `PlayxTheme.boot`, so make sure
+      // the logger exists.
+      PlayxLogger.initLogger(name: 'PLAYX THEME', useColoredFormatter: true);
+      logger = PlayxLogger.getLogger('PLAYX THEME');
+    }
+    return logger!;
+  }
 
   /// Retrieves the optional explicitly set theme mode, or system by default.
   ThemeMode getInitialThemeMode() {
@@ -135,12 +144,23 @@ class XThemeController extends ValueNotifier<XTheme>
         ? await storage.getString(lastKnownThemeModeKey)
         : null;
 
+    final hasValidSavedIndex =
+        lastSavedIndex != null &&
+        lastSavedIndex >= 0 &&
+        lastSavedIndex < availableThemes.length;
+
     ThemeMode computedMode;
     if (lastSavedThemeModeString != null) {
       computedMode = ThemeMode.values.firstWhere(
         (e) => e.name == lastSavedThemeModeString,
         orElse: () => ThemeMode.system,
       );
+    } else if (hasValidSavedIndex) {
+      // Only an index was saved (e.g. by an older version): the user picked
+      // that theme explicitly, so derive the mode from it.
+      computedMode = availableThemes[lastSavedIndex].isDark
+          ? ThemeMode.dark
+          : ThemeMode.light;
     } else {
       computedMode = getInitialThemeMode();
     }
@@ -149,22 +169,14 @@ class XThemeController extends ValueNotifier<XTheme>
 
     if (lastSavedThemeModeString != null && computedMode == ThemeMode.system) {
       value = _getThemeForMode(isDeviceInDarkMode()) ?? availableThemes.first;
+    } else if (hasValidSavedIndex) {
+      value = availableThemes[lastSavedIndex];
+    } else if (lastSavedThemeModeString == null) {
+      value = getInitialTheme();
     } else {
-      if (lastSavedThemeModeString == null) {
-        value = getInitialTheme();
-      } else {
-        if (lastSavedIndex != null &&
-            lastSavedIndex >= 0 &&
-            lastSavedIndex < availableThemes.length) {
-          value = availableThemes[lastSavedIndex];
-        } else {
-          if (computedMode == ThemeMode.light) {
-            value = _getThemeForMode(false) ?? availableThemes.first;
-          } else {
-            value = _getThemeForMode(true) ?? availableThemes.first;
-          }
-        }
-      }
+      value =
+          _getThemeForMode(computedMode != ThemeMode.light) ??
+          availableThemes.first;
     }
 
     currentIndex = availableThemes.indexOf(value);
@@ -598,8 +610,12 @@ class XThemeController extends ValueNotifier<XTheme>
     this.controller = controller;
   }
 
+  bool _isDisposed = false;
+
   @override
   void dispose() {
+    if (_isDisposed) return;
+    _isDisposed = true;
     WidgetsBinding.instance.removeObserver(this);
     _themeModeNotifier.dispose();
     timer?.cancel();

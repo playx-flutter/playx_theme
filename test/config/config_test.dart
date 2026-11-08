@@ -86,8 +86,8 @@ void main() {
       expect(config.themes[1].id, 'dark');
       expect(config.themes[0].themeData.brightness, Brightness.light);
       expect(config.themes[1].themeData.brightness, Brightness.dark);
-      expect(config.initialThemeIndex,
-          anyOf(0, 1)); // Should be 0 or 1 depending on device mode
+      expect(config.initialThemeIndex, isNull);
+      expect(config.initialThemeMode, ThemeMode.system);
     });
   });
 }

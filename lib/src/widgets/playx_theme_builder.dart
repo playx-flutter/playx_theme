@@ -77,8 +77,8 @@ class _ThemeProviderState extends State<PlayxThemeBuilder>
 
   @override
   void dispose() {
+    // The controller is owned by PlayxTheme; only release the animation controller.
     themeController.updateThemeAnimationController(null);
-    themeController.dispose();
     super.dispose();
   }
 }

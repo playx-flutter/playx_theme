@@ -5,16 +5,8 @@ import '../playx_theme.dart';
 
 /// Manages the app's theme and provides methods to update it.
 abstract class PlayxTheme {
-  static XThemeController? _themeControllerInstance;
-
-  static XThemeController get _controller {
-    if (_themeControllerInstance == null) {
-      throw Exception(
-        "PlayxTheme is not initialized. Please call boot() before accessing PlayxTheme.",
-      );
-    }
-    return _themeControllerInstance!;
-  }
+  /// The booted controller. [XThemeController] owns the singleton.
+  static XThemeController get _controller => XThemeController.instance;
 
   /// Initializes the theme management system.
   ///
@@ -24,7 +16,7 @@ abstract class PlayxTheme {
     PlayxLogger.initLogger(name: 'PLAYX THEME', useColoredFormatter: true);
     final logger = PlayxLogger.getLogger('PLAYX THEME')!;
 
-    if (_themeControllerInstance != null) {
+    if (XThemeController.maybeInstance != null) {
       logger.w(
         'PlayxTheme is already initialized. '
         'Calling boot() again will replace the existing instance.',
@@ -36,9 +28,7 @@ abstract class PlayxTheme {
       throw Exception('No themes provided in the configuration.');
     }
     logger.i('Booting PlayxTheme with ${config.themes.length} themes.');
-    final controller = XThemeController(config: config);
-    _themeControllerInstance = controller;
-    return controller.boot();
+    return XThemeController(config: config).boot();
   }
 
   /// Gets the index of the currently active theme.
@@ -301,10 +291,7 @@ abstract class PlayxTheme {
   /// This method should be called when theme management is no longer needed to clean up resources.
   /// It returns `true` if the disposal was successful, otherwise returns `false`.
   static Future<bool> dispose() async {
-    if (_themeControllerInstance != null) {
-      _themeControllerInstance!.dispose();
-      _themeControllerInstance = null;
-    }
+    XThemeController.disposeInstance();
     return true;
   }
 }

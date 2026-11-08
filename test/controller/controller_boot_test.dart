@@ -206,6 +206,8 @@ void main() {
     });
   });
 
+  _ownershipTests();
+
   group('misc', () {
     test('instance throws before boot', () {
       expect(() => XThemeController.instance, throwsException);
@@ -245,6 +247,42 @@ void main() {
       final c = await _boot(_config(saveTheme: false));
       c.dispose();
       expect(c.dispose, returnsNormally);
+    });
+  });
+}
+
+void _ownershipTests() {
+  group('singleton ownership', () {
+    tearDown(() => PlayxTheme.dispose());
+
+    test('PlayxTheme and the widgets share one controller', () async {
+      await PlayxTheme.boot(config: _config(saveTheme: false));
+      expect(XThemeController.maybeInstance, isNotNull);
+      expect(PlayxTheme.currentTheme, XThemeController.instance.value);
+      await PlayxTheme.dispose();
+      expect(XThemeController.maybeInstance, isNull);
+      expect(() => PlayxTheme.index, throwsException);
+    });
+
+    test('disposing an old controller keeps the new instance', () async {
+      final old = await _boot(_config(saveTheme: false));
+      final fresh = await _boot(_config(saveTheme: false));
+      old.dispose();
+      expect(XThemeController.instance, same(fresh));
+      fresh.dispose();
+    });
+
+    testWidgets('removing PlayxThemeBuilder does not dispose the controller', (
+      tester,
+    ) async {
+      await PlayxTheme.boot(config: _config(saveTheme: false));
+      await tester.pumpWidget(
+        const PlayxThemeBuilder(child: SizedBox(key: ValueKey('x'))),
+      );
+      await tester.pumpWidget(const SizedBox());
+      expect(() => PlayxTheme.currentTheme, returnsNormally);
+      await PlayxTheme.updateToDarkMode(animate: false);
+      expect(PlayxTheme.id, 'Dark');
     });
   });
 }

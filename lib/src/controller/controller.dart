@@ -21,11 +21,17 @@ class XThemeController extends ValueNotifier<XTheme>
   static XThemeController get instance {
     if (_instance == null) {
       throw Exception(
-        'PlayxTheme is not initialized. Please call `boot` before accessing the instance.',
+        'PlayxTheme is not initialized. Please call boot() before accessing PlayxTheme.',
       );
     }
     return _instance!;
   }
+
+  /// The booted controller, or `null` if [boot] hasn't been called.
+  static XThemeController? get maybeInstance => _instance;
+
+  /// Disposes the booted controller (if any) and clears the singleton.
+  static void disposeInstance() => _instance?.dispose();
 
   /// Theme configuration.
   final PlayxThemeConfig config;
@@ -134,6 +140,7 @@ class XThemeController extends ValueNotifier<XTheme>
 
   /// Initializes the theme controller by loading the last saved theme index if applicable.
   Future<void> boot() async {
+    _instance = this;
     final lastSavedIndex = config.saveTheme
         ? await getLastSavedIndexFromPrefs(
             migratePrefsToAsync: config.migratePrefsToAsyncPrefs,
@@ -182,7 +189,6 @@ class XThemeController extends ValueNotifier<XTheme>
     currentIndex = availableThemes.indexOf(value);
     initialIndex = currentIndex;
 
-    _instance = this;
     WidgetsBinding.instance.addObserver(this);
     logger.info(
       'Initialized with theme: ${value.id} at index: $currentIndex, mode: ${_themeModeNotifier.value.name}',
@@ -619,7 +625,7 @@ class XThemeController extends ValueNotifier<XTheme>
     WidgetsBinding.instance.removeObserver(this);
     _themeModeNotifier.dispose();
     timer?.cancel();
-    _instance = null;
+    if (identical(_instance, this)) _instance = null;
     super.dispose();
   }
 }

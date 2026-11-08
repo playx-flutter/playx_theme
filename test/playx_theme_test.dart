@@ -189,6 +189,15 @@ void main() {
       expect(PlayxTheme.nextTheme.id, 'Light');
     });
 
+    test('PlayxTheme.toggleMode() toggles between light and dark', () async {
+      await PlayxTheme.toggleMode();
+      expect(PlayxTheme.id, 'Dark');
+      expect(PlayxTheme.themeMode, ThemeMode.dark);
+      await PlayxTheme.toggleMode();
+      expect(PlayxTheme.id, 'Light');
+      expect(PlayxTheme.themeMode, ThemeMode.light);
+    });
+
     test(
         'PlayxTheme.isDeviceInDarkMode() should return true if the device is in dark mode',
         () async {

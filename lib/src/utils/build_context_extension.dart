@@ -27,4 +27,10 @@ extension BuildContextExtension on BuildContext {
   bool get isDarkMode {
     return xTheme.isDark;
   }
+
+  /// Returns the app's current [ThemeMode] (light, dark or system).
+  ///
+  /// This is not reactive on its own; listen to `PlayxTheme.themeModeNotifier`
+  /// if you need to rebuild when only the mode changes.
+  ThemeMode get themeMode => PlayxTheme.themeMode;
 }

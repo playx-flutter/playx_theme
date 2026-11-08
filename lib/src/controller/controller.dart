@@ -518,6 +518,23 @@ class XThemeController extends ValueNotifier<XTheme>
     }
   }
 
+  /// Toggles between light and dark mode based on the current theme's brightness.
+  ///
+  /// If the current theme is dark it switches to the light mode, otherwise to
+  /// the dark mode. Throws an [Exception] if the target mode has no theme.
+  Future<void> toggleMode({
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
+    bool forceUpdateNonAnimatedTheme = false,
+  }) {
+    return updateByThemeMode(
+      mode: value.isDark ? ThemeMode.light : ThemeMode.dark,
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    );
+  }
+
   /// Clear the last saved theme index and theme mode.
   static Future<void> clearLastSavedTheme() async {
     await PlayxAsyncPrefs.remove(lastKnownThemeModeKey);

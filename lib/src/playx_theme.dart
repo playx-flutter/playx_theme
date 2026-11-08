@@ -276,6 +276,22 @@ abstract class PlayxTheme {
     );
   }
 
+  /// Toggles between light and dark mode based on the current theme's brightness.
+  ///
+  /// Switches to the light mode if the current theme is dark, otherwise to the dark mode.
+  /// Throws an [Exception] if no theme exists for the target mode.
+  static Future<void> toggleMode({
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
+    bool forceUpdateNonAnimatedTheme = false,
+  }) {
+    return _controller.toggleMode(
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    );
+  }
+
   /// Clears the last saved theme from local storage.
   ///
   /// This method removes the theme data that was previously saved to allow the app to revert to default settings or choose a new theme.

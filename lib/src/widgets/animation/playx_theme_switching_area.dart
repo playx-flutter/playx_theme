@@ -4,10 +4,7 @@ import 'package:playx_theme/src/controller/controller.dart';
 import '../../../playx_theme.dart';
 
 class PlayxThemeSwitchingArea extends StatelessWidget {
-  const PlayxThemeSwitchingArea({
-    super.key,
-    required this.child,
-  });
+  const PlayxThemeSwitchingArea({super.key, required this.child});
 
   final Widget child;
 
@@ -23,51 +20,80 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
       // If there is no old theme, or no animation in progress, just show the current theme
       return Material(child: _getPage(xTheme.themeData));
     } else {
+      if (themeAnimation is PlayxThemeLerpAnimation) {
+        final oldData = controller.oldTheme!.themeData;
+        final animationController = controller.controller!;
+        return Material(
+          child: AnimatedBuilder(
+            animation: animationController,
+            builder: (_, _) => _getPage(
+              ThemeData.lerp(
+                oldData,
+                xTheme.themeData,
+                themeAnimation.curve.transform(animationController.value),
+              ),
+            ),
+          ),
+        );
+      }
+
       // Create the widgets for the transition
       late final Widget oldThemeWidget, newThemeWidget;
       if (themeAnimation.isReversed) {
         oldThemeWidget = _getPage(xTheme.themeData); // Show the new theme first
-        newThemeWidget =
-            RawImage(image: controller.image); // Transition from screenshot
+        newThemeWidget = RawImage(
+          image: controller.image,
+        ); // Transition from screenshot
       } else {
         oldThemeWidget = RawImage(
-            image: controller.image); // Show the old theme screenshot first
-        newThemeWidget =
-            _getPage(xTheme.themeData); // Transition to the new theme
+          image: controller.image,
+        ); // Show the old theme screenshot first
+        newThemeWidget = _getPage(
+          xTheme.themeData,
+        ); // Transition to the new theme
       }
 
       // Create a widget based on the selected animation type
       Widget transitionWidget;
       switch (themeAnimation) {
+        case PlayxThemeLerpAnimation _:
+          // Handled above.
+          transitionWidget = newThemeWidget;
+          break;
         case PlayxThemeClipperAnimation _:
           transitionWidget = _buildClipperAnimation(
-              animation: themeAnimation,
-              oldThemeWidget: oldThemeWidget,
-              newThemeWidget: newThemeWidget);
+            animation: themeAnimation,
+            oldThemeWidget: oldThemeWidget,
+            newThemeWidget: newThemeWidget,
+          );
           break;
         case PlayxThemeFadeAnimation _:
           transitionWidget = _buildFadeAnimation(
-              animation: themeAnimation,
-              oldThemeWidget: oldThemeWidget,
-              newThemeWidget: newThemeWidget);
+            animation: themeAnimation,
+            oldThemeWidget: oldThemeWidget,
+            newThemeWidget: newThemeWidget,
+          );
           break;
         case PlayxThemeScaleAnimation _:
           transitionWidget = _buildScaleAnimation(
-              animation: themeAnimation,
-              oldThemeWidget: oldThemeWidget,
-              newThemeWidget: newThemeWidget);
+            animation: themeAnimation,
+            oldThemeWidget: oldThemeWidget,
+            newThemeWidget: newThemeWidget,
+          );
           break;
         case PlayxThemeHorizontalSlideAnimation _:
           transitionWidget = _buildHorizontalSlideAnimation(
-              animation: themeAnimation,
-              oldThemeWidget: oldThemeWidget,
-              newThemeWidget: newThemeWidget);
+            animation: themeAnimation,
+            oldThemeWidget: oldThemeWidget,
+            newThemeWidget: newThemeWidget,
+          );
           break;
         case PlayxThemeVerticalSlideAnimation _:
           transitionWidget = _buildVerticalSlideAnimation(
-              animation: themeAnimation,
-              oldThemeWidget: oldThemeWidget,
-              newThemeWidget: newThemeWidget);
+            animation: themeAnimation,
+            oldThemeWidget: oldThemeWidget,
+            newThemeWidget: newThemeWidget,
+          );
           break;
       }
 
@@ -76,10 +102,11 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
   }
 
   // Circular animation, similar to your original implementation
-  Widget _buildClipperAnimation(
-      {required PlayxThemeClipperAnimation animation,
-      required Widget oldThemeWidget,
-      required Widget newThemeWidget}) {
+  Widget _buildClipperAnimation({
+    required PlayxThemeClipperAnimation animation,
+    required Widget oldThemeWidget,
+    required Widget newThemeWidget,
+  }) {
     final controller = XThemeController.instance;
     return Stack(
       children: [
@@ -119,19 +146,17 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
           opacity: ReverseAnimation(controller.controller!),
           child: oldThemeWidget,
         ),
-        FadeTransition(
-          opacity: controller.controller!,
-          child: newThemeWidget,
-        ),
+        FadeTransition(opacity: controller.controller!, child: newThemeWidget),
       ],
     );
   }
 
   // Scale animation
-  Widget _buildScaleAnimation(
-      {required PlayxThemeScaleAnimation animation,
-      required Widget oldThemeWidget,
-      required Widget newThemeWidget}) {
+  Widget _buildScaleAnimation({
+    required PlayxThemeScaleAnimation animation,
+    required Widget oldThemeWidget,
+    required Widget newThemeWidget,
+  }) {
     final controller = XThemeController.instance;
     return Stack(
       children: [
@@ -139,51 +164,54 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
           scale: ReverseAnimation(controller.controller!),
           child: oldThemeWidget,
         ),
-        ScaleTransition(
-          scale: controller.controller!,
-          child: newThemeWidget,
-        ),
+        ScaleTransition(scale: controller.controller!, child: newThemeWidget),
       ],
     );
   }
 
   // Slide animation
-  Widget _buildHorizontalSlideAnimation(
-      {required PlayxThemeHorizontalSlideAnimation animation,
-      required Widget oldThemeWidget,
-      required Widget newThemeWidget}) {
+  Widget _buildHorizontalSlideAnimation({
+    required PlayxThemeHorizontalSlideAnimation animation,
+    required Widget oldThemeWidget,
+    required Widget newThemeWidget,
+  }) {
     final controller = XThemeController.instance;
     return Stack(
       children: [
         SlideTransition(
-          position: controller.controller!.drive(Tween(
-              begin: const Offset(0.0, 0.0), end: const Offset(1.0, 0.0))),
+          position: controller.controller!.drive(
+            Tween(begin: const Offset(0.0, 0.0), end: const Offset(1.0, 0.0)),
+          ),
           child: oldThemeWidget,
         ),
         SlideTransition(
-          position: controller.controller!.drive(Tween(
-              begin: const Offset(-1.0, 0.0), end: const Offset(0.0, 0.0))),
+          position: controller.controller!.drive(
+            Tween(begin: const Offset(-1.0, 0.0), end: const Offset(0.0, 0.0)),
+          ),
           child: newThemeWidget,
         ),
       ],
     );
   }
 
-  Widget _buildVerticalSlideAnimation(
-      {required PlayxThemeVerticalSlideAnimation animation,
-      required Widget oldThemeWidget,
-      required Widget newThemeWidget}) {
+  Widget _buildVerticalSlideAnimation({
+    required PlayxThemeVerticalSlideAnimation animation,
+    required Widget oldThemeWidget,
+    required Widget newThemeWidget,
+  }) {
     final controller = XThemeController.instance;
     return Stack(
       children: [
         SlideTransition(
-          position: controller.controller!.drive(Tween(
-              begin: const Offset(0.0, 0.0), end: const Offset(0.0, 1.0))),
+          position: controller.controller!.drive(
+            Tween(begin: const Offset(0.0, 0.0), end: const Offset(0.0, 1.0)),
+          ),
           child: oldThemeWidget,
         ),
         SlideTransition(
-          position: controller.controller!.drive(Tween(
-              begin: const Offset(0.0, -1.0), end: const Offset(0.0, 0.0))),
+          position: controller.controller!.drive(
+            Tween(begin: const Offset(0.0, -1.0), end: const Offset(0.0, 0.0)),
+          ),
           child: newThemeWidget,
         ),
       ],
@@ -200,8 +228,11 @@ class PlayxThemeSwitchingArea extends StatelessWidget {
 }
 
 class ThemeSwitcherClipperBridge extends CustomClipper<Path> {
-  ThemeSwitcherClipperBridge(
-      {required this.sizeRate, required this.offset, required this.clipper});
+  ThemeSwitcherClipperBridge({
+    required this.sizeRate,
+    required this.offset,
+    required this.clipper,
+  });
 
   final double sizeRate;
   final Offset offset;

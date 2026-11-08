@@ -33,9 +33,7 @@ sealed class PlayxThemeAnimation {
   });
 
   /// Animates the selected [PlayxThemeAnimation] using the provided [controller].
-  Future<void> animate({
-    required AnimationController controller,
-  });
+  Future<void> animate({required AnimationController controller});
 
   /// Creates a [PlayxThemeClipperAnimation] with custom clipping settings.
   /// As it create a clipping-based theme animation using a custom clipper.
@@ -50,6 +48,15 @@ sealed class PlayxThemeAnimation {
     VoidCallback? onAnimationFinish,
     Duration duration,
   }) = PlayxThemeClipperAnimation;
+
+  /// Creates a [PlayxThemeLerpAnimation] that smoothly interpolates between
+  /// the old and the new [ThemeData] (colors, text styles, ...) with [curve],
+  /// without cross-fading screenshots of the old UI.
+  const factory PlayxThemeAnimation.lerp({
+    Curve curve,
+    VoidCallback? onAnimationFinish,
+    Duration duration,
+  }) = PlayxThemeLerpAnimation;
 
   /// Creates a [PlayxThemeFadeAnimation] that controls fade effects.
   /// As it create a fade animation effect with adjustable opacity levels.
@@ -139,6 +146,27 @@ class PlayxThemeClipperAnimation extends PlayxThemeAnimation {
   }
 }
 
+/// Defines an animation that interpolates between the old and new [ThemeData]
+/// using `ThemeData.lerp`, so every themed widget transitions smoothly in place.
+class PlayxThemeLerpAnimation extends PlayxThemeAnimation {
+  /// The curve applied to the interpolation. Defaults to [Curves.easeInOut].
+  final Curve curve;
+
+  /// Creates a [PlayxThemeLerpAnimation].
+  const PlayxThemeLerpAnimation({
+    this.curve = Curves.easeInOut,
+    super.onAnimationFinish,
+    super.duration,
+  });
+
+  @override
+  Future<void> animate({required AnimationController controller}) async {
+    await controller
+        .forward(from: 0.0)
+        .then((value) => onAnimationFinish?.call());
+  }
+}
+
 /// Defines a fade animation effect with adjustable opacity levels.
 class PlayxThemeFadeAnimation extends PlayxThemeAnimation {
   /// The starting opacity value for the fade animation.
@@ -155,10 +183,10 @@ class PlayxThemeFadeAnimation extends PlayxThemeAnimation {
     this.end = 1.0,
     super.onAnimationFinish,
     super.duration,
-  })  : assert(begin >= 0),
-        assert(end >= 0),
-        assert(begin <= 1),
-        assert(end <= 1);
+  }) : assert(begin >= 0),
+       assert(end >= 0),
+       assert(begin <= 1),
+       assert(end <= 1);
 
   @override
   Future<void> animate({required AnimationController controller}) async {
@@ -186,10 +214,10 @@ class PlayxThemeScaleAnimation extends PlayxThemeAnimation {
     super.isReversed,
     super.onAnimationFinish,
     super.duration,
-  })  : assert(begin >= 0),
-        assert(end >= 0),
-        assert(begin <= 1),
-        assert(end <= 1);
+  }) : assert(begin >= 0),
+       assert(end >= 0),
+       assert(begin <= 1),
+       assert(end <= 1);
 
   @override
   Future<void> animate({required AnimationController controller}) async {

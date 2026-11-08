@@ -309,4 +309,32 @@ void main() {
       expect(animation.endOffset, const Offset(0.0, 0.0));
     });
   });
+  _lerpAnimationTests();
+}
+
+void _lerpAnimationTests() {
+  group('PlayxThemeLerpAnimation', () {
+    test('factory creates a lerp animation with defaults', () {
+      final animation = PlayxThemeAnimation.lerp();
+      expect(animation, isA<PlayxThemeLerpAnimation>());
+      expect((animation as PlayxThemeLerpAnimation).curve, Curves.easeInOut);
+      expect(animation.duration, const Duration(milliseconds: 300));
+    });
+
+    testWidgets('animate runs the controller and calls onAnimationFinish',
+        (tester) async {
+      var finished = false;
+      final controller = AnimationController(
+        vsync: tester,
+        duration: const Duration(milliseconds: 300),
+      );
+      final animation =
+          PlayxThemeLerpAnimation(onAnimationFinish: () => finished = true);
+      animation.animate(controller: controller);
+      await tester.pumpAndSettle();
+      expect(finished, isTrue);
+      expect(controller.value, 1.0);
+      controller.dispose();
+    });
+  });
 }

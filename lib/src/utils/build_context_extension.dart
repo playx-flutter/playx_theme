@@ -28,6 +28,24 @@ extension BuildContextExtension on BuildContext {
     return xTheme.isDark;
   }
 
+  /// Returns the [ThemeExtension] of type [T] of the current theme, or `null`
+  /// if the theme doesn't register one in `ThemeData.extensions`.
+  T? maybeThemeExtension<T extends ThemeExtension<T>>() =>
+      xTheme.extension<T>();
+
+  /// Returns the [ThemeExtension] of type [T] of the current theme.
+  ///
+  /// Throws a [FlutterError] if the theme doesn't register one.
+  T themeExtension<T extends ThemeExtension<T>>() {
+    final extension = maybeThemeExtension<T>();
+    if (extension == null) {
+      throw FlutterError(
+        'No ThemeExtension of type $T found in the current theme',
+      );
+    }
+    return extension;
+  }
+
   /// Returns the app's current [ThemeMode] (light, dark or system).
   ///
   /// This is not reactive on its own; listen to `PlayxTheme.themeModeNotifier`

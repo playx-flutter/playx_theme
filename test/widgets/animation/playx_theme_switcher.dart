@@ -7,28 +7,23 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 import '../../config/config.dart';
 
 void main() {
-  setUpAll(
-    () async {
-      TestWidgetsFlutterBinding.ensureInitialized();
-    },
-  );
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+  });
 
-  setUp(
-    () async {
-      PlayxPrefs.setMockInitialValues({});
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.empty();
-      await PlayxTheme.boot(config: getTestConfig());
-    },
-  );
-  tearDown(
-    () async {
-      await PlayxTheme.clearLastSavedTheme();
-      await PlayxTheme.dispose();
-    },
-  );
-  testWidgets('PlayxThemeSwitcher triggers theme change with builder',
-      (WidgetTester tester) async {
+  setUp(() async {
+    PlayxPrefs.setMockInitialValues({});
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
+    await PlayxTheme.boot(config: getTestConfig());
+  });
+  tearDown(() async {
+    await PlayxTheme.clearLastSavedTheme();
+    await PlayxTheme.dispose();
+  });
+  testWidgets('PlayxThemeSwitcher triggers theme change with builder', (
+    WidgetTester tester,
+  ) async {
     Offset? switcherOffset;
     await tester.pumpWidget(
       TestApp(
@@ -36,14 +31,10 @@ void main() {
           builder: (context, theme) {
             return FloatingActionButton(
               onPressed: () {
-                final animation = PlayxThemeAnimation.clipper(
-                  context: context,
-                );
+                final animation = PlayxThemeAnimation.clipper(context: context);
                 switcherOffset =
                     (animation as PlayxThemeClipperAnimation).switcherOffset;
-                PlayxTheme.next(
-                  animation: animation,
-                ); // Trigger theme change
+                PlayxTheme.next(animation: animation); // Trigger theme change
               },
               child: const Icon(Icons.add),
             );

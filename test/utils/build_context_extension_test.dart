@@ -6,15 +6,14 @@ import 'package:playx_theme/src/widgets/playx_inherited_theme.dart';
 import '../config/config.dart';
 
 void main() {
-  setUpAll(
-    () async {
-      TestWidgetsFlutterBinding.ensureInitialized();
-    },
-  );
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+  });
 
   group('PlayxTheme  BuildContext Extensions Test', () {
-    testWidgets('XTheme can be accessed from BuildContext',
-        (WidgetTester tester) async {
+    testWidgets('XTheme can be accessed from BuildContext', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         PlayxInheritedTheme(
           theme: darkTestTheme,
@@ -32,20 +31,22 @@ void main() {
 
     // Throws error when PlayxInheritedTheme not in the widget tree
     testWidgets(
-        'XTheme throws error when PlayxInheritedTheme not in the widget tree',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        Builder(
-          builder: (context) {
-            expect(() => context.xTheme, throwsAssertionError);
-            return Container();
-          },
-        ),
-      );
-    });
+      'XTheme throws error when PlayxInheritedTheme not in the widget tree',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          Builder(
+            builder: (context) {
+              expect(() => context.xTheme, throwsAssertionError);
+              return Container();
+            },
+          ),
+        );
+      },
+    );
 
-    testWidgets('PlayxColors can be accessed from BuildContext',
-        (WidgetTester tester) async {
+    testWidgets('PlayxColors can be accessed from BuildContext', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         PlayxInheritedTheme(
           theme: darkTestTheme,
@@ -70,16 +71,17 @@ void main() {
     });
 
     testWidgets(
-        'PlayxColors throws error when PlayxInheritedTheme not in the widget tree',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        Builder(
-          builder: (context) {
-            expect(() => context.playxColors, throwsAssertionError);
-            return Container();
-          },
-        ),
-      );
-    });
+      'PlayxColors throws error when PlayxInheritedTheme not in the widget tree',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          Builder(
+            builder: (context) {
+              expect(() => context.playxColors, throwsAssertionError);
+              return Container();
+            },
+          ),
+        );
+      },
+    );
   });
 }

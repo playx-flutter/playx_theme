@@ -7,43 +7,37 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 import '../config/config.dart';
 
 void main() {
-  setUpAll(
-    () async {
-      TestWidgetsFlutterBinding.ensureInitialized();
-    },
-  );
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+  });
 
   setUp(() async {
     PlayxPrefs.setMockInitialValues({XThemeController.lastKnownIndexKey: 1});
     SharedPreferencesAsyncPlatform.instance =
-        InMemorySharedPreferencesAsync.withData(
-            {XThemeController.lastKnownIndexKey: 1});
+        InMemorySharedPreferencesAsync.withData({
+          XThemeController.lastKnownIndexKey: 1,
+        });
     await PlayxTheme.boot(config: getTestConfig());
   });
 
-  tearDown(
-    () async {
-      await PlayxTheme.dispose();
-    },
-  );
+  tearDown(() async {
+    await PlayxTheme.dispose();
+  });
 
   group('PlayxTheme test Prefs', () {
-    test(
-      'PlayxTheme loads last selected theme when it boots',
-      () async {
-        expect(PlayxTheme.index, 1);
-      },
-    );
+    test('PlayxTheme loads last selected theme when it boots', () async {
+      expect(PlayxTheme.index, 1);
+    });
 
-    test(
-      'PlayxTheme saves last selected theme index',
-      () async {
-        await PlayxTheme.updateById(lightTestTheme.id);
-        expect(
-            await PlayxAsyncPrefs.getInt(XThemeController.lastKnownIndexKey,
-                fallback: 0),
-            0);
-      },
-    );
+    test('PlayxTheme saves last selected theme index', () async {
+      await PlayxTheme.updateById(lightTestTheme.id);
+      expect(
+        await PlayxAsyncPrefs.getInt(
+          XThemeController.lastKnownIndexKey,
+          fallback: 0,
+        ),
+        0,
+      );
+    });
   });
 }

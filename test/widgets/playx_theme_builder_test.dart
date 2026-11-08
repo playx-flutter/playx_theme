@@ -6,26 +6,20 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 import '../config/config.dart';
 
 void main() {
-  setUpAll(
-    () async {
-      TestWidgetsFlutterBinding.ensureInitialized();
-    },
-  );
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+  });
 
-  setUp(
-    () async {
-      PlayxPrefs.setMockInitialValues({});
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.empty();
-      await PlayxTheme.boot(config: getTestConfig());
-    },
-  );
-  tearDown(
-    () async {
-      await PlayxTheme.clearLastSavedTheme();
-      await PlayxTheme.dispose();
-    },
-  );
+  setUp(() async {
+    PlayxPrefs.setMockInitialValues({});
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
+    await PlayxTheme.boot(config: getTestConfig());
+  });
+  tearDown(() async {
+    await PlayxTheme.clearLastSavedTheme();
+    await PlayxTheme.dispose();
+  });
 
   group('PlayxThemeBuilder Test', () {
     testWidgets(

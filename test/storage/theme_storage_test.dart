@@ -6,10 +6,10 @@ import 'package:playx_theme/src/controller/controller.dart';
 import '../config/config.dart';
 
 PlayxThemeConfig _config(PlayxThemeStorage storage) => PlayxThemeConfig(
-      initialThemeMode: ThemeMode.light,
-      themes: [lightTestTheme, darkTestTheme],
-      storage: storage,
-    );
+  initialThemeMode: ThemeMode.light,
+  themes: [lightTestTheme, darkTestTheme],
+  storage: storage,
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -38,8 +38,10 @@ void main() {
       await PlayxTheme.updateToDarkMode(animate: false);
 
       expect(await storage.getInt(XThemeController.lastKnownIndexKey), 1);
-      expect(await storage.getString(XThemeController.lastKnownThemeModeKey),
-          'dark');
+      expect(
+        await storage.getString(XThemeController.lastKnownThemeModeKey),
+        'dark',
+      );
 
       await PlayxTheme.boot(config: _config(storage));
       expect(PlayxTheme.id, 'Dark');
@@ -53,18 +55,20 @@ void main() {
       await PlayxTheme.clearLastSavedTheme();
       expect(await storage.getInt(XThemeController.lastKnownIndexKey), isNull);
       expect(
-          await storage.getString(XThemeController.lastKnownThemeModeKey),
-          isNull);
+        await storage.getString(XThemeController.lastKnownThemeModeKey),
+        isNull,
+      );
     });
 
     test('does not persist when saveTheme is false', () async {
       final storage = PlayxMemoryThemeStorage();
       await PlayxTheme.boot(
-          config: PlayxThemeConfig(
-        saveTheme: false,
-        themes: [lightTestTheme, darkTestTheme],
-        storage: storage,
-      ));
+        config: PlayxThemeConfig(
+          saveTheme: false,
+          themes: [lightTestTheme, darkTestTheme],
+          storage: storage,
+        ),
+      );
       await PlayxTheme.updateToDarkMode(animate: false);
       expect(await storage.getInt(XThemeController.lastKnownIndexKey), isNull);
     });

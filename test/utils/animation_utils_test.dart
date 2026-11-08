@@ -35,8 +35,9 @@ void main() {
     expect(screenshot.height, greaterThan(0));
   });
 
-  testWidgets('getSwitcherCoordinates with valid context',
-      (WidgetTester tester) async {
+  testWidgets('getSwitcherCoordinates with valid context', (
+    WidgetTester tester,
+  ) async {
     // Build a simple widget to obtain a context
     await tester.pumpWidget(
       MaterialApp(
@@ -56,8 +57,10 @@ void main() {
 
   test('getSwitcherCoordinates with null context and offset', () {
     final Offset tapOffset = Offset(25, 25);
-    final Offset coordinates =
-        AnimationUtils.getSwitcherCoordinates(null, tapOffset);
+    final Offset coordinates = AnimationUtils.getSwitcherCoordinates(
+      null,
+      tapOffset,
+    );
 
     // Validate coordinates match the provided tap offset
     expect(coordinates, tapOffset);

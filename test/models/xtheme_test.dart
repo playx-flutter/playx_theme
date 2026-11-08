@@ -44,8 +44,10 @@ void main() {
       expect(xTheme.name, 'Dynamic Theme');
       expect(xTheme.themeData, initialTheme);
       expect(xTheme.themeBuilder!(null), isInstanceOf<ThemeData>());
-      expect(xTheme.cupertinoThemeBuilder!(null),
-          isInstanceOf<CupertinoThemeData>());
+      expect(
+        xTheme.cupertinoThemeBuilder!(null),
+        isInstanceOf<CupertinoThemeData>(),
+      );
     });
 
     test('XTheme equality and props and toString()', () {
@@ -68,16 +70,19 @@ void main() {
       );
 
       expect(xTheme1 == xTheme2, isTrue); // Same id and name, should be equal
-      expect(xTheme1 == xTheme3,
-          isFalse); // Different id and name, should not be equal
+      expect(
+        xTheme1 == xTheme3,
+        isFalse,
+      ); // Different id and name, should not be equal
       expect(xTheme1.props, [xTheme1.id, xTheme1.name]);
 
       expect(xTheme1.toString(), 'XTheme(id: theme1, name: Light Theme)');
       expect(xTheme3.toString(), 'XTheme(id: theme2, name: Dark Theme)');
     });
 
-    testWidgets('XTheme.of should return current theme from context',
-        (WidgetTester tester) async {
+    testWidgets('XTheme.of should return current theme from context', (
+      WidgetTester tester,
+    ) async {
       final xTheme = XTheme(
         id: 'theme1',
         name: 'Light Theme',
@@ -86,10 +91,7 @@ void main() {
       SharedPreferencesAsyncPlatform.instance =
           InMemorySharedPreferencesAsync.empty();
 
-      await PlayxTheme.boot(
-          config: PlayxThemeConfig(
-        themes: [xTheme],
-      ));
+      await PlayxTheme.boot(config: PlayxThemeConfig(themes: [xTheme]));
 
       await tester.pumpWidget(
         PlayxThemeBuilder(
@@ -107,47 +109,47 @@ void main() {
     });
 
     testWidgets(
-        'XTheme.maybeOf should return current theme or null from context',
-        (WidgetTester tester) async {
-      final xTheme = XTheme(
-        id: 'theme1',
-        name: 'Light Theme',
-        themeData: ThemeData.light(),
-      );
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.empty();
+      'XTheme.maybeOf should return current theme or null from context',
+      (WidgetTester tester) async {
+        final xTheme = XTheme(
+          id: 'theme1',
+          name: 'Light Theme',
+          themeData: ThemeData.light(),
+        );
+        SharedPreferencesAsyncPlatform.instance =
+            InMemorySharedPreferencesAsync.empty();
 
-      await PlayxTheme.boot(
-          config: PlayxThemeConfig(
-        themes: [xTheme],
-      ));
+        await PlayxTheme.boot(config: PlayxThemeConfig(themes: [xTheme]));
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: PlayxThemeBuilder(
-            child: Builder(
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PlayxThemeBuilder(
+              child: Builder(
+                builder: (context) {
+                  final retrievedTheme = XTheme.maybeOf(context);
+                  expect(retrievedTheme, xTheme);
+                  return Container();
+                },
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
               builder: (context) {
                 final retrievedTheme = XTheme.maybeOf(context);
-                expect(retrievedTheme, xTheme);
+                expect(
+                  retrievedTheme,
+                  isNull,
+                ); // No PlayxInheritedTheme in the context
                 return Container();
               },
             ),
           ),
-        ),
-      );
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) {
-              final retrievedTheme = XTheme.maybeOf(context);
-              expect(retrievedTheme,
-                  isNull); // No PlayxInheritedTheme in the context
-              return Container();
-            },
-          ),
-        ),
-      );
-    });
+        );
+      },
+    );
   });
 }

@@ -38,8 +38,10 @@ void main() {
     test('Custom constructor initializes with provided values', () {
       const customPrimary = Colors.red;
       const customOnPrimary = Colors.white;
-      const colors =
-          PlayxColors(primary: customPrimary, onPrimary: customOnPrimary);
+      const colors = PlayxColors(
+        primary: customPrimary,
+        onPrimary: customOnPrimary,
+      );
 
       expect(colors.primary, customPrimary);
       expect(colors.onPrimary, customOnPrimary);
@@ -57,8 +59,9 @@ void main() {
       expect(colors.onPrimary, Colors.orange);
     });
 
-    testWidgets('of method retrieves the correct PlayxColors from context',
-        (WidgetTester tester) async {
+    testWidgets('of method retrieves the correct PlayxColors from context', (
+      WidgetTester tester,
+    ) async {
       const playxColors = PlayxColors(primary: Colors.red);
 
       final theme = XTheme(
@@ -71,10 +74,7 @@ void main() {
       SharedPreferencesAsyncPlatform.instance =
           InMemorySharedPreferencesAsync.empty();
 
-      await PlayxTheme.boot(
-          config: PlayxThemeConfig(
-        themes: [theme],
-      ));
+      await PlayxTheme.boot(config: PlayxThemeConfig(themes: [theme]));
 
       await tester.pumpWidget(
         MaterialApp(
@@ -92,49 +92,49 @@ void main() {
     });
 
     testWidgets(
-        'maybeOf method retrieves the correct PlayxColors from context or null',
-        (WidgetTester tester) async {
-      const playxColors = PlayxColors(primary: Colors.red);
+      'maybeOf method retrieves the correct PlayxColors from context or null',
+      (WidgetTester tester) async {
+        const playxColors = PlayxColors(primary: Colors.red);
 
-      final theme = XTheme(
-        id: 'test-theme',
-        name: 'Test Theme',
-        themeData: ThemeData(),
-        colors: playxColors,
-      );
+        final theme = XTheme(
+          id: 'test-theme',
+          name: 'Test Theme',
+          themeData: ThemeData(),
+          colors: playxColors,
+        );
 
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.empty();
+        SharedPreferencesAsyncPlatform.instance =
+            InMemorySharedPreferencesAsync.empty();
 
-      await PlayxTheme.boot(
-          config: PlayxThemeConfig(
-        themes: [theme],
-      ));
+        await PlayxTheme.boot(config: PlayxThemeConfig(themes: [theme]));
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: PlayxThemeBuilder(
-            child: Builder(
+        await tester.pumpWidget(
+          MaterialApp(
+            home: PlayxThemeBuilder(
+              child: Builder(
+                builder: (context) {
+                  final retrievedColors = PlayxColors.maybeOf(context);
+                  expect(retrievedColors?.primary, playxColors.primary);
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          ),
+        );
+
+        // Test when no PlayxColors is available in the context
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
               builder: (context) {
                 final retrievedColors = PlayxColors.maybeOf(context);
-                expect(retrievedColors?.primary, playxColors.primary);
+                expect(retrievedColors, isNull);
                 return const SizedBox.shrink();
               },
             ),
           ),
-        ),
-      );
-
-      // Test when no PlayxColors is available in the context
-      await tester.pumpWidget(MaterialApp(
-        home: Builder(
-          builder: (context) {
-            final retrievedColors = PlayxColors.maybeOf(context);
-            expect(retrievedColors, isNull);
-            return const SizedBox.shrink();
-          },
-        ),
-      ));
-    });
+        );
+      },
+    );
   });
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+- Bump `playx_core` dependency to `^2.0.0`. Its breaking changes (synchronous `PlayxEnv` getters, `PlayxSecurePrefs` settings) don't affect `playx_theme`; `PlayxPrefs` is unchanged.
+- **SDK Update**: minimum SDK constraints are now `sdk: '>=3.12.0 <4.0.0'` and `flutter: '>=3.44.0'`, as required by `playx_core` 2.0.0.
+- Refreshed transitive dependencies.
+- Updated example app SDK constraint to match.
+
 ## 2.0.0
 > **Note**: This release contains breaking changes.
 

@@ -159,6 +159,14 @@ abstract class PlayxTheme {
         updateMode: updateMode,
       );
 
+  /// The index of the theme that [next] would switch to.
+  ///
+  /// Wraps around to the first theme when the current one is the last.
+  static int get nextIndex => _controller.nextThemeIndex;
+
+  /// The theme that [next] would switch to.
+  static XTheme get nextTheme => _controller.nextThemeValue;
+
   /// Updates the app's theme to the next theme in the list.
   ///
   /// You can specify an animation for the theme change using the [animation] parameter.

@@ -180,6 +180,15 @@ void main() {
       expect(PlayxTheme.id, 'Dark');
     });
 
+    test('PlayxTheme.nextTheme/nextIndex preview the theme next() switches to',
+        () async {
+      expect(PlayxTheme.nextIndex, 1);
+      expect(PlayxTheme.nextTheme.id, 'Dark');
+      await PlayxTheme.next();
+      expect(PlayxTheme.nextIndex, 0, reason: 'wraps around at the last theme');
+      expect(PlayxTheme.nextTheme.id, 'Light');
+    });
+
     test(
         'PlayxTheme.isDeviceInDarkMode() should return true if the device is in dark mode',
         () async {

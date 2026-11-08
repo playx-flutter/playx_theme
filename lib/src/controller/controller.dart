@@ -327,6 +327,15 @@ class XThemeController extends ValueNotifier<XTheme>
     );
   }
 
+  /// The index of the theme that [nextTheme] would switch to.
+  ///
+  /// Wraps around to `0` when the current theme is the last one.
+  int get nextThemeIndex =>
+      currentIndex >= config.themes.length - 1 ? 0 : currentIndex + 1;
+
+  /// The theme that [nextTheme] would switch to.
+  XTheme get nextThemeValue => config.themes[nextThemeIndex];
+
   /// Switches the theme to the next one in the list.
   ///
   /// If there is no next theme, it will switch to the first one.
@@ -337,9 +346,7 @@ class XThemeController extends ValueNotifier<XTheme>
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
   }) async {
-    final isLastTheme = currentIndex == config.themes.length - 1;
-
-    return updateByIndex(isLastTheme ? 0 : currentIndex + 1,
+    return updateByIndex(nextThemeIndex,
         animation: animation,
         animate: animate,
         forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,

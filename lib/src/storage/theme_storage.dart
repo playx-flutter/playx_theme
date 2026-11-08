@@ -62,7 +62,7 @@ class PlayxMemoryThemeStorage implements PlayxThemeStorage {
   final Map<String, Object> _values;
 
   PlayxMemoryThemeStorage([Map<String, Object>? initialValues])
-      : _values = {...?initialValues};
+    : _values = {...?initialValues};
 
   @override
   Future<int?> getInt(String key) async {

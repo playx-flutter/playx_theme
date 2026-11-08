@@ -10,7 +10,8 @@ abstract class PlayxTheme {
   static XThemeController get _controller {
     if (_themeControllerInstance == null) {
       throw Exception(
-          "PlayxTheme is not initialized. Please call boot() before accessing PlayxTheme.");
+        "PlayxTheme is not initialized. Please call boot() before accessing PlayxTheme.",
+      );
     }
     return _themeControllerInstance!;
   }
@@ -19,15 +20,15 @@ abstract class PlayxTheme {
   ///
   /// This method sets up the theme controller with the provided configuration.
   /// Ensure to call this method before using other `PlayxTheme` methods.
-  static Future<void> boot({
-    required PlayxThemeConfig config,
-  }) async {
+  static Future<void> boot({required PlayxThemeConfig config}) async {
     PlayxLogger.initLogger(name: 'PLAYX THEME', useColoredFormatter: true);
     final logger = PlayxLogger.getLogger('PLAYX THEME')!;
 
     if (_themeControllerInstance != null) {
-      logger.w('PlayxTheme is already initialized. '
-          'Calling boot() again will replace the existing instance.');
+      logger.w(
+        'PlayxTheme is already initialized. '
+        'Calling boot() again will replace the existing instance.',
+      );
       await dispose();
     }
     if (config.themes.isEmpty) {
@@ -102,14 +103,13 @@ abstract class PlayxTheme {
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
-  }) =>
-      _controller.updateTo(
-        theme,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
-      );
+  }) => _controller.updateTo(
+    theme,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    updateMode: updateMode,
+  );
 
   /// Updates the app's theme to the theme at the specified index.
   ///
@@ -126,14 +126,13 @@ abstract class PlayxTheme {
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
-  }) =>
-      _controller.updateByIndex(
-        index,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
-      );
+  }) => _controller.updateByIndex(
+    index,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    updateMode: updateMode,
+  );
 
   /// Updates the app's theme to the theme with the specified ID.
   ///
@@ -150,14 +149,13 @@ abstract class PlayxTheme {
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
-  }) =>
-      _controller.updateById(
-        id,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
-      );
+  }) => _controller.updateById(
+    id,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    updateMode: updateMode,
+  );
 
   /// The index of the theme that [next] would switch to.
   ///
@@ -179,13 +177,12 @@ abstract class PlayxTheme {
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
-  }) =>
-      _controller.nextTheme(
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
-      );
+  }) => _controller.nextTheme(
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    updateMode: updateMode,
+  );
 
   /// Determines if the device is currently in dark mode.
   ///

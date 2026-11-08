@@ -18,7 +18,7 @@ abstract class BaseColors extends PlayxColors {
   final ColorScheme colorScheme;
 
   BaseColors({required this.colorScheme})
-      : super.fromColorScheme(scheme: colorScheme);
+    : super.fromColorScheme(scheme: colorScheme);
 
   ///Colors that needs to is used for each theme.
   static const Color blue = Colors.blue;

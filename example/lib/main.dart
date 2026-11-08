@@ -17,14 +17,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlayxThemeBuilder(builder: (ctx, xTheme) {
-      return MaterialApp(
-        title: 'Flutter Demo',
-        theme:
-            xTheme.themeBuilder?.call(const Locale('en')) ?? xTheme.themeData,
-        home: const HomeScreen(),
-      );
-    });
+    return PlayxThemeBuilder(
+      builder: (ctx, xTheme) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme:
+              xTheme.themeBuilder?.call(const Locale('en')) ?? xTheme.themeData,
+          home: const HomeScreen(),
+        );
+      },
+    );
   }
 }
 
@@ -36,9 +38,7 @@ class HomeScreen extends StatelessWidget {
     return PlayxThemeSwitchingArea(
       child: Scaffold(
         backgroundColor: PlayxColors.of(context).surface,
-        appBar: AppBar(
-          title: const Text('Playx Theme'),
-        ),
+        appBar: AppBar(title: const Text('Playx Theme')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -88,8 +88,9 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            PlayxColors.of(context).primaryContainer,
+                        backgroundColor: PlayxColors.of(
+                          context,
+                        ).primaryContainer,
                       ),
                       onPressed: () {
                         showDialog<void>(
@@ -102,58 +103,59 @@ class HomeScreen extends StatelessWidget {
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: List.generate(
-                                    PlayxTheme.supportedThemes.length,
-                                    (index) => Card(
-                                          margin: const EdgeInsets.all(8),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            side: BorderSide(
-                                              color: PlayxTheme.id ==
-                                                      PlayxTheme
-                                                          .supportedThemes[
-                                                              index]
-                                                          .id
-                                                  ? context.playxColors.primary
-                                                  : Colors.transparent,
-                                            ),
-                                          ),
-                                          child: ListTile(
-                                            contentPadding:
-                                                const EdgeInsets.all(32),
-                                            title: Text(PlayxTheme
-                                                .supportedThemes[index].name),
-                                            trailing: PlayxTheme.id ==
-                                                    PlayxTheme
-                                                        .supportedThemes[index]
-                                                        .id
-                                                ? const Icon(Icons.check)
-                                                : null,
-                                            onTap: () async {
-                                              // PlayxTheme.updateByIndex(
-                                              //   index,
-                                              // );
-                                              Navigator.of(dialogContext)
-                                                  .pop(); // Dismiss alert dialog
+                                  PlayxTheme.supportedThemes.length,
+                                  (index) => Card(
+                                    margin: const EdgeInsets.all(8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      side: BorderSide(
+                                        color:
+                                            PlayxTheme.id ==
+                                                PlayxTheme
+                                                    .supportedThemes[index]
+                                                    .id
+                                            ? context.playxColors.primary
+                                            : Colors.transparent,
+                                      ),
+                                    ),
+                                    child: ListTile(
+                                      contentPadding: const EdgeInsets.all(32),
+                                      title: Text(
+                                        PlayxTheme.supportedThemes[index].name,
+                                      ),
+                                      trailing:
+                                          PlayxTheme.id ==
+                                              PlayxTheme
+                                                  .supportedThemes[index]
+                                                  .id
+                                          ? const Icon(Icons.check)
+                                          : null,
+                                      onTap: () async {
+                                        // PlayxTheme.updateByIndex(
+                                        //   index,
+                                        // );
+                                        Navigator.of(
+                                          dialogContext,
+                                        ).pop(); // Dismiss alert dialog
 
-                                              PlayxTheme.updateById(
-                                                  PlayxTheme
-                                                      .supportedThemes[index]
-                                                      .id,
-                                                  animate: true,
-                                                  animation:
-                                                      const PlayxThemeAnimation
-                                                          .horizontalSlide());
-                                            },
-                                          ),
-                                        )),
+                                        PlayxTheme.updateById(
+                                          PlayxTheme.supportedThemes[index].id,
+                                          animate: true,
+                                          animation:
+                                              const PlayxThemeAnimation.horizontalSlide(),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
                               ),
                               actions: <Widget>[
                                 TextButton(
                                   child: const Text('Confirm'),
                                   onPressed: () {
-                                    Navigator.of(dialogContext)
-                                        .pop(); // Dismiss alert dialog
+                                    Navigator.of(
+                                      dialogContext,
+                                    ).pop(); // Dismiss alert dialog
                                   },
                                 ),
                               ],
@@ -188,15 +190,14 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               PlayxTheme.next(
                 animation: PlayxThemeAnimation.clipper(
-                    clipper: const ThemeSwitcherCircleClipper(), context: ctx),
+                  clipper: const ThemeSwitcherCircleClipper(),
+                  context: ctx,
+                ),
                 animate: false,
               );
             },
             tooltip: 'Next Theme',
-            child: Icon(
-              Icons.add,
-              color: context.colorScheme.onPrimary,
-            ),
+            child: Icon(Icons.add, color: context.colorScheme.onPrimary),
           ),
         ),
       ),
@@ -226,10 +227,12 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
           child: Column(
             children: [
-              Icon(icon,
-                  color: isSelected
-                      ? context.playxColors.onPrimary
-                      : context.playxColors.onSurface),
+              Icon(
+                icon,
+                color: isSelected
+                    ? context.playxColors.onPrimary
+                    : context.playxColors.onSurface,
+              ),
               const SizedBox(height: 8),
               Text(
                 title,

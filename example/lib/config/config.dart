@@ -12,84 +12,85 @@ class ThemeConfig extends PlayxThemeConfig {
   final config = PlayxThemeConfig(
     themes: [
       XTheme.builder(
-          id: 'light',
-          name: 'Light',
-          themeBuilder: (l) => ThemeData(
-                brightness: Brightness.light,
-                colorScheme: lightColors.colorScheme,
-                useMaterial3: true,
-              ),
-          initialTheme: ThemeData(
-            brightness: Brightness.light,
-            colorScheme: lightColors.colorScheme,
-            useMaterial3: true,
-          ),
-          cupertinoThemeBuilder: (l) => const CupertinoThemeData(
-                brightness: Brightness.light,
-              ),
-          colors: lightColors),
+        id: 'light',
+        name: 'Light',
+        themeBuilder: (l) => ThemeData(
+          brightness: Brightness.light,
+          colorScheme: lightColors.colorScheme,
+          useMaterial3: true,
+        ),
+        initialTheme: ThemeData(
+          brightness: Brightness.light,
+          colorScheme: lightColors.colorScheme,
+          useMaterial3: true,
+        ),
+        cupertinoThemeBuilder: (l) =>
+            const CupertinoThemeData(brightness: Brightness.light),
+        colors: lightColors,
+      ),
       XTheme.builder(
-          id: 'dark',
-          name: 'Dark',
-          initialTheme: ThemeData(
-            brightness: Brightness.dark,
-            colorScheme: darkColors.colorScheme,
-            useMaterial3: true,
-          ),
+        id: 'dark',
+        name: 'Dark',
+        initialTheme: ThemeData(
+          brightness: Brightness.dark,
+          colorScheme: darkColors.colorScheme,
+          useMaterial3: true,
+        ),
 
-          /// We can use builder to specify different theme data for each locale.
-          themeBuilder: (locale) => ThemeData(
-                brightness: Brightness.dark,
-                colorScheme: darkColors.colorScheme,
-                useMaterial3: true,
-              ),
-          cupertinoThemeBuilder: (locale) => const CupertinoThemeData(
-                brightness: Brightness.dark,
-              ),
-          isDark: true,
-          colors: darkColors),
+        /// We can use builder to specify different theme data for each locale.
+        themeBuilder: (locale) => ThemeData(
+          brightness: Brightness.dark,
+          colorScheme: darkColors.colorScheme,
+          useMaterial3: true,
+        ),
+        cupertinoThemeBuilder: (locale) =>
+            const CupertinoThemeData(brightness: Brightness.dark),
+        isDark: true,
+        colors: darkColors,
+      ),
     ],
     initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0,
   );
 
   ThemeConfig()
-      : super(
-          themes: [
-            XTheme(
-                id: 'light',
-                name: 'Light',
-                themeData: ThemeData(
-                  brightness: Brightness.light,
-                  colorScheme: lightColors.colorScheme,
-                  useMaterial3: true,
-                ),
-                cupertinoThemeData: const CupertinoThemeData(
-                  brightness: Brightness.light,
-                ),
-                colors: lightColors),
-            XTheme.builder(
-                id: 'dark',
-                name: 'Dark',
-                initialTheme: ThemeData(
-                  brightness: Brightness.dark,
-                  colorScheme: darkColors.colorScheme,
-                  useMaterial3: true,
-                ),
+    : super(
+        themes: [
+          XTheme(
+            id: 'light',
+            name: 'Light',
+            themeData: ThemeData(
+              brightness: Brightness.light,
+              colorScheme: lightColors.colorScheme,
+              useMaterial3: true,
+            ),
+            cupertinoThemeData: const CupertinoThemeData(
+              brightness: Brightness.light,
+            ),
+            colors: lightColors,
+          ),
+          XTheme.builder(
+            id: 'dark',
+            name: 'Dark',
+            initialTheme: ThemeData(
+              brightness: Brightness.dark,
+              colorScheme: darkColors.colorScheme,
+              useMaterial3: true,
+            ),
 
-                /// We can use builder to specify different theme data for each locale.
-                themeBuilder: (locale) => ThemeData(
-                      brightness: Brightness.dark,
-                      colorScheme: darkColors.colorScheme,
-                      useMaterial3: true,
-                    ),
-                cupertinoThemeBuilder: (locale) => const CupertinoThemeData(
-                      brightness: Brightness.dark,
-                    ),
-                isDark: true,
-                colors: darkColors),
-          ],
-          initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0,
-          saveTheme: true,
-          migratePrefsToAsyncPrefs: true,
-        );
+            /// We can use builder to specify different theme data for each locale.
+            themeBuilder: (locale) => ThemeData(
+              brightness: Brightness.dark,
+              colorScheme: darkColors.colorScheme,
+              useMaterial3: true,
+            ),
+            cupertinoThemeBuilder: (locale) =>
+                const CupertinoThemeData(brightness: Brightness.dark),
+            isDark: true,
+            colors: darkColors,
+          ),
+        ],
+        initialThemeIndex: PlayxTheme.isDeviceInDarkMode() ? 1 : 0,
+        saveTheme: true,
+        migratePrefsToAsyncPrefs: true,
+      );
 }

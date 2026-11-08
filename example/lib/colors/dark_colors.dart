@@ -4,11 +4,12 @@ import 'package:playx_theme/playx_theme.dart';
 
 class DarkColorScheme extends BaseColors {
   DarkColorScheme()
-      : super(
-            colorScheme: SeedColorScheme.fromSeeds(
+    : super(
+        colorScheme: SeedColorScheme.fromSeeds(
           primaryKey: Colors.blue,
           brightness: Brightness.dark,
-        ));
+        ),
+      );
 
   @override
   Color get containerBackgroundColor => PlayxColors.darkGrey;

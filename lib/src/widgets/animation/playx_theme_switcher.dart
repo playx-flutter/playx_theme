@@ -3,8 +3,8 @@ import 'package:playx_theme/playx_theme.dart';
 
 /// Defines a callback function that takes the
 /// current [XTheme] and builds a widget based on that theme.
-typedef ThemeSwitcherBuilder = Widget Function(
-    BuildContext context, XTheme theme);
+typedef ThemeSwitcherBuilder =
+    Widget Function(BuildContext context, XTheme theme);
 
 /// A [StatelessWidget] that allows for building widgets based on the current [XTheme].
 ///

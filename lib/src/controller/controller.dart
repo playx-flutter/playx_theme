@@ -21,7 +21,8 @@ class XThemeController extends ValueNotifier<XTheme>
   static XThemeController get instance {
     if (_instance == null) {
       throw Exception(
-          'PlayxTheme is not initialized. Please call `boot` before accessing the instance.');
+        'PlayxTheme is not initialized. Please call `boot` before accessing the instance.',
+      );
     }
     return _instance!;
   }
@@ -32,11 +33,16 @@ class XThemeController extends ValueNotifier<XTheme>
   /// Default theme index.
   int initialIndex = -1;
 
+  /// Where the selected theme index and mode are persisted.
+  PlayxThemeStorage get storage =>
+      config.storage ?? const PlayxPrefsThemeStorage();
+
   /// The current theme being used.
   XTheme get theme => value;
 
-  final ValueNotifier<ThemeMode> _themeModeNotifier =
-      ValueNotifier(ThemeMode.system);
+  final ValueNotifier<ThemeMode> _themeModeNotifier = ValueNotifier(
+    ThemeMode.system,
+  );
 
   /// The notifier for current theme mode.
   ValueNotifier<ThemeMode> get themeModeNotifier => _themeModeNotifier;
@@ -58,12 +64,11 @@ class XThemeController extends ValueNotifier<XTheme>
   ///
   /// The provided [theme] will be used as the initial theme if provided; otherwise,
   /// the theme from [getInitialThemeByConfig] will be used.
-  XThemeController({
-    XTheme? theme,
-    required this.config,
-  }) : super(theme ?? getInitialThemeByConfig(config)) {
-    var initialThemeIdx =
-        availableThemes.indexOf(theme ?? getInitialThemeByConfig(config));
+  XThemeController({XTheme? theme, required this.config})
+    : super(theme ?? getInitialThemeByConfig(config)) {
+    var initialThemeIdx = availableThemes.indexOf(
+      theme ?? getInitialThemeByConfig(config),
+    );
     if (initialThemeIdx < 0 || initialThemeIdx >= config.themes.length) {
       initialThemeIdx = 0;
     }
@@ -122,11 +127,12 @@ class XThemeController extends ValueNotifier<XTheme>
   Future<void> boot() async {
     final lastSavedIndex = config.saveTheme
         ? await getLastSavedIndexFromPrefs(
-            migratePrefsToAsync: config.migratePrefsToAsyncPrefs)
+            migratePrefsToAsync: config.migratePrefsToAsyncPrefs,
+          )
         : null;
 
     final lastSavedThemeModeString = config.saveTheme
-        ? await PlayxAsyncPrefs.maybeGetString(lastKnownThemeModeKey)
+        ? await storage.getString(lastKnownThemeModeKey)
         : null;
 
     ThemeMode computedMode;
@@ -175,7 +181,7 @@ class XThemeController extends ValueNotifier<XTheme>
     if (_themeModeNotifier.value == mode) return;
     _themeModeNotifier.value = mode;
     if (config.saveTheme) {
-      await PlayxAsyncPrefs.setString(lastKnownThemeModeKey, mode.name);
+      await storage.setString(lastKnownThemeModeKey, mode.name);
     }
   }
 
@@ -221,15 +227,14 @@ class XThemeController extends ValueNotifier<XTheme>
   Future<int?> getLastSavedIndexFromPrefs({
     bool migratePrefsToAsync = false,
   }) async {
-    await PlayxAsyncPrefs.create();
-    int? lastSavedIndex = await PlayxAsyncPrefs.maybeGetInt(
-      lastKnownIndexKey,
-    );
+    int? lastSavedIndex = await storage.getInt(lastKnownIndexKey);
     if (migratePrefsToAsync && lastSavedIndex == null) {
       await PlayxPrefs.create();
-      final lastKnownIndexInPrefs =
-          PlayxPrefs.getInt(lastKnownIndexKey, fallback: initialIndex);
-      await PlayxAsyncPrefs.setInt(lastKnownIndexKey, lastKnownIndexInPrefs);
+      final lastKnownIndexInPrefs = PlayxPrefs.getInt(
+        lastKnownIndexKey,
+        fallback: initialIndex,
+      );
+      await storage.setInt(lastKnownIndexKey, lastKnownIndexInPrefs);
       lastSavedIndex = lastKnownIndexInPrefs;
     }
     return lastSavedIndex;
@@ -252,14 +257,16 @@ class XThemeController extends ValueNotifier<XTheme>
   }) async {
     if (value == theme) {
       if (config.logThemeChanges) {
-        logger
-            .warning('Theme is already set to ${theme.id}, no update needed.');
+        logger.warning(
+          'Theme is already set to ${theme.id}, no update needed.',
+        );
       }
       return;
     }
     if (index < 0 || index >= availableThemes.length) {
       throw RangeError(
-          'The provided index is out of range of available themes list');
+        'The provided index is out of range of available themes list',
+      );
     }
     if (updateMode) {
       await _setThemeMode(theme.isDark ? ThemeMode.dark : ThemeMode.light);
@@ -273,7 +280,10 @@ class XThemeController extends ValueNotifier<XTheme>
     final shouldAnimate = animate && controller != null;
     if (shouldAnimate) {
       await animateTheme(
-          theme: theme, controller: controller!, animation: animation);
+        theme: theme,
+        controller: controller!,
+        animation: animation,
+      );
     } else {
       value = theme;
       if (forceUpdateNonAnimatedTheme) {
@@ -281,7 +291,7 @@ class XThemeController extends ValueNotifier<XTheme>
       }
     }
     if (config.saveTheme) {
-      await PlayxAsyncPrefs.setInt(lastKnownIndexKey, currentIndex);
+      await storage.setInt(lastKnownIndexKey, currentIndex);
     }
   }
 
@@ -346,11 +356,12 @@ class XThemeController extends ValueNotifier<XTheme>
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
   }) async {
-    return updateByIndex(nextThemeIndex,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
+    return updateByIndex(
+      nextThemeIndex,
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      updateMode: updateMode,
     );
   }
 
@@ -369,15 +380,16 @@ class XThemeController extends ValueNotifier<XTheme>
     if (index < 0 || index >= availableThemes.length) {
       logger.e('Index $index is out of range for available themes list.');
       throw RangeError(
-          'The provided index is out of range of available themes list');
+        'The provided index is out of range of available themes list',
+      );
     }
     return _updateTheme(
-        theme: availableThemes[index],
-        index: index,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
+      theme: availableThemes[index],
+      index: index,
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      updateMode: updateMode,
     );
   }
 
@@ -402,12 +414,12 @@ class XThemeController extends ValueNotifier<XTheme>
 
     final index = availableThemes.indexWhere((element) => element.id == id);
     return _updateTheme(
-        theme: availableThemes[index],
-        index: index,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
+      theme: availableThemes[index],
+      index: index,
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      updateMode: updateMode,
     );
   }
 
@@ -435,11 +447,13 @@ class XThemeController extends ValueNotifier<XTheme>
       throw Exception('Could not find any light theme in the available themes');
     }
     await _setThemeMode(ThemeMode.light);
-    return updateTo(theme,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: false);
+    return updateTo(
+      theme,
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      updateMode: false,
+    );
   }
 
   ///Update the theme to the first dark theme in supported themes
@@ -479,16 +493,19 @@ class XThemeController extends ValueNotifier<XTheme>
     if (theme == null) {
       if (config.logThemeChanges) {
         logger.error(
-            'Could not find any theme that matches the device mode: ${isDeviceInDarkMode()}');
+          'Could not find any theme that matches the device mode: ${isDeviceInDarkMode()}',
+        );
       }
       throw Exception('Could not find any theme that matches the device mode');
     }
     await _setThemeMode(ThemeMode.system);
-    return updateTo(theme,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: false);
+    return updateTo(
+      theme,
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+      updateMode: false,
+    );
   }
 
   /// Update the theme to the first theme that matches the given mode.
@@ -502,19 +519,22 @@ class XThemeController extends ValueNotifier<XTheme>
     switch (mode) {
       case ThemeMode.system:
         return updateToDeviceMode(
-            animation: animation,
-            animate: animate,
-            forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+          animation: animation,
+          animate: animate,
+          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+        );
       case ThemeMode.light:
         return updateToLightMode(
-            animation: animation,
-            animate: animate,
-            forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+          animation: animation,
+          animate: animate,
+          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+        );
       case ThemeMode.dark:
         return updateToDarkMode(
-            animation: animation,
-            animate: animate,
-            forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme);
+          animation: animation,
+          animate: animate,
+          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+        );
     }
   }
 
@@ -536,9 +556,13 @@ class XThemeController extends ValueNotifier<XTheme>
   }
 
   /// Clear the last saved theme index and theme mode.
+  ///
+  /// Uses the storage of the booted controller, or the default one if
+  /// PlayxTheme isn't booted yet.
   static Future<void> clearLastSavedTheme() async {
-    await PlayxAsyncPrefs.remove(lastKnownThemeModeKey);
-    return PlayxAsyncPrefs.remove(lastKnownIndexKey);
+    final storage = _instance?.storage ?? const PlayxPrefsThemeStorage();
+    await storage.remove(lastKnownThemeModeKey);
+    return storage.remove(lastKnownIndexKey);
   }
 
   /// Animate the theme change.
@@ -557,14 +581,13 @@ class XThemeController extends ValueNotifier<XTheme>
 
     oldTheme = value;
 
-    image =
-        await AnimationUtils.saveScreenshot(previewContainer: previewContainer);
+    image = await AnimationUtils.saveScreenshot(
+      previewContainer: previewContainer,
+    );
     value = theme;
 
     themeAnimation = animation;
-    await animation.animate(
-      controller: controller,
-    );
+    await animation.animate(controller: controller);
 
     // Notify listeners when the animation finishes.
     notifyListeners();

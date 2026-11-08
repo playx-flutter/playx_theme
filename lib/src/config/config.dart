@@ -32,6 +32,11 @@ class PlayxThemeConfig {
   /// Whether to log theme changes or not.
   final bool logThemeChanges;
 
+  /// Where the selected theme and mode are persisted when [saveTheme] is true.
+  ///
+  /// Defaults to `PlayxPrefsThemeStorage` (SharedPreferencesAsync) when `null`.
+  final PlayxThemeStorage? storage;
+
   /// Creates a [PlayxThemeConfig] instance.
   ///
   /// The [initialThemeIndex] must be non-negative and less than the length of [themes] if provided.
@@ -45,13 +50,20 @@ class PlayxThemeConfig {
     this.themes = const [],
     this.migratePrefsToAsyncPrefs = false,
     this.logThemeChanges = true,
-  })  : assert(initialThemeIndex == null ||
-            (initialThemeIndex >= 0 && initialThemeIndex < themes.length)),
-        assert(lightThemeIndex == null ||
-            (lightThemeIndex >= 0 && lightThemeIndex < themes.length)),
-        assert(darkThemeIndex == null ||
-            (darkThemeIndex >= 0 && darkThemeIndex < themes.length)),
-        assert(themes.isNotEmpty);
+    this.storage,
+  }) : assert(
+         initialThemeIndex == null ||
+             (initialThemeIndex >= 0 && initialThemeIndex < themes.length),
+       ),
+       assert(
+         lightThemeIndex == null ||
+             (lightThemeIndex >= 0 && lightThemeIndex < themes.length),
+       ),
+       assert(
+         darkThemeIndex == null ||
+             (darkThemeIndex >= 0 && darkThemeIndex < themes.length),
+       ),
+       assert(themes.isNotEmpty);
 }
 
 /// Default theme configuration.
@@ -60,21 +72,24 @@ class XDefaultThemeConfig extends PlayxThemeConfig {
   ///
   /// The initial theme is determined based on the device's current theme mode.
   XDefaultThemeConfig()
-      : super(themes: [
+    : super(
+        themes: [
           XTheme(
-              id: 'light',
-              name: 'Light',
-              themeData: ThemeData(
-                  brightness: Brightness.light,
-                  colorScheme: ColorScheme.fromSeed(
-                    seedColor: Colors.blue,
-                    brightness: Brightness.light,
-                  )),
-              cupertinoThemeData: const CupertinoThemeData(
+            id: 'light',
+            name: 'Light',
+            themeData: ThemeData(
+              brightness: Brightness.light,
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.blue,
                 brightness: Brightness.light,
               ),
-              isDark: false,
-              colors: const PlayxColors()),
+            ),
+            cupertinoThemeData: const CupertinoThemeData(
+              brightness: Brightness.light,
+            ),
+            isDark: false,
+            colors: const PlayxColors(),
+          ),
           XTheme(
             id: 'dark',
             name: 'Dark',
@@ -95,5 +110,6 @@ class XDefaultThemeConfig extends PlayxThemeConfig {
         ],
         lightThemeIndex: 0,
         darkThemeIndex: 1,
-        initialThemeMode: ThemeMode.system);
+        initialThemeMode: ThemeMode.system,
+      );
 }

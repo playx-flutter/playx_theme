@@ -75,6 +75,23 @@ void main() {
     expect(await persistence.loadMode(), isNull);
     expect(await persistence.loadIndex(), isNull);
   });
+
+  test('rapid theme switches persist the last requested theme', () async {
+    final storage = _SlowStorage();
+    await PlayxTheme.boot(
+      config: PlayxThemeConfig(
+        initialThemeIndex: 0,
+        themes: [lightTheme, darkTheme, lightTheme2],
+        storage: storage,
+      ),
+    );
+    await Future.wait([
+      PlayxTheme.updateByIndex(1, animate: false),
+      PlayxTheme.updateByIndex(2, animate: false),
+    ]);
+    expect(await storage.getInt(ThemePersistence.indexKey), 2);
+    await PlayxTheme.dispose();
+  });
 }
 
 final lightTheme = XTheme(id: 'l', name: 'l', themeData: ThemeData.light());

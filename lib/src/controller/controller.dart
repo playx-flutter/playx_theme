@@ -102,6 +102,18 @@ class XThemeController extends ValueNotifier<XTheme>
     return logger!;
   }
 
+  // Info and warnings are only logged when `config.logThemeChanges` is on;
+  // errors are always logged since an exception follows them.
+  void _logInfo(String message) {
+    if (config.logThemeChanges) logger.info(message);
+  }
+
+  void _logWarning(String message) {
+    if (config.logThemeChanges) logger.warning(message);
+  }
+
+  void _logError(String message) => logger.error(message);
+
   /// Retrieves the optional explicitly set theme mode, or system by default.
   ThemeMode getInitialThemeMode() => ThemeResolver.initialMode(config);
 
@@ -138,17 +150,9 @@ class XThemeController extends ValueNotifier<XTheme>
     initialIndex = currentIndex;
 
     WidgetsBinding.instance.addObserver(this);
-    logger.info(
+    _logInfo(
       'Initialized with theme: ${value.id} at index: $currentIndex, mode: ${_themeModeNotifier.value.name}',
     );
-  }
-
-  Future<void> _setThemeMode(ThemeMode mode) async {
-    if (_themeModeNotifier.value == mode) return;
-    _themeModeNotifier.value = mode;
-    if (config.saveTheme) {
-      await _persistence.saveMode(mode);
-    }
   }
 
   XTheme? _getThemeForMode(bool isDark) =>
@@ -160,11 +164,10 @@ class XThemeController extends ValueNotifier<XTheme>
     if (_themeModeNotifier.value == ThemeMode.system) {
       final currentTheme =
           _getThemeForMode(isDeviceInDarkMode()) ?? config.themes.first;
-      _updateTheme(
+      _applyTheme(
         theme: currentTheme,
         index: availableThemes.indexOf(currentTheme),
         animate: false,
-        updateMode: false,
       );
     }
   }
@@ -181,59 +184,100 @@ class XThemeController extends ValueNotifier<XTheme>
     );
   }
 
-  /// Updates the theme to one from the available theme list.
+  /// Applies [theme] (at [index] in the available themes) to the app.
   ///
-  /// The provided [theme] should be in the available themes list in [PlayxThemeConfig].
-  /// If [animate] is false, the theme change will not be animated.
-  /// If [animation] is provided, the theme change will be animated based on the animation type.
-  /// If [forceUpdateNonAnimatedTheme] is true, the app's widget tree will be rebuilt.
-  /// If [updateMode] is true, the `themeMode` is updated to light or dark based on the theme's brightness.
-  Future<void> _updateTheme({
+  /// If [mode] is given, the theme mode is changed to it together with the
+  /// theme, so listeners never see a mode that doesn't match the theme.
+  /// Everything that decides the final state (current index, what gets saved)
+  /// happens synchronously when this is called, so concurrent calls resolve in
+  /// call order: the last requested theme wins and is the last one persisted.
+  Future<void> _applyTheme({
     required XTheme theme,
     required int index,
+    ThemeMode? mode,
     PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
-    bool updateMode = true,
   }) async {
-    if (value == theme) {
-      if (config.logThemeChanges) {
-        logger.warning(
-          'Theme is already set to ${theme.id}, no update needed.',
-        );
-      }
-      return;
-    }
     if (index < 0 || index >= availableThemes.length) {
+      _logError('Index $index is out of range for available themes list.');
       throw RangeError(
         'The provided index is out of range of available themes list',
       );
     }
-    if (updateMode) {
-      await _setThemeMode(theme.isDark ? ThemeMode.dark : ThemeMode.light);
+    final modeChanged = mode != null && mode != themeMode;
+    final saves = <Future<void>>[
+      if (config.saveTheme && modeChanged) _persistence.saveMode(mode),
+    ];
+
+    if (value == theme) {
+      _logWarning('Theme is already set to ${theme.id}, no update needed.');
+      if (modeChanged) _themeModeNotifier.value = mode;
+      await Future.wait(saves);
+      return;
     }
-    if (config.logThemeChanges) {
-      logger.info(
-        'Updating theme from ${value.id} to ${theme.id} at index $index with animation enabled : $animate',
-      );
-    }
+
+    _logInfo(
+      'Updating theme from ${value.id} to ${theme.id} at index $index with animation enabled : $animate',
+    );
     currentIndex = index;
-    final shouldAnimate = animate && controller != null;
-    if (shouldAnimate) {
+    if (config.saveTheme) saves.add(_persistence.saveIndex(index));
+
+    void applyMode() {
+      if (modeChanged) _themeModeNotifier.value = mode;
+    }
+
+    if (animate && controller != null) {
       await animateTheme(
         theme: theme,
         controller: controller!,
         animation: animation,
+        onThemeApplied: applyMode,
       );
     } else {
       value = theme;
+      applyMode();
       if (forceUpdateNonAnimatedTheme) {
         _forceAppUpdate();
       }
     }
-    if (config.saveTheme) {
-      await _persistence.saveIndex(currentIndex);
+    await Future.wait(saves);
+  }
+
+  /// Switches to the theme for [mode] (light, dark or the device's mode) and
+  /// sets the theme mode to it.
+  ///
+  /// Throws an [Exception] if no theme matches the mode.
+  Future<void> _switchToMode(
+    ThemeMode mode, {
+    required PlayxThemeAnimation animation,
+    required bool animate,
+    required bool forceUpdateNonAnimatedTheme,
+  }) async {
+    final isDark = mode == ThemeMode.system
+        ? isDeviceInDarkMode()
+        : mode == ThemeMode.dark;
+    final theme = _getThemeForMode(isDark);
+    if (theme == null) {
+      final message = switch (mode) {
+        ThemeMode.light =>
+          'Could not find any light theme in the available themes',
+        ThemeMode.dark =>
+          'Could not find any dark theme in the available themes',
+        ThemeMode.system =>
+          'Could not find any theme that matches the device mode',
+      };
+      _logError(message);
+      throw Exception(message);
     }
+    return _applyTheme(
+      theme: theme,
+      index: availableThemes.indexOf(theme),
+      mode: mode,
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    );
   }
 
   /// Forces the app to update the theme by rebuilding the entire widget tree.
@@ -247,6 +291,11 @@ class XThemeController extends ValueNotifier<XTheme>
       _forceAppUpdate();
     });
   }
+
+  /// The theme mode that matches [theme]'s brightness, or `null` when
+  /// [updateMode] is false.
+  ThemeMode? _modeFor(XTheme theme, bool updateMode) =>
+      !updateMode ? null : (theme.isDark ? ThemeMode.dark : ThemeMode.light);
 
   /// Updates the theme to a specific theme from the available theme list.
   ///
@@ -262,19 +311,18 @@ class XThemeController extends ValueNotifier<XTheme>
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
   }) async {
-    if (!availableThemes.contains(theme)) {
-      if (config.logThemeChanges) {
-        logger.error('Theme ${theme.id} not found in available themes.');
-      }
+    final index = availableThemes.indexOf(theme);
+    if (index < 0) {
+      _logError('Theme ${theme.id} not found in available themes.');
       throw Exception('The provided theme is not in the available theme list');
     }
-    return _updateTheme(
+    return _applyTheme(
       theme: theme,
-      index: availableThemes.indexOf(theme),
+      index: index,
+      mode: _modeFor(theme, updateMode),
       animation: animation,
       animate: animate,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-      updateMode: updateMode,
     );
   }
 
@@ -319,18 +367,19 @@ class XThemeController extends ValueNotifier<XTheme>
     bool updateMode = true,
   }) async {
     if (index < 0 || index >= availableThemes.length) {
-      logger.e('Index $index is out of range for available themes list.');
+      _logError('Index $index is out of range for available themes list.');
       throw RangeError(
         'The provided index is out of range of available themes list',
       );
     }
-    return _updateTheme(
-      theme: availableThemes[index],
+    final theme = availableThemes[index];
+    return _applyTheme(
+      theme: theme,
       index: index,
+      mode: _modeFor(theme, updateMode),
       animation: animation,
       animate: animate,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-      updateMode: updateMode,
     );
   }
 
@@ -346,21 +395,19 @@ class XThemeController extends ValueNotifier<XTheme>
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
   }) async {
-    if (!availableThemes.any((element) => element.id == id)) {
-      if (config.logThemeChanges) {
-        logger.error('Theme with id $id not found in available themes.');
-      }
+    final index = availableThemes.indexWhere((element) => element.id == id);
+    if (index < 0) {
+      _logError('Theme with id $id not found in available themes.');
       throw Exception('The provided id is not in the available themes list');
     }
-
-    final index = availableThemes.indexWhere((element) => element.id == id);
-    return _updateTheme(
-      theme: availableThemes[index],
+    final theme = availableThemes[index];
+    return _applyTheme(
+      theme: theme,
       index: index,
+      mode: _modeFor(theme, updateMode),
       animation: animation,
       animate: animate,
       forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-      updateMode: updateMode,
     );
   }
 
@@ -379,48 +426,26 @@ class XThemeController extends ValueNotifier<XTheme>
     PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
-  }) async {
-    final theme = _getThemeForMode(false);
-    if (theme == null) {
-      if (config.logThemeChanges) {
-        logger.error('Could not find any light theme in the available themes');
-      }
-      throw Exception('Could not find any light theme in the available themes');
-    }
-    await _setThemeMode(ThemeMode.light);
-    return updateTo(
-      theme,
-      animation: animation,
-      animate: animate,
-      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-      updateMode: false,
-    );
-  }
+  }) => _switchToMode(
+    ThemeMode.light,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+  );
 
-  ///Update the theme to the first dark theme in supported themes
+  /// Update the theme to the first dark theme in supported themes
   /// (or uses `darkThemeIndex` if specified in config).
-  ///If there is no dark theme, it will throw an exception.
+  /// If there is no dark theme, it will throw an exception.
   Future<void> updateToDarkMode({
     PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
-  }) async {
-    final theme = _getThemeForMode(true);
-    if (theme == null) {
-      if (config.logThemeChanges) {
-        logger.error('Could not find any dark theme in the available themes');
-      }
-      throw Exception('Could not find any dark theme in the available themes');
-    }
-    await _setThemeMode(ThemeMode.dark);
-    return updateTo(
-      theme,
-      animation: animation,
-      animate: animate,
-      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-      updateMode: false,
-    );
-  }
+  }) => _switchToMode(
+    ThemeMode.dark,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+  );
 
   /// Update the theme to the first theme that matches the device mode
   /// (or uses `lightThemeIndex`/`darkThemeIndex` if specified in config).
@@ -429,25 +454,12 @@ class XThemeController extends ValueNotifier<XTheme>
     PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
-  }) async {
-    XTheme? theme = _getThemeForMode(isDeviceInDarkMode());
-    if (theme == null) {
-      if (config.logThemeChanges) {
-        logger.error(
-          'Could not find any theme that matches the device mode: ${isDeviceInDarkMode()}',
-        );
-      }
-      throw Exception('Could not find any theme that matches the device mode');
-    }
-    await _setThemeMode(ThemeMode.system);
-    return updateTo(
-      theme,
-      animation: animation,
-      animate: animate,
-      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-      updateMode: false,
-    );
-  }
+  }) => _switchToMode(
+    ThemeMode.system,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+  );
 
   /// Update the theme to the first theme that matches the given mode.
   Future<void> updateByThemeMode({
@@ -455,29 +467,12 @@ class XThemeController extends ValueNotifier<XTheme>
     PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
-  }) async {
-    await _setThemeMode(mode);
-    switch (mode) {
-      case ThemeMode.system:
-        return updateToDeviceMode(
-          animation: animation,
-          animate: animate,
-          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        );
-      case ThemeMode.light:
-        return updateToLightMode(
-          animation: animation,
-          animate: animate,
-          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        );
-      case ThemeMode.dark:
-        return updateToDarkMode(
-          animation: animation,
-          animate: animate,
-          forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        );
-    }
-  }
+  }) => _switchToMode(
+    mode,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+  );
 
   /// Toggles between light and dark mode based on the current theme's brightness.
   ///
@@ -487,14 +482,12 @@ class XThemeController extends ValueNotifier<XTheme>
     PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
-  }) {
-    return updateByThemeMode(
-      mode: value.isDark ? ThemeMode.light : ThemeMode.dark,
-      animation: animation,
-      animate: animate,
-      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-    );
-  }
+  }) => _switchToMode(
+    value.isDark ? ThemeMode.light : ThemeMode.dark,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+  );
 
   /// Clear the last saved theme index and theme mode.
   ///
@@ -508,10 +501,14 @@ class XThemeController extends ValueNotifier<XTheme>
   }
 
   /// Animate the theme change.
+  ///
+  /// [onThemeApplied] is called right after the new theme is set, before the
+  /// animation runs.
   Future<void> animateTheme({
     required XTheme theme,
     required AnimationController controller,
     required PlayxThemeAnimation animation,
+    VoidCallback? onThemeApplied,
   }) async {
     if (controller.isAnimating) {
       controller.reset();
@@ -527,6 +524,7 @@ class XThemeController extends ValueNotifier<XTheme>
       previewContainer: previewContainer,
     );
     value = theme;
+    onThemeApplied?.call();
 
     themeAnimation = animation;
     await animation.animate(controller: controller);

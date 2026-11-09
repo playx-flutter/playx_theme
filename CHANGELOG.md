@@ -11,6 +11,11 @@
 - **New**: `PlayxThemeAnimation.lerp` which interpolates `ThemeData` between themes.
 - **Fix**: a saved theme index without a saved mode (e.g. from v1) is restored on boot.
 - **Fix**: `XThemeController.dispose` is idempotent, and the controller logger no longer crashes when used without `PlayxTheme.boot`.
+- **Fix**: switching themes quickly can no longer leave a stale theme index saved; storage operations now run in call order, and the final index/mode are decided synchronously when a switch is requested.
+- **Fix**: the theme and the theme mode now change together, and the mode is no longer changed when no theme matches the requested mode (the call still throws).
+- `PlayxThemeBuilder` no longer disposes the controller it doesn't own; `PlayxTheme` and the widgets share a single controller instance.
+- Errors are always logged before an exception is thrown; info/warning logs follow `logThemeChanges`.
+- Internal: the controller was split into `ThemeResolver` (pure theme/mode resolution) and `ThemePersistence` (ordered storage access), and the update methods share one code path.
 - Tests: fixed the failing suite and raised coverage to ~93%. CI now runs on pull requests, tests the minimum and latest Flutter, and gates coverage at 85%.
 - Updated example app SDK constraint to match.
 

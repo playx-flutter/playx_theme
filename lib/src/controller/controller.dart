@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 
 import '../../playx_theme.dart';
 import '../utils/animation_utils.dart';
+import 'theme_resolver.dart';
 
 /// XThemeController is responsible for managing and updating the app's theme,
 /// including handling theme changes, animations, and theme persistence.
@@ -99,44 +100,14 @@ class XThemeController extends ValueNotifier<XTheme>
   }
 
   /// Retrieves the optional explicitly set theme mode, or system by default.
-  ThemeMode getInitialThemeMode() {
-    if (config.initialThemeIndex != null &&
-        config.initialThemeIndex! >= 0 &&
-        config.initialThemeIndex! < config.themes.length) {
-      final theme = config.themes[config.initialThemeIndex!];
-      return theme.isDark ? ThemeMode.dark : ThemeMode.light;
-    } else if (config.initialThemeMode != null) {
-      return config.initialThemeMode!;
-    } else {
-      return ThemeMode.system;
-    }
-  }
+  ThemeMode getInitialThemeMode() => ThemeResolver.initialMode(config);
 
   /// Retrieves the initial theme based on the configuration.
   XTheme getInitialTheme() => getInitialThemeByConfig(config);
 
   /// Helper to retrieve the initial theme using a configuration object before initialization.
-  static XTheme getInitialThemeByConfig(PlayxThemeConfig config) {
-    if (config.initialThemeIndex != null &&
-        config.initialThemeIndex! >= 0 &&
-        config.initialThemeIndex! < config.themes.length) {
-      return config.themes[config.initialThemeIndex!];
-    }
-
-    if (config.initialThemeMode != null) {
-      if (config.initialThemeMode == ThemeMode.system) {
-        return _getThemeForModeStatic(config, isDeviceInDarkMode()) ??
-            config.themes.first;
-      } else if (config.initialThemeMode == ThemeMode.light) {
-        return _getThemeForModeStatic(config, false) ?? config.themes.first;
-      } else {
-        return _getThemeForModeStatic(config, true) ?? config.themes.first;
-      }
-    }
-
-    return _getThemeForModeStatic(config, isDeviceInDarkMode()) ??
-        config.themes.first;
-  }
+  static XTheme getInitialThemeByConfig(PlayxThemeConfig config) =>
+      ThemeResolver.initialTheme(config, deviceIsDark: isDeviceInDarkMode());
 
   /// Initializes the theme controller by loading the last saved theme index if applicable.
   Future<void> boot() async {
@@ -151,40 +122,14 @@ class XThemeController extends ValueNotifier<XTheme>
         ? await storage.getString(lastKnownThemeModeKey)
         : null;
 
-    final hasValidSavedIndex =
-        lastSavedIndex != null &&
-        lastSavedIndex >= 0 &&
-        lastSavedIndex < availableThemes.length;
-
-    ThemeMode computedMode;
-    if (lastSavedThemeModeString != null) {
-      computedMode = ThemeMode.values.firstWhere(
-        (e) => e.name == lastSavedThemeModeString,
-        orElse: () => ThemeMode.system,
-      );
-    } else if (hasValidSavedIndex) {
-      // Only an index was saved (e.g. by an older version): the user picked
-      // that theme explicitly, so derive the mode from it.
-      computedMode = availableThemes[lastSavedIndex].isDark
-          ? ThemeMode.dark
-          : ThemeMode.light;
-    } else {
-      computedMode = getInitialThemeMode();
-    }
-
-    _themeModeNotifier.value = computedMode;
-
-    if (lastSavedThemeModeString != null && computedMode == ThemeMode.system) {
-      value = _getThemeForMode(isDeviceInDarkMode()) ?? availableThemes.first;
-    } else if (hasValidSavedIndex) {
-      value = availableThemes[lastSavedIndex];
-    } else if (lastSavedThemeModeString == null) {
-      value = getInitialTheme();
-    } else {
-      value =
-          _getThemeForMode(computedMode != ThemeMode.light) ??
-          availableThemes.first;
-    }
+    final resolved = ThemeResolver.resolveBoot(
+      config,
+      savedIndex: lastSavedIndex,
+      savedMode: lastSavedThemeModeString,
+      deviceIsDark: isDeviceInDarkMode(),
+    );
+    _themeModeNotifier.value = resolved.mode;
+    value = resolved.theme;
 
     currentIndex = availableThemes.indexOf(value);
     initialIndex = currentIndex;
@@ -204,25 +149,7 @@ class XThemeController extends ValueNotifier<XTheme>
   }
 
   XTheme? _getThemeForMode(bool isDark) =>
-      _getThemeForModeStatic(config, isDark);
-
-  static XTheme? _getThemeForModeStatic(PlayxThemeConfig config, bool isDark) {
-    if (isDark) {
-      if (config.darkThemeIndex != null &&
-          config.darkThemeIndex! >= 0 &&
-          config.darkThemeIndex! < config.themes.length) {
-        return config.themes[config.darkThemeIndex!];
-      }
-      return config.themes.firstWhereOrNull((element) => element.isDark);
-    } else {
-      if (config.lightThemeIndex != null &&
-          config.lightThemeIndex! >= 0 &&
-          config.lightThemeIndex! < config.themes.length) {
-        return config.themes[config.lightThemeIndex!];
-      }
-      return config.themes.firstWhereOrNull((element) => !element.isDark);
-    }
-  }
+      ThemeResolver.themeForBrightness(config, isDark);
 
   @override
   void didChangePlatformBrightness() {

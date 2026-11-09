@@ -2,7 +2,9 @@
 
 [![pub package](https://img.shields.io/pub/v/playx_theme.svg?color=1284C5)](https://pub.dev/packages/playx_theme) [![Build](https://github.com/playx-flutter/playx_theme/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/playx-flutter/playx_theme/actions/workflows/build.yml) <a href="https://codecov.io/gh/playx-flutter/playx_theme"><img src="https://codecov.io/gh/playx-flutter/playx_theme/branch/main/graph/badge.svg" alt="codecov"></a> <a href="https://github.com/playx-flutter/playx_theme/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="License: MIT"></a>
 
-Playx Theme: Effortlessly control your app's visual style. Seamlessly switch themes, enjoy smooth animations, and tailor custom color schemes for each theme with ease in your Flutter projects## Features
+Playx Theme: Effortlessly control your app's visual style. Seamlessly switch themes, enjoy smooth animations, and tailor custom color schemes for each theme with ease in your Flutter projects.
+
+## Features
 
 - **Easy Theme Management**: Create and manage app themes effortlessly.
 - **Smooth Transitions**: Switch between themes with unique transitions.
@@ -15,7 +17,7 @@ Playx Theme: Effortlessly control your app's visual style. Seamlessly switch the
 Add the following line to your `dependencies` in `pubspec.yaml`:
 
 ```yaml  
-playx_theme: ^1.1.1 
+playx_theme: ^2.1.0
 ```  
 
 ## Usage
@@ -51,9 +53,9 @@ void main() async {
 }  
 ```  
 
-### Wrap Your App with `PlayXThemeBuilder`
+### Wrap Your App with `PlayxThemeBuilder`
 
-Use `PlayXThemeBuilder` to wrap your app and apply the themes.
+Use `PlayxThemeBuilder` to wrap your app and apply the themes.
 
 ```dart  
 class MyApp extends StatelessWidget {  
@@ -61,7 +63,7 @@ class MyApp extends StatelessWidget {
   
   @override  
   Widget build(BuildContext context) {  
-    return PlayXThemeBuilder(  
+    return PlayxThemeBuilder(  
       builder: (context, theme) {  
         return MaterialApp(  
           title: 'Flutter Demo',  
@@ -85,7 +87,7 @@ FloatingActionButton(
   },  
   child: Icon(  
     Icons.next,  
-    color: PlayxTheme.colorScheme.onBackground,  
+    color: context.colorScheme.onPrimary,  
   ),  
 )  
 ```  
@@ -102,6 +104,28 @@ final currentThemeId = PlayxTheme.currentTheme.id;
 final currentThemeData = PlayxTheme.currentThemeData;  
 ```  
 
+```dart
+// Show a preview of what the next tap will switch to
+final upcoming = PlayxTheme.nextTheme; // XTheme
+PlayxTheme.toggleMode(); // light <-> dark
+final mode = context.themeMode; // ThemeMode
+```
+
+#### Custom theme tokens (`ThemeExtension`)
+
+Register `ThemeExtension`s in `ThemeData.extensions` and read them from the current theme:
+
+```dart
+final spacing = context.themeExtension<AppSpacing>(); // throws if missing
+final maybe = context.maybeThemeExtension<AppSpacing>();
+```
+
+### Custom Persistence
+
+By default the selected theme is saved with `SharedPreferencesAsync`. Provide your own
+`PlayxThemeStorage` through `PlayxThemeConfig(storage: ...)` to store it anywhere
+(`PlayxMemoryThemeStorage` is available for tests).
+
 ### Available Methods
 
 | Method              | Description                                                         |  
@@ -115,6 +139,8 @@ final currentThemeData = PlayxTheme.currentThemeData;
 | `initialTheme` | Returns start theme if provided.                                    |  
 | `supportedThemes` | Returns list of supported themes configured in `PlayxThemeConfig`.  |  
 | `next` | Updates the app theme to the next theme.                            |  
+| `nextIndex` / `nextTheme` | Preview the index / theme that `next` would switch to.   |  
+| `toggleMode` | Toggles between light and dark based on the current theme.          |  
 | `updateByIndex` | Updates the app theme by the index.                                 |  
 | `updateTo` | Updates the app theme to a specific `XTheme`.                       |  
 | `updateById` | Updates the app theme to a specific theme id.                       |  
@@ -180,6 +206,11 @@ The base class for theme animations provides common settings, including:
 - **`isReversed`**: Reverses the animation direction.
 - **`onAnimationFinish`**: Callback triggered when the animation finishes.
 - **`duration`**: Duration of the animation.
+
+#### PlayxThemeLerpAnimation
+
+Smoothly interpolates between the old and new `ThemeData` in place, without screenshots:
+`PlayxThemeAnimation.lerp(curve: Curves.easeInOut)`. Requires `PlayxThemeSwitchingArea`.
 
 #### PlayxThemeClipperAnimation
 
@@ -376,7 +407,7 @@ utilities and widgets to help with Material 3 integration, such as `ImageTheme` 
 
 ## Reference & Documentation
 
-- Check out the [documentation](https://pub.dev/documentation/playx_theme/latest/) for detailed information on how to integrate and utilize `playx_theme` in your Flutter applications.
+- Read the [guides](https://playx-flutter.github.io/playx_theme/) and the [API reference](https://playx-flutter.github.io/playx_theme/api/) for detailed information on how to integrate and utilize `playx_theme` in your Flutter applications (also on [pub.dev](https://pub.dev/documentation/playx_theme/latest/)).
 - The theme switching animation is based on the [animated_theme_switcher](https://pub.dev/packages/animated_theme_switcher) package.
 
 ## Support and Contribution

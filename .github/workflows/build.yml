@@ -1,37 +1,72 @@
 name: Build
+
 on:
   push:
-    branches: [main , qa]
+    branches: [main, qa]
+  pull_request:
+    branches: [main, qa]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
-    defaults:
-      run:
-        working-directory: ./
+    name: Test (Flutter ${{ matrix.flutter }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # `3.44.0` is the minimum version supported by the package
+        # (see `environment` in pubspec.yaml), `stable` is the latest one.
+        flutter: ['3.44.0', 'stable']
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v1.5.3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ matrix.flutter == 'stable' && '' || matrix.flutter }}
+          cache: true
 
       - name: Install deps
-        run: flutter packages get
+        run: flutter pub get
 
+      # Formatting output depends on the SDK version, so check it only once.
       - name: Format
+        if: matrix.flutter == 'stable'
         run: dart format --set-exit-if-changed .
 
       - name: Analyze
-        run: flutter analyze lib test
+        run: flutter analyze
 
       - name: Test
         run: flutter test --coverage
 
       - name: Check Test Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v1.2.0
+        if: matrix.flutter == 'stable'
+        uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          min_coverage: 32
+          min_coverage: 85
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
+        if: matrix.flutter == 'stable' && github.event_name == 'push'
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: playx-flutter/playx_theme
+
+  publish-dry-run:
+    name: Publish dry run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter pub publish --dry-run

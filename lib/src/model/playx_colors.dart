@@ -248,71 +248,77 @@ class PlayxColors {
     Color? surfaceContainer,
     Color? surfaceContainerHigh,
     Color? surfaceContainerHighest,
-    @Deprecated('Use surface instead. '
-        'This feature was deprecated after v3.18.0-0.1.pre.'
-        ' It will be removed in the next releases.')
+    @Deprecated(
+      'Use surface instead. '
+      'This feature was deprecated after v3.18.0-0.1.pre.'
+      ' It will be removed in the next releases.',
+    )
     Color? background,
-    @Deprecated('Use onSurface instead. '
-        'This feature was deprecated after v3.18.0-0.1.pre.'
-        ' It will be removed in the next releases.')
+    @Deprecated(
+      'Use onSurface instead. '
+      'This feature was deprecated after v3.18.0-0.1.pre.'
+      ' It will be removed in the next releases.',
+    )
     Color? onBackground,
-    @Deprecated('Use surfaceContainerHighest instead. '
-        'This feature was deprecated after v3.18.0-0.1.pre.'
-        ' It will be removed in the next releases.')
+    @Deprecated(
+      'Use surfaceContainerHighest instead. '
+      'This feature was deprecated after v3.18.0-0.1.pre.'
+      ' It will be removed in the next releases.',
+    )
     Color? surfaceVariant,
-  })  : primary = primary ?? scheme.primary,
-        onPrimary = onPrimary ?? scheme.onPrimary,
-        primaryContainer = primaryContainer ?? scheme.primaryContainer,
-        onPrimaryContainer = onPrimaryContainer ?? scheme.onPrimaryContainer,
-        secondary = secondary ?? scheme.secondary,
-        onSecondary = onSecondary ?? scheme.onSecondary,
-        secondaryContainer = secondaryContainer ?? scheme.secondaryContainer,
-        onSecondaryContainer =
-            onSecondaryContainer ?? scheme.onSecondaryContainer,
-        tertiary = tertiary ?? scheme.tertiary,
-        onTertiary = onTertiary ?? scheme.onTertiary,
-        tertiaryContainer = tertiaryContainer ?? scheme.tertiaryContainer,
-        onTertiaryContainer = onTertiaryContainer ?? scheme.onTertiaryContainer,
-        error = error ?? scheme.error,
-        onError = onError ?? scheme.onError,
-        errorContainer = errorContainer ?? scheme.errorContainer,
-        onErrorContainer = onErrorContainer ?? scheme.onErrorContainer,
-        outline = outline ?? scheme.outline,
-        outlineVariant = outlineVariant ?? scheme.outlineVariant,
-        surface = surface ?? scheme.surface,
-        onSurface = onSurface ?? scheme.onSurface,
-        onSurfaceVariant = onSurfaceVariant ?? scheme.onSurfaceVariant,
-        inverseSurface = inverseSurface ?? scheme.inverseSurface,
-        onInverseSurface = onInverseSurface ?? scheme.onInverseSurface,
-        inversePrimary = inversePrimary ?? scheme.inversePrimary,
-        shadow = shadow ?? scheme.shadow,
-        scrim = scrim ?? scheme.scrim,
-        surfaceTint = surfaceTint ?? scheme.primary,
-        primaryFixed = primaryFixed ?? scheme.primaryFixed,
-        primaryFixedDim = primaryFixedDim ?? scheme.primaryFixedDim,
-        onPrimaryFixed = onPrimaryFixed ?? scheme.onPrimaryFixed,
-        onPrimaryFixedVariant =
-            onPrimaryFixedVariant ?? scheme.onPrimaryFixedVariant,
-        secondaryFixed = secondaryFixed ?? scheme.secondaryFixed,
-        secondaryFixedDim = secondaryFixedDim ?? scheme.secondaryFixedDim,
-        onSecondaryFixed = onSecondaryFixed ?? scheme.onSecondaryFixed,
-        onSecondaryFixedVariant =
-            onSecondaryFixedVariant ?? scheme.onSecondaryFixedVariant,
-        tertiaryFixed = tertiaryFixed ?? scheme.tertiaryFixed,
-        tertiaryFixedDim = tertiaryFixedDim ?? scheme.tertiaryFixedDim,
-        onTertiaryFixed = onTertiaryFixed ?? scheme.onTertiaryFixed,
-        onTertiaryFixedVariant =
-            onTertiaryFixedVariant ?? scheme.onTertiaryFixedVariant,
-        surfaceDim = surfaceDim ?? scheme.surfaceDim,
-        surfaceBright = surfaceBright ?? scheme.surfaceBright,
-        surfaceContainerLowest =
-            surfaceContainerLowest ?? scheme.surfaceContainerLowest,
-        surfaceContainerLow = surfaceContainerLow ?? scheme.surfaceContainerLow,
-        surfaceContainer = surfaceContainer ?? scheme.surfaceContainer,
-        surfaceContainerHigh =
-            surfaceContainerHigh ?? scheme.surfaceContainerHigh,
-        surfaceContainerHighest =
-            surfaceContainerHighest ?? scheme.surfaceContainerHighest;
+  }) : primary = primary ?? scheme.primary,
+       onPrimary = onPrimary ?? scheme.onPrimary,
+       primaryContainer = primaryContainer ?? scheme.primaryContainer,
+       onPrimaryContainer = onPrimaryContainer ?? scheme.onPrimaryContainer,
+       secondary = secondary ?? scheme.secondary,
+       onSecondary = onSecondary ?? scheme.onSecondary,
+       secondaryContainer = secondaryContainer ?? scheme.secondaryContainer,
+       onSecondaryContainer =
+           onSecondaryContainer ?? scheme.onSecondaryContainer,
+       tertiary = tertiary ?? scheme.tertiary,
+       onTertiary = onTertiary ?? scheme.onTertiary,
+       tertiaryContainer = tertiaryContainer ?? scheme.tertiaryContainer,
+       onTertiaryContainer = onTertiaryContainer ?? scheme.onTertiaryContainer,
+       error = error ?? scheme.error,
+       onError = onError ?? scheme.onError,
+       errorContainer = errorContainer ?? scheme.errorContainer,
+       onErrorContainer = onErrorContainer ?? scheme.onErrorContainer,
+       outline = outline ?? scheme.outline,
+       outlineVariant = outlineVariant ?? scheme.outlineVariant,
+       surface = surface ?? scheme.surface,
+       onSurface = onSurface ?? scheme.onSurface,
+       onSurfaceVariant = onSurfaceVariant ?? scheme.onSurfaceVariant,
+       inverseSurface = inverseSurface ?? scheme.inverseSurface,
+       onInverseSurface = onInverseSurface ?? scheme.onInverseSurface,
+       inversePrimary = inversePrimary ?? scheme.inversePrimary,
+       shadow = shadow ?? scheme.shadow,
+       scrim = scrim ?? scheme.scrim,
+       surfaceTint = surfaceTint ?? scheme.primary,
+       primaryFixed = primaryFixed ?? scheme.primaryFixed,
+       primaryFixedDim = primaryFixedDim ?? scheme.primaryFixedDim,
+       onPrimaryFixed = onPrimaryFixed ?? scheme.onPrimaryFixed,
+       onPrimaryFixedVariant =
+           onPrimaryFixedVariant ?? scheme.onPrimaryFixedVariant,
+       secondaryFixed = secondaryFixed ?? scheme.secondaryFixed,
+       secondaryFixedDim = secondaryFixedDim ?? scheme.secondaryFixedDim,
+       onSecondaryFixed = onSecondaryFixed ?? scheme.onSecondaryFixed,
+       onSecondaryFixedVariant =
+           onSecondaryFixedVariant ?? scheme.onSecondaryFixedVariant,
+       tertiaryFixed = tertiaryFixed ?? scheme.tertiaryFixed,
+       tertiaryFixedDim = tertiaryFixedDim ?? scheme.tertiaryFixedDim,
+       onTertiaryFixed = onTertiaryFixed ?? scheme.onTertiaryFixed,
+       onTertiaryFixedVariant =
+           onTertiaryFixedVariant ?? scheme.onTertiaryFixedVariant,
+       surfaceDim = surfaceDim ?? scheme.surfaceDim,
+       surfaceBright = surfaceBright ?? scheme.surfaceBright,
+       surfaceContainerLowest =
+           surfaceContainerLowest ?? scheme.surfaceContainerLowest,
+       surfaceContainerLow = surfaceContainerLow ?? scheme.surfaceContainerLow,
+       surfaceContainer = surfaceContainer ?? scheme.surfaceContainer,
+       surfaceContainerHigh =
+           surfaceContainerHigh ?? scheme.surfaceContainerHigh,
+       surfaceContainerHighest =
+           surfaceContainerHighest ?? scheme.surfaceContainerHighest;
 
   const PlayxColors({
     this.primary = blueMain,

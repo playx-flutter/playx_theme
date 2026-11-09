@@ -1,0 +1,76 @@
+name: Docs
+
+# Builds the guides (doc/, Jekyll) and the API reference (dart doc) and
+# publishes them to GitHub Pages: https://playx-flutter.github.io/playx_theme/
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'doc/**'
+      - 'lib/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'dartdoc_options.yaml'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'doc/**'
+      - 'lib/**'
+      - 'dartdoc_options.yaml'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install deps
+        run: flutter pub get
+
+      - name: API reference
+        run: dart doc --output _api
+
+      - name: Build guides
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./doc
+          destination: ./_site
+
+      - name: Add API reference to the site
+        run: cp -r _api _site/api
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    # Only publish from main; pull requests just verify the build.
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -5,29 +5,22 @@ import '../playx_theme.dart';
 
 /// Manages the app's theme and provides methods to update it.
 abstract class PlayxTheme {
-  static XThemeController? _themeControllerInstance;
-
-  static XThemeController get _controller {
-    if (_themeControllerInstance == null) {
-      throw Exception(
-          "PlayxTheme is not initialized. Please call boot() before accessing PlayxTheme.");
-    }
-    return _themeControllerInstance!;
-  }
+  /// The booted controller. [XThemeController] owns the singleton.
+  static XThemeController get _controller => XThemeController.instance;
 
   /// Initializes the theme management system.
   ///
   /// This method sets up the theme controller with the provided configuration.
   /// Ensure to call this method before using other `PlayxTheme` methods.
-  static Future<void> boot({
-    required PlayxThemeConfig config,
-  }) async {
+  static Future<void> boot({required PlayxThemeConfig config}) async {
     PlayxLogger.initLogger(name: 'PLAYX THEME', useColoredFormatter: true);
     final logger = PlayxLogger.getLogger('PLAYX THEME')!;
 
-    if (_themeControllerInstance != null) {
-      logger.w('PlayxTheme is already initialized. '
-          'Calling boot() again will replace the existing instance.');
+    if (XThemeController.maybeInstance != null) {
+      logger.w(
+        'PlayxTheme is already initialized. '
+        'Calling boot() again will replace the existing instance.',
+      );
       await dispose();
     }
     if (config.themes.isEmpty) {
@@ -35,9 +28,7 @@ abstract class PlayxTheme {
       throw Exception('No themes provided in the configuration.');
     }
     logger.i('Booting PlayxTheme with ${config.themes.length} themes.');
-    final controller = XThemeController(config: config);
-    _themeControllerInstance = controller;
-    return controller.boot();
+    return XThemeController(config: config).boot();
   }
 
   /// Gets the index of the currently active theme.
@@ -102,14 +93,13 @@ abstract class PlayxTheme {
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
-  }) =>
-      _controller.updateTo(
-        theme,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
-      );
+  }) => _controller.updateTo(
+    theme,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    updateMode: updateMode,
+  );
 
   /// Updates the app's theme to the theme at the specified index.
   ///
@@ -126,14 +116,13 @@ abstract class PlayxTheme {
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
-  }) =>
-      _controller.updateByIndex(
-        index,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
-      );
+  }) => _controller.updateByIndex(
+    index,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    updateMode: updateMode,
+  );
 
   /// Updates the app's theme to the theme with the specified ID.
   ///
@@ -150,14 +139,21 @@ abstract class PlayxTheme {
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
-  }) =>
-      _controller.updateById(
-        id,
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
-      );
+  }) => _controller.updateById(
+    id,
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    updateMode: updateMode,
+  );
+
+  /// The index of the theme that [next] would switch to.
+  ///
+  /// Wraps around to the first theme when the current one is the last.
+  static int get nextIndex => _controller.nextThemeIndex;
+
+  /// The theme that [next] would switch to.
+  static XTheme get nextTheme => _controller.nextThemeValue;
 
   /// Updates the app's theme to the next theme in the list.
   ///
@@ -171,13 +167,12 @@ abstract class PlayxTheme {
     bool animate = true,
     bool forceUpdateNonAnimatedTheme = false,
     bool updateMode = true,
-  }) =>
-      _controller.nextTheme(
-        animation: animation,
-        animate: animate,
-        forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
-        updateMode: updateMode,
-      );
+  }) => _controller.nextTheme(
+    animation: animation,
+    animate: animate,
+    forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    updateMode: updateMode,
+  );
 
   /// Determines if the device is currently in dark mode.
   ///
@@ -268,6 +263,22 @@ abstract class PlayxTheme {
     );
   }
 
+  /// Toggles between light and dark mode based on the current theme's brightness.
+  ///
+  /// Switches to the light mode if the current theme is dark, otherwise to the dark mode.
+  /// Throws an [Exception] if no theme exists for the target mode.
+  static Future<void> toggleMode({
+    PlayxThemeAnimation animation = const PlayxThemeAnimation.fade(),
+    bool animate = true,
+    bool forceUpdateNonAnimatedTheme = false,
+  }) {
+    return _controller.toggleMode(
+      animation: animation,
+      animate: animate,
+      forceUpdateNonAnimatedTheme: forceUpdateNonAnimatedTheme,
+    );
+  }
+
   /// Clears the last saved theme from local storage.
   ///
   /// This method removes the theme data that was previously saved to allow the app to revert to default settings or choose a new theme.
@@ -280,10 +291,7 @@ abstract class PlayxTheme {
   /// This method should be called when theme management is no longer needed to clean up resources.
   /// It returns `true` if the disposal was successful, otherwise returns `false`.
   static Future<bool> dispose() async {
-    if (_themeControllerInstance != null) {
-      _themeControllerInstance!.dispose();
-      _themeControllerInstance = null;
-    }
+    XThemeController.disposeInstance();
     return true;
   }
 }

@@ -49,8 +49,8 @@ class XTheme extends Equatable {
     this.cupertinoThemeData,
     this.colors = const DefaultColors(),
     this.isDark = false,
-  })  : themeBuilder = null,
-        cupertinoThemeBuilder = null;
+  }) : themeBuilder = null,
+       cupertinoThemeBuilder = null;
 
   /// Creates an [XTheme] instance with a builder function for dynamic theming
   /// based on the app's locale.
@@ -66,14 +66,18 @@ class XTheme extends Equatable {
     this.cupertinoThemeBuilder,
     this.colors = const DefaultColors(),
     this.isDark = false,
-  })  : themeData = initialTheme,
-        cupertinoThemeData = null;
+  }) : themeData = initialTheme,
+       cupertinoThemeData = null;
+
+  /// Returns the [ThemeExtension] of type [T] registered in
+  /// `themeData.extensions`, or `null` if there is none.
+  ///
+  /// Use this to attach custom design tokens (spacing, brand colors, ...) to a
+  /// theme so they switch and animate together with it.
+  T? extension<T extends ThemeExtension<T>>() => themeData.extension<T>();
 
   @override
-  List<Object> get props => [
-        id,
-        name,
-      ];
+  List<Object> get props => [id, name];
 
   @override
   String toString() {

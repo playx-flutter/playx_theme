@@ -26,10 +26,7 @@ final darkTestTheme = XTheme(
 PlayxThemeConfig getTestConfig({int initialThemeIndex = 0}) {
   return PlayxThemeConfig(
     initialThemeIndex: initialThemeIndex,
-    themes: [
-      lightTestTheme,
-      darkTestTheme,
-    ],
+    themes: [lightTestTheme, darkTestTheme],
   );
 }
 
@@ -37,11 +34,7 @@ class TestApp extends StatelessWidget {
   final Widget? child;
   final bool attachThemeSwitcher;
 
-  const TestApp({
-    super.key,
-    this.child,
-    this.attachThemeSwitcher = false,
-  });
+  const TestApp({super.key, this.child, this.attachThemeSwitcher = false});
 
   @override
   Widget build(BuildContext context) {
@@ -49,18 +42,17 @@ class TestApp extends StatelessWidget {
       builder: (cxt, xTheme) => MaterialApp(
         theme: xTheme.themeData,
         home: Scaffold(
-          body: Builder(builder: (context) {
-            return attachThemeSwitcher
-                ? PlayxThemeSwitchingArea(
-                    child: child ??
-                        Center(
-                          child: Text(PlayxTheme.index.toString()),
-                        ))
-                : child ??
-                    Center(
-                      child: Text(PlayxTheme.index.toString()),
-                    );
-          }),
+          body: Builder(
+            builder: (context) {
+              return attachThemeSwitcher
+                  ? PlayxThemeSwitchingArea(
+                      child:
+                          child ??
+                          Center(child: Text(PlayxTheme.index.toString())),
+                    )
+                  : child ?? Center(child: Text(PlayxTheme.index.toString()));
+            },
+          ),
         ),
       ),
     );

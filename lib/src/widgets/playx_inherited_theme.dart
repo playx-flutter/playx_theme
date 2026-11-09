@@ -44,9 +44,10 @@ class PlayxInheritedTheme extends InheritedWidget {
     final PlayxInheritedTheme? result = maybeOf(context);
     if (result == null) {
       throw FlutterError(
-          'PlayxInheritedTheme.of() called with a context that does not contain a PlayxInheritedTheme.\n'
-          'No PlayxInheritedTheme ancestor could be found starting from the context that was passed to PlayxInheritedTheme.of(). '
-          'This can happen because you do not have a PlayxThemeBuilder widget at the top of your widget tree.');
+        'PlayxInheritedTheme.of() called with a context that does not contain a PlayxInheritedTheme.\n'
+        'No PlayxInheritedTheme ancestor could be found starting from the context that was passed to PlayxInheritedTheme.of(). '
+        'This can happen because you do not have a PlayxThemeBuilder widget at the top of your widget tree.',
+      );
     }
     return result;
   }

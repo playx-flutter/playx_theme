@@ -47,47 +47,47 @@ void main() {
 
     test('PlayxThemeConfig throws assertion error if themes list is empty', () {
       expect(
-        () => PlayxThemeConfig(
-          initialThemeIndex: 0,
-          themes: [],
-        ),
+        () => PlayxThemeConfig(initialThemeIndex: 0, themes: []),
         throwsAssertionError,
       );
     });
   });
   test(
-      'PlayxThemeConfig throws assertion error if initialThemeIndex is out of range',
-      () {
-    final theme1 = XTheme(
-      id: 'light',
-      name: 'Light',
-      themeData: ThemeData.light(),
-      cupertinoThemeData: CupertinoThemeData(brightness: Brightness.light),
-      isDark: false,
-      colors: const PlayxColors(),
-    );
+    'PlayxThemeConfig throws assertion error if initialThemeIndex is out of range',
+    () {
+      final theme1 = XTheme(
+        id: 'light',
+        name: 'Light',
+        themeData: ThemeData.light(),
+        cupertinoThemeData: CupertinoThemeData(brightness: Brightness.light),
+        isDark: false,
+        colors: const PlayxColors(),
+      );
 
-    expect(
-      () => PlayxThemeConfig(
-        initialThemeIndex: 1, // Out of range for a single theme in the list
-        themes: [theme1],
-      ),
-      throwsAssertionError,
-    );
-  });
+      expect(
+        () => PlayxThemeConfig(
+          initialThemeIndex: 1, // Out of range for a single theme in the list
+          themes: [theme1],
+        ),
+        throwsAssertionError,
+      );
+    },
+  );
 
   group('XDefaultThemeConfig Tests', () {
-    test('XDefaultThemeConfig initializes with default light and dark themes',
-        () {
-      final config = XDefaultThemeConfig();
+    test(
+      'XDefaultThemeConfig initializes with default light and dark themes',
+      () {
+        final config = XDefaultThemeConfig();
 
-      expect(config.themes.length, 2);
-      expect(config.themes[0].id, 'light');
-      expect(config.themes[1].id, 'dark');
-      expect(config.themes[0].themeData.brightness, Brightness.light);
-      expect(config.themes[1].themeData.brightness, Brightness.dark);
-      expect(config.initialThemeIndex,
-          anyOf(0, 1)); // Should be 0 or 1 depending on device mode
-    });
+        expect(config.themes.length, 2);
+        expect(config.themes[0].id, 'light');
+        expect(config.themes[1].id, 'dark');
+        expect(config.themes[0].themeData.brightness, Brightness.light);
+        expect(config.themes[1].themeData.brightness, Brightness.dark);
+        expect(config.initialThemeIndex, isNull);
+        expect(config.initialThemeMode, ThemeMode.system);
+      },
+    );
   });
 }

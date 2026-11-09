@@ -22,12 +22,11 @@ class PlayxThemeBuilder extends StatefulWidget {
   /// The `child` parameter is a widget that will be built using the current theme.
   ///
   /// Either `builder` or `child` must be provided.
-  const PlayxThemeBuilder({
-    super.key,
-    this.builder,
-    this.child,
-  }) : assert(builder != null || child != null,
-            'Either `builder` or `child` must be provided.');
+  const PlayxThemeBuilder({super.key, this.builder, this.child})
+    : assert(
+        builder != null || child != null,
+        'Either `builder` or `child` must be provided.',
+      );
 
   /// A function that takes the [BuildContext] and the current [XTheme], and returns
   /// a [Widget] to be built with the current theme.
@@ -78,8 +77,8 @@ class _ThemeProviderState extends State<PlayxThemeBuilder>
 
   @override
   void dispose() {
+    // The controller is owned by PlayxTheme; only release the animation controller.
     themeController.updateThemeAnimationController(null);
-    themeController.dispose();
     super.dispose();
   }
 }

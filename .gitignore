@@ -30,3 +30,10 @@ migrate_working_dir/
 build/
 .flutter-plugins-dependencies
 .flutter-plugins
+
+# Test coverage
+coverage/
+
+# Generated docs
+_api/
+_site/

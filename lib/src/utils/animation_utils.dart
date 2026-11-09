@@ -8,14 +8,18 @@ class AnimationUtils {
   static Future<ui.Image> saveScreenshot({
     required GlobalKey previewContainer,
   }) async {
-    final boundary = previewContainer.currentContext!.findRenderObject()
-        as RenderRepaintBoundary;
+    final boundary =
+        previewContainer.currentContext!.findRenderObject()
+            as RenderRepaintBoundary;
     return boundary.toImage(
-        pixelRatio: getCurrentView()?.devicePixelRatio ?? 1);
+      pixelRatio: getCurrentView()?.devicePixelRatio ?? 1,
+    );
   }
 
-  static Offset getSwitcherCoordinates(BuildContext? context,
-      [Offset? tapOffset]) {
+  static Offset getSwitcherCoordinates(
+    BuildContext? context, [
+    Offset? tapOffset,
+  ]) {
     if (context == null) {
       return tapOffset ?? getCenterOffset();
     }
@@ -24,7 +28,9 @@ class AnimationUtils {
       return tapOffset ?? getCenterOffset();
     }
     final size = renderObject.size;
-    return renderObject.localToGlobal(Offset.zero).translate(
+    return renderObject
+        .localToGlobal(Offset.zero)
+        .translate(
           tapOffset?.dx ?? (size.width / 2),
           tapOffset?.dy ?? (size.height / 2),
         );

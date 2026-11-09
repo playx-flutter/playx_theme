@@ -1,0 +1,5 @@
+dartdoc:
+  showUndocumentedCategories: false
+  linkToSource:
+    root: '.'
+    uriTemplate: 'https://github.com/playx-flutter/playx_theme/blob/main/%f%#L%l%'

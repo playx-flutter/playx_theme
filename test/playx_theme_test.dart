@@ -8,26 +8,20 @@ import 'package:shared_preferences_platform_interface/shared_preferences_async_p
 import 'config/config.dart';
 
 void main() {
-  setUpAll(
-    () async {
-      TestWidgetsFlutterBinding.ensureInitialized();
-    },
-  );
+  setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+  });
 
-  setUp(
-    () async {
-      PlayxPrefs.setMockInitialValues({});
-      SharedPreferencesAsyncPlatform.instance =
-          InMemorySharedPreferencesAsync.empty();
-      await PlayxTheme.boot(config: getTestConfig());
-    },
-  );
-  tearDown(
-    () async {
-      await PlayxTheme.clearLastSavedTheme();
-      await PlayxTheme.dispose();
-    },
-  );
+  setUp(() async {
+    PlayxPrefs.setMockInitialValues({});
+    SharedPreferencesAsyncPlatform.instance =
+        InMemorySharedPreferencesAsync.empty();
+    await PlayxTheme.boot(config: getTestConfig());
+  });
+  tearDown(() async {
+    await PlayxTheme.clearLastSavedTheme();
+    await PlayxTheme.dispose();
+  });
 
   group('PlayxTheme test', () {
     group('boot() test', () {
@@ -36,18 +30,15 @@ void main() {
       });
 
       test(
-          'boot with config with initial theme index should set the default theme',
-          () async {
-        await PlayxTheme.dispose();
-        await PlayxTheme.boot(
-          config: getTestConfig(initialThemeIndex: 1),
-        );
-        expect(PlayxTheme.index, 1);
-      });
+        'boot with config with initial theme index should set the default theme',
+        () async {
+          await PlayxTheme.dispose();
+          await PlayxTheme.boot(config: getTestConfig(initialThemeIndex: 1));
+          expect(PlayxTheme.index, 1);
+        },
+      );
       test('boot register PlayxThemeController in Getx DI in memory', () async {
-        await PlayxTheme.boot(
-          config: getTestConfig(initialThemeIndex: 1),
-        );
+        await PlayxTheme.boot(config: getTestConfig(initialThemeIndex: 1));
         bool isRegistered = false;
         try {
           XThemeController.instance;
@@ -66,26 +57,27 @@ void main() {
 
       test('PlayxTheme.index should return the current theme index', () async {
         await PlayxTheme.dispose();
-        await PlayxTheme.boot(
-          config: getTestConfig(initialThemeIndex: 1),
-        );
+        await PlayxTheme.boot(config: getTestConfig(initialThemeIndex: 1));
         expect(PlayxTheme.index, 1);
       });
 
       test(
-          'PlayxTheme.index should return the Last saved and current theme index',
-          () async {
-        await PlayxTheme.dispose();
+        'PlayxTheme.index should return the Last saved and current theme index',
+        () async {
+          await PlayxTheme.dispose();
 
-        PlayxPrefs.setMockInitialValues(
-            {XThemeController.lastKnownIndexKey: 1});
-        SharedPreferencesAsyncPlatform.instance =
-            InMemorySharedPreferencesAsync.withData(
-                {XThemeController.lastKnownIndexKey: 1});
-        await PlayxTheme.boot(config: getTestConfig());
+          PlayxPrefs.setMockInitialValues({
+            XThemeController.lastKnownIndexKey: 1,
+          });
+          SharedPreferencesAsyncPlatform.instance =
+              InMemorySharedPreferencesAsync.withData({
+                XThemeController.lastKnownIndexKey: 1,
+              });
+          await PlayxTheme.boot(config: getTestConfig());
 
-        expect(PlayxTheme.index, 1);
-      });
+          expect(PlayxTheme.index, 1);
+        },
+      );
     });
 
     test('PlayxTheme.xTheme should return the current theme', () async {
@@ -104,202 +96,248 @@ void main() {
       expect(PlayxTheme.id, 'Light');
     });
 
-    test('PlayxTheme.initialTheme should return the start theme if provided',
-        () async {
-      expect(PlayxTheme.initialTheme, lightTestTheme);
-    });
+    test(
+      'PlayxTheme.initialTheme should return the start theme if provided',
+      () async {
+        expect(PlayxTheme.initialTheme, lightTestTheme);
+      },
+    );
 
-    test('PlayxTheme.supportedThemes should return list of supported XThemes',
-        () async {
-      expect(PlayxTheme.supportedThemes, getTestConfig().themes);
-    });
+    test(
+      'PlayxTheme.supportedThemes should return list of supported XThemes',
+      () async {
+        expect(PlayxTheme.supportedThemes, getTestConfig().themes);
+      },
+    );
 
     group('PlayxTheme.updateTo()', () {
       test(
-          'PlayxTheme.updateTo() should update the theme to the provided theme',
-          () async {
-        final theme = PlayxTheme.supportedThemes[1];
-        await PlayxTheme.updateTo(theme);
-        expect(PlayxTheme.id, 'Dark');
-      });
+        'PlayxTheme.updateTo() should update the theme to the provided theme',
+        () async {
+          final theme = PlayxTheme.supportedThemes[1];
+          await PlayxTheme.updateTo(theme);
+          expect(PlayxTheme.id, 'Dark');
+        },
+      );
 
       test(
-          'PlayxTheme.updateTo() should throw an error if the theme is not available in the availableThemes in config',
-          () async {
-        final theme = themeOutOFTheList;
-        try {
-          await PlayxTheme.updateTo(theme);
-          expect("updateTo didn't throw an exception.", false);
-        } catch (e) {
-          expect(e, isA<Exception>());
-        }
-      });
+        'PlayxTheme.updateTo() should throw an error if the theme is not available in the availableThemes in config',
+        () async {
+          final theme = themeOutOFTheList;
+          try {
+            await PlayxTheme.updateTo(theme);
+            expect("updateTo didn't throw an exception.", false);
+          } catch (e) {
+            expect(e, isA<Exception>());
+          }
+        },
+      );
     });
 
     group('PlayxTheme.updateByIndex()', () {
-      test('PlayxTheme.updateByIndex() should update the theme by the index',
-          () async {
-        await PlayxTheme.updateByIndex(1);
-        expect(PlayxTheme.id, 'Dark');
-      });
+      test(
+        'PlayxTheme.updateByIndex() should update the theme by the index',
+        () async {
+          await PlayxTheme.updateByIndex(1);
+          expect(PlayxTheme.id, 'Dark');
+        },
+      );
 
       test(
-          'PlayxTheme.updateByIndex() should throw a RangeError if the index is out of range',
-          () async {
-        try {
-          await PlayxTheme.updateByIndex(100);
-          expect("updateByIndex didn't throw an exception.", false);
-        } catch (e) {
-          expect(e, isA<RangeError>());
-        }
-      });
+        'PlayxTheme.updateByIndex() should throw a RangeError if the index is out of range',
+        () async {
+          try {
+            await PlayxTheme.updateByIndex(100);
+            expect("updateByIndex didn't throw an exception.", false);
+          } catch (e) {
+            expect(e, isA<RangeError>());
+          }
+        },
+      );
     });
 
     group('PlayxTheme.updateById()', () {
-      test('PlayxTheme.updateById() should update the theme by the id',
-          () async {
-        await PlayxTheme.updateById('Dark');
-        expect(PlayxTheme.id, 'Dark');
-      });
+      test(
+        'PlayxTheme.updateById() should update the theme by the id',
+        () async {
+          await PlayxTheme.updateById('Dark');
+          expect(PlayxTheme.id, 'Dark');
+        },
+      );
 
       test(
-          'PlayxTheme.updateById() should throw an error if the id is not available in the availableThemes in config',
-          () async {
-        try {
-          await PlayxTheme.updateById('id');
-          expect("updateById didn't throw an exception.", false);
-        } catch (e) {
-          expect(e, isA<Exception>());
-        }
-      });
-    });
-
-    test('PlayxTheme.next() should update the theme to the next theme',
+        'PlayxTheme.updateById() should throw an error if the id is not available in the availableThemes in config',
         () async {
-      await PlayxTheme.next();
-      expect(PlayxTheme.id, 'Dark');
+          try {
+            await PlayxTheme.updateById('id');
+            expect("updateById didn't throw an exception.", false);
+          } catch (e) {
+            expect(e, isA<Exception>());
+          }
+        },
+      );
     });
 
     test(
-        'PlayxTheme.isDeviceInDarkMode() should return true if the device is in dark mode',
-        () async {
-      expect(PlayxTheme.isDeviceInDarkMode(), false);
+      'PlayxTheme.next() should update the theme to the next theme',
+      () async {
+        await PlayxTheme.next();
+        expect(PlayxTheme.id, 'Dark');
+      },
+    );
+
+    test(
+      'PlayxTheme.nextTheme/nextIndex preview the theme next() switches to',
+      () async {
+        expect(PlayxTheme.nextIndex, 1);
+        expect(PlayxTheme.nextTheme.id, 'Dark');
+        await PlayxTheme.next();
+        expect(
+          PlayxTheme.nextIndex,
+          0,
+          reason: 'wraps around at the last theme',
+        );
+        expect(PlayxTheme.nextTheme.id, 'Light');
+      },
+    );
+
+    test('PlayxTheme.toggleMode() toggles between light and dark', () async {
+      await PlayxTheme.toggleMode();
+      expect(PlayxTheme.id, 'Dark');
+      expect(PlayxTheme.themeMode, ThemeMode.dark);
+      await PlayxTheme.toggleMode();
+      expect(PlayxTheme.id, 'Light');
+      expect(PlayxTheme.themeMode, ThemeMode.light);
     });
+
+    test(
+      'PlayxTheme.isDeviceInDarkMode() should return true if the device is in dark mode',
+      () async {
+        expect(PlayxTheme.isDeviceInDarkMode(), false);
+      },
+    );
 
     group('PlayxTheme.updateToLightMode()', () {
       test(
-          'PlayxTheme.updateToLightMode() should update the theme to the first light theme in supported themes',
-          () async {
-        await PlayxTheme.updateToLightMode();
-        expect(PlayxTheme.id, 'Light');
-      });
+        'PlayxTheme.updateToLightMode() should update the theme to the first light theme in supported themes',
+        () async {
+          await PlayxTheme.updateToLightMode();
+          expect(PlayxTheme.id, 'Light');
+        },
+      );
 
       test(
-          'PlayxTheme.updateToLightMode() should throw an error if there is no light theme in the availableThemes in config',
-          () async {
-        try {
-          await PlayxTheme.updateToLightMode();
-          expect("updateToLightMode didn't throw an exception.", false);
-        } catch (e) {
-          expect(e, isA<Exception>());
-        }
-      });
+        'PlayxTheme.updateToLightMode() should throw an error if there is no light theme in the availableThemes in config',
+        () async {
+          try {
+            await PlayxTheme.updateToLightMode();
+            expect("updateToLightMode didn't throw an exception.", false);
+          } catch (e) {
+            expect(e, isA<Exception>());
+          }
+        },
+      );
     });
 
     group('PlayxTheme.updateToDarkMode()', () {
       test(
-          'PlayxTheme.updateToDarkMode() should update the theme to the first dark theme in supported themes',
-          () async {
-        await PlayxTheme.updateToDarkMode();
-        expect(PlayxTheme.id, 'Dark');
-      });
+        'PlayxTheme.updateToDarkMode() should update the theme to the first dark theme in supported themes',
+        () async {
+          await PlayxTheme.updateToDarkMode();
+          expect(PlayxTheme.id, 'Dark');
+        },
+      );
 
       test(
-          'PlayxTheme.updateToDarkMode() should throw an error if there is no dark theme in the availableThemes in config',
-          () async {
-        try {
-          await PlayxTheme.updateToDarkMode();
-          expect("updateToDarkMode didn't throw an exception.", false);
-        } catch (e) {
-          expect(e, isA<Exception>());
-        }
-      });
+        'PlayxTheme.updateToDarkMode() should throw an error if there is no dark theme in the availableThemes in config',
+        () async {
+          try {
+            await PlayxTheme.updateToDarkMode();
+            expect("updateToDarkMode didn't throw an exception.", false);
+          } catch (e) {
+            expect(e, isA<Exception>());
+          }
+        },
+      );
     });
 
     group('PlayxTheme.updateToDeviceMode()', () {
       test(
-          'PlayxTheme.updateToDeviceMode() should update the theme to the first theme that matches the device mode',
-          () async {
-        await PlayxTheme.updateToDeviceMode();
-        expect(PlayxTheme.id, 'Light');
-      });
+        'PlayxTheme.updateToDeviceMode() should update the theme to the first theme that matches the device mode',
+        () async {
+          await PlayxTheme.updateToDeviceMode();
+          expect(PlayxTheme.id, 'Light');
+        },
+      );
 
       test(
-          'PlayxTheme.updateToDeviceMode() should throw an error if there is no theme that matches the device mode in the availableThemes in config',
-          () async {
-        final controller = XThemeController(
-          config: PlayxThemeConfig(
-            themes: [
-              XTheme(
-                id: 'Dark',
-                name: 'Dark',
-                themeData: ThemeData.dark(),
-                isDark: true,
-              ),
-            ],
-          ),
-        );
-        await controller.boot();
-        try {
-          await controller.updateToDeviceMode();
-          expect("updateToDeviceMode didn't throw an exception.", false);
-        } catch (e) {
-          expect(e, isA<Exception>());
-        }
-      });
+        'PlayxTheme.updateToDeviceMode() should throw an error if there is no theme that matches the device mode in the availableThemes in config',
+        () async {
+          final controller = XThemeController(
+            config: PlayxThemeConfig(
+              themes: [
+                XTheme(
+                  id: 'Dark',
+                  name: 'Dark',
+                  themeData: ThemeData.dark(),
+                  isDark: true,
+                ),
+              ],
+            ),
+          );
+          await controller.boot();
+          try {
+            await controller.updateToDeviceMode();
+            expect("updateToDeviceMode didn't throw an exception.", false);
+          } catch (e) {
+            expect(e, isA<Exception>());
+          }
+        },
+      );
     });
 
     group('PlayxTheme.updateByThemeMode()', () {
       test(
-          'PlayxTheme.updateByThemeMode() should update the theme to the first theme that matches the given mode',
-          () async {
-        await PlayxTheme.updateByThemeMode(mode: ThemeMode.light);
-        expect(PlayxTheme.id, 'Light');
-      });
+        'PlayxTheme.updateByThemeMode() should update the theme to the first theme that matches the given mode',
+        () async {
+          await PlayxTheme.updateByThemeMode(mode: ThemeMode.light);
+          expect(PlayxTheme.id, 'Light');
+        },
+      );
 
       test(
-          'PlayxTheme.updateByThemeMode() should throw an error if there is no theme that matches the given mode in the availableThemes in config',
-          () async {
-        final controller = XThemeController(
-          config: PlayxThemeConfig(
-            themes: [
-              XTheme(
-                id: 'Dark',
-                name: 'Dark',
-                themeData: ThemeData.dark(),
-                isDark: true,
-              ),
-            ],
-          ),
-        );
-        await controller.boot();
-        try {
-          await controller.updateByThemeMode(mode: ThemeMode.light);
-          expect("updateByThemeMode didn't throw an exception.", false);
-        } catch (e) {
-          expect(e, isA<Exception>());
-        }
-      });
+        'PlayxTheme.updateByThemeMode() should throw an error if there is no theme that matches the given mode in the availableThemes in config',
+        () async {
+          final controller = XThemeController(
+            config: PlayxThemeConfig(
+              themes: [
+                XTheme(
+                  id: 'Dark',
+                  name: 'Dark',
+                  themeData: ThemeData.dark(),
+                  isDark: true,
+                ),
+              ],
+            ),
+          );
+          await controller.boot();
+          try {
+            await controller.updateByThemeMode(mode: ThemeMode.light);
+            expect("updateByThemeMode didn't throw an exception.", false);
+          } catch (e) {
+            expect(e, isA<Exception>());
+          }
+        },
+      );
     });
 
     test('PlayxTheme.clearLastSavedTheme()', () async {
-      await PlayxTheme.updateByIndex(
-        1,
-      );
+      await PlayxTheme.updateByIndex(1);
 
       final index = await PlayxAsyncPrefs.getInt(
-          XThemeController.lastKnownIndexKey,
-          fallback: 0);
+        XThemeController.lastKnownIndexKey,
+        fallback: 0,
+      );
       expect(index, 1);
 
       // await PlayxTheme.clearLastSavedTheme();
@@ -307,18 +345,20 @@ void main() {
       //     0);
     });
 
-    test('PlayxTheme.dispose() should dispose the PlayxThemeController',
-        () async {
-      await PlayxTheme.dispose();
-      bool isRegistered = false;
-      try {
-        XThemeController.instance;
-        isRegistered = true;
-      } catch (e) {
-        isRegistered = false;
-      }
-      expect(false, isRegistered);
-    });
+    test(
+      'PlayxTheme.dispose() should dispose the PlayxThemeController',
+      () async {
+        await PlayxTheme.dispose();
+        bool isRegistered = false;
+        try {
+          XThemeController.instance;
+          isRegistered = true;
+        } catch (e) {
+          isRegistered = false;
+        }
+        expect(false, isRegistered);
+      },
+    );
   });
 
   group('PlayxThemeBuilder test', () {

@@ -4,8 +4,9 @@ import 'package:playx_theme/playx_theme.dart';
 
 void main() {
   group('PlayxThemeAnimation Tests', () {
-    testWidgets('PlayxThemeClipperAnimation animates correctly',
-        (WidgetTester tester) async {
+    testWidgets('PlayxThemeClipperAnimation animates correctly', (
+      WidgetTester tester,
+    ) async {
       bool animationFinished = false;
       late AnimationController controller;
       final animation = PlayxThemeClipperAnimation(
@@ -46,50 +47,52 @@ void main() {
     });
 
     testWidgets(
-        'PlayxThemeClipperAnimation with isReversed true animates correctly',
-        (WidgetTester tester) async {
-      bool animationFinished = false;
-      late AnimationController controller;
-      final animation = PlayxThemeClipperAnimation(
-        isReversed: true,
-        onAnimationFinish: () => animationFinished = true,
-      );
+      'PlayxThemeClipperAnimation with isReversed true animates correctly',
+      (WidgetTester tester) async {
+        bool animationFinished = false;
+        late AnimationController controller;
+        final animation = PlayxThemeClipperAnimation(
+          isReversed: true,
+          onAnimationFinish: () => animationFinished = true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: StatefulBuilder(
-              builder: (context, setState) {
-                controller = AnimationController(
-                  vsync: tester,
-                  duration: animation.duration,
-                );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: StatefulBuilder(
+                builder: (context, setState) {
+                  controller = AnimationController(
+                    vsync: tester,
+                    duration: animation.duration,
+                  );
 
-                return AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) {
-                    return controller.value > 0.5
-                        ? Container()
-                        : const Placeholder();
-                  },
-                );
-              },
+                  return AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) {
+                      return controller.value > 0.5
+                          ? Container()
+                          : const Placeholder();
+                    },
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      animation.animate(controller: controller);
-      await tester.pumpAndSettle();
+        animation.animate(controller: controller);
+        await tester.pumpAndSettle();
 
-      expect(animationFinished, isTrue);
-      expect(controller.value, 0.0);
-      expect(animation.duration, controller.duration);
-      expect(animation.isReversed, true);
-    });
+        expect(animationFinished, isTrue);
+        expect(controller.value, 0.0);
+        expect(animation.duration, controller.duration);
+        expect(animation.isReversed, true);
+      },
+    );
 
-    testWidgets('PlayxThemeFadeAnimation fades from begin to end',
-        (WidgetTester tester) async {
+    testWidgets('PlayxThemeFadeAnimation fades from begin to end', (
+      WidgetTester tester,
+    ) async {
       bool animationFinished = false;
       late AnimationController controller;
       final animation = PlayxThemeFadeAnimation(
@@ -112,8 +115,9 @@ void main() {
                   animation: controller,
                   builder: (context, child) {
                     return Opacity(
-                        opacity: controller.value,
-                        child: const Text('Fade Test'));
+                      opacity: controller.value,
+                      child: const Text('Fade Test'),
+                    );
                   },
                 );
               },
@@ -131,8 +135,9 @@ void main() {
       expect(animation.end, 1.0);
     });
 
-    testWidgets('PlayxThemeScaleAnimation scales correctly from begin to end',
-        (WidgetTester tester) async {
+    testWidgets('PlayxThemeScaleAnimation scales correctly from begin to end', (
+      WidgetTester tester,
+    ) async {
       bool animationFinished = false;
       late AnimationController controller;
       final animation = PlayxThemeScaleAnimation(
@@ -155,8 +160,9 @@ void main() {
                   animation: controller,
                   builder: (context, child) {
                     return Transform.scale(
-                        scale: controller.value,
-                        child: const Text('Scale Test'));
+                      scale: controller.value,
+                      child: const Text('Scale Test'),
+                    );
                   },
                 );
               },
@@ -175,138 +181,172 @@ void main() {
     });
 
     testWidgets(
-        'PlayxThemeScaleAnimation scales correctly from end to begin when isReversed is true',
-        (WidgetTester tester) async {
-      bool animationFinished = false;
-      late AnimationController controller;
-      final animation = PlayxThemeScaleAnimation(
-        begin: 1.0,
-        end: 0.5,
-        isReversed: true,
-        onAnimationFinish: () => animationFinished = true,
-      );
+      'PlayxThemeScaleAnimation scales correctly from end to begin when isReversed is true',
+      (WidgetTester tester) async {
+        bool animationFinished = false;
+        late AnimationController controller;
+        final animation = PlayxThemeScaleAnimation(
+          begin: 1.0,
+          end: 0.5,
+          isReversed: true,
+          onAnimationFinish: () => animationFinished = true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: StatefulBuilder(
-              builder: (context, setState) {
-                controller = AnimationController(
-                  vsync: tester,
-                  duration: animation.duration,
-                );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: StatefulBuilder(
+                builder: (context, setState) {
+                  controller = AnimationController(
+                    vsync: tester,
+                    duration: animation.duration,
+                  );
 
-                return AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) {
-                    return Transform.scale(
+                  return AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) {
+                      return Transform.scale(
                         scale: controller.value,
-                        child: const Text('Scale Test'));
-                  },
-                );
-              },
+                        child: const Text('Scale Test'),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      animation.animate(controller: controller);
-      await tester.pumpAndSettle();
+        animation.animate(controller: controller);
+        await tester.pumpAndSettle();
 
-      expect(animationFinished, isTrue);
-      expect(controller.value, 0.0);
-      expect(animation.begin, 1.0);
-      expect(animation.end, 0.5);
-    });
+        expect(animationFinished, isTrue);
+        expect(controller.value, 0.0);
+        expect(animation.begin, 1.0);
+        expect(animation.end, 0.5);
+      },
+    );
 
     testWidgets(
-        'PlayxThemeHorizontalSlideAnimation slides horizontally as expected',
-        (WidgetTester tester) async {
-      bool animationFinished = false;
-      late AnimationController controller;
-      final animation = PlayxThemeHorizontalSlideAnimation(
-        beginOffset: const Offset(-1.0, 0.0),
-        endOffset: const Offset(0.0, 0.0),
-        onAnimationFinish: () => animationFinished = true,
-      );
+      'PlayxThemeHorizontalSlideAnimation slides horizontally as expected',
+      (WidgetTester tester) async {
+        bool animationFinished = false;
+        late AnimationController controller;
+        final animation = PlayxThemeHorizontalSlideAnimation(
+          beginOffset: const Offset(-1.0, 0.0),
+          endOffset: const Offset(0.0, 0.0),
+          onAnimationFinish: () => animationFinished = true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: StatefulBuilder(
-              builder: (context, setState) {
-                controller = AnimationController(
-                  vsync: tester,
-                  duration: animation.duration,
-                );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: StatefulBuilder(
+                builder: (context, setState) {
+                  controller = AnimationController(
+                    vsync: tester,
+                    duration: animation.duration,
+                  );
 
-                return AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(controller.value * 100, 0),
-                      child: const Text('Horizontal Slide Test'),
-                    );
-                  },
-                );
-              },
+                  return AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(controller.value * 100, 0),
+                        child: const Text('Horizontal Slide Test'),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      animation.animate(controller: controller);
-      await tester.pumpAndSettle();
+        animation.animate(controller: controller);
+        await tester.pumpAndSettle();
 
-      expect(animationFinished, isTrue);
-      expect(controller.value, 1.0);
-      expect(animation.beginOffset, const Offset(-1.0, 0.0));
-      expect(animation.endOffset, const Offset(0.0, 0.0));
-    });
+        expect(animationFinished, isTrue);
+        expect(controller.value, 1.0);
+        expect(animation.beginOffset, const Offset(-1.0, 0.0));
+        expect(animation.endOffset, const Offset(0.0, 0.0));
+      },
+    );
 
     testWidgets(
-        'PlayxThemeVerticalSlideAnimation slides vertically as expected',
-        (WidgetTester tester) async {
-      bool animationFinished = false;
-      late AnimationController controller;
-      final animation = PlayxThemeVerticalSlideAnimation(
-        beginOffset: const Offset(0.0, -1.0),
-        endOffset: const Offset(0.0, 0.0),
-        onAnimationFinish: () => animationFinished = true,
-      );
+      'PlayxThemeVerticalSlideAnimation slides vertically as expected',
+      (WidgetTester tester) async {
+        bool animationFinished = false;
+        late AnimationController controller;
+        final animation = PlayxThemeVerticalSlideAnimation(
+          beginOffset: const Offset(0.0, -1.0),
+          endOffset: const Offset(0.0, 0.0),
+          onAnimationFinish: () => animationFinished = true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: StatefulBuilder(
-              builder: (context, setState) {
-                controller = AnimationController(
-                  vsync: tester,
-                  duration: animation.duration,
-                );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: StatefulBuilder(
+                builder: (context, setState) {
+                  controller = AnimationController(
+                    vsync: tester,
+                    duration: animation.duration,
+                  );
 
-                return AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(0, controller.value * 100),
-                      child: const Text('Vertical Slide Test'),
-                    );
-                  },
-                );
-              },
+                  return AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) {
+                      return Transform.translate(
+                        offset: Offset(0, controller.value * 100),
+                        child: const Text('Vertical Slide Test'),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      );
+        );
 
+        animation.animate(controller: controller);
+        await tester.pumpAndSettle();
+
+        expect(animationFinished, isTrue);
+        expect(controller.value, 1.0);
+        expect(animation.beginOffset, const Offset(0.0, -1.0));
+        expect(animation.endOffset, const Offset(0.0, 0.0));
+      },
+    );
+  });
+  _lerpAnimationTests();
+}
+
+void _lerpAnimationTests() {
+  group('PlayxThemeLerpAnimation', () {
+    test('factory creates a lerp animation with defaults', () {
+      final animation = PlayxThemeAnimation.lerp();
+      expect(animation, isA<PlayxThemeLerpAnimation>());
+      expect((animation as PlayxThemeLerpAnimation).curve, Curves.easeInOut);
+      expect(animation.duration, const Duration(milliseconds: 300));
+    });
+
+    testWidgets('animate runs the controller and calls onAnimationFinish', (
+      tester,
+    ) async {
+      var finished = false;
+      final controller = AnimationController(
+        vsync: tester,
+        duration: const Duration(milliseconds: 300),
+      );
+      final animation = PlayxThemeLerpAnimation(
+        onAnimationFinish: () => finished = true,
+      );
       animation.animate(controller: controller);
       await tester.pumpAndSettle();
-
-      expect(animationFinished, isTrue);
+      expect(finished, isTrue);
       expect(controller.value, 1.0);
-      expect(animation.beginOffset, const Offset(0.0, -1.0));
-      expect(animation.endOffset, const Offset(0.0, 0.0));
+      controller.dispose();
     });
   });
 }

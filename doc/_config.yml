@@ -1,0 +1,19 @@
+title: Playx Theme
+description: Switch themes, animate the change and persist the choice in Flutter.
+remote_theme: just-the-docs/just-the-docs@v0.10.0
+plugins:
+  - jekyll-remote-theme
+url: https://playx-flutter.github.io
+baseurl: /playx_theme
+search_enabled: true
+heading_anchors: true
+color_scheme: light
+aux_links:
+  "API reference":
+    - "https://playx-flutter.github.io/playx_theme/api/"
+  "pub.dev":
+    - "https://pub.dev/packages/playx_theme"
+  "GitHub":
+    - "https://github.com/playx-flutter/playx_theme"
+exclude:
+  - api

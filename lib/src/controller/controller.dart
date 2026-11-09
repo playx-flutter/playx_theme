@@ -6,14 +6,15 @@ import 'package:flutter/scheduler.dart';
 
 import '../../playx_theme.dart';
 import '../utils/animation_utils.dart';
+import 'theme_persistence.dart';
 import 'theme_resolver.dart';
 
 /// XThemeController is responsible for managing and updating the app's theme,
 /// including handling theme changes, animations, and theme persistence.
 class XThemeController extends ValueNotifier<XTheme>
     with WidgetsBindingObserver {
-  static const lastKnownIndexKey = 'playx.theme.last_known_index';
-  static const lastKnownThemeModeKey = 'playx.theme.last_known_theme_mode';
+  static const lastKnownIndexKey = ThemePersistence.indexKey;
+  static const lastKnownThemeModeKey = ThemePersistence.modeKey;
 
   static XThemeController? _instance;
 
@@ -43,6 +44,8 @@ class XThemeController extends ValueNotifier<XTheme>
   /// Where the selected theme index and mode are persisted.
   PlayxThemeStorage get storage =>
       config.storage ?? const PlayxPrefsThemeStorage();
+
+  late final ThemePersistence _persistence = ThemePersistence(storage);
 
   /// The current theme being used.
   XTheme get theme => value;
@@ -119,7 +122,7 @@ class XThemeController extends ValueNotifier<XTheme>
         : null;
 
     final lastSavedThemeModeString = config.saveTheme
-        ? await storage.getString(lastKnownThemeModeKey)
+        ? await _persistence.loadMode()
         : null;
 
     final resolved = ThemeResolver.resolveBoot(
@@ -144,7 +147,7 @@ class XThemeController extends ValueNotifier<XTheme>
     if (_themeModeNotifier.value == mode) return;
     _themeModeNotifier.value = mode;
     if (config.saveTheme) {
-      await storage.setString(lastKnownThemeModeKey, mode.name);
+      await _persistence.saveMode(mode);
     }
   }
 
@@ -172,17 +175,10 @@ class XThemeController extends ValueNotifier<XTheme>
   Future<int?> getLastSavedIndexFromPrefs({
     bool migratePrefsToAsync = false,
   }) async {
-    int? lastSavedIndex = await storage.getInt(lastKnownIndexKey);
-    if (migratePrefsToAsync && lastSavedIndex == null) {
-      await PlayxPrefs.create();
-      final lastKnownIndexInPrefs = PlayxPrefs.getInt(
-        lastKnownIndexKey,
-        fallback: initialIndex,
-      );
-      await storage.setInt(lastKnownIndexKey, lastKnownIndexInPrefs);
-      lastSavedIndex = lastKnownIndexInPrefs;
-    }
-    return lastSavedIndex;
+    return _persistence.loadIndex(
+      migrateLegacyPrefs: migratePrefsToAsync,
+      fallbackIndex: initialIndex,
+    );
   }
 
   /// Updates the theme to one from the available theme list.
@@ -236,7 +232,7 @@ class XThemeController extends ValueNotifier<XTheme>
       }
     }
     if (config.saveTheme) {
-      await storage.setInt(lastKnownIndexKey, currentIndex);
+      await _persistence.saveIndex(currentIndex);
     }
   }
 
@@ -505,9 +501,10 @@ class XThemeController extends ValueNotifier<XTheme>
   /// Uses the storage of the booted controller, or the default one if
   /// PlayxTheme isn't booted yet.
   static Future<void> clearLastSavedTheme() async {
-    final storage = _instance?.storage ?? const PlayxPrefsThemeStorage();
-    await storage.remove(lastKnownThemeModeKey);
-    return storage.remove(lastKnownIndexKey);
+    final persistence =
+        _instance?._persistence ??
+        ThemePersistence(const PlayxPrefsThemeStorage());
+    return persistence.clear();
   }
 
   /// Animate the theme change.

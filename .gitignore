@@ -33,3 +33,7 @@ build/
 
 # Test coverage
 coverage/
+
+# Generated docs
+_api/
+_site/
